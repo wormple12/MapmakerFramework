@@ -1,7 +1,5 @@
 package processing.general.menus;
 
-import java.nio.file.FileSystemException;
-import java.nio.file.Path;
 import mapmaker.general.menus.StorageMenu;
 import processing.core.PApplet;
 

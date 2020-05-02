@@ -25,15 +25,17 @@ abstract public class StorageMenu implements SubMenu {
     public void loadMap(boolean loadLatest) {
         try {
             Path path = storage.getLatestMapPath();
-            if (!loadLatest || path != null) {
+            if (!loadLatest || path == null) {
                 path = storage.selectPath();
-                storage.setLatestMapPath(path);
             }
-            WorldMap map = storage.attemptLoad(path);
-            map.setFilePath(path);
-            canvas.loadWorldMap(map);
-            canvas.setCurrentMap(map);
-            switchUserRole();
+            if (path != null) {
+                storage.setLatestMapPath(path);
+                WorldMap map = storage.attemptLoad(path);
+                map.setFilePath(path);
+                canvas.loadWorldMap(map);
+                canvas.setCurrentMap(map);
+                switchUserRole();
+            }
         } catch (FileSystemException e) {
             storage.handleFileSystemException(e);
         }
