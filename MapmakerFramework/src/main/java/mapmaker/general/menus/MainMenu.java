@@ -1,22 +1,29 @@
-
 package mapmaker.general.menus;
 
 /**
  *
  * @author Simon Norup
  */
-public interface MainMenu {
-    
-    public void open(); // graphic
-    
-    public void enterEditorMode(); // default: editorMenu.show()
-    
-    public void enterViewerMode(); // default: viewerMenu.show()
-    
-    public void close();
-    
-    public void openSettings();
-    
-    public void terminate();
-    
+abstract public class MainMenu implements SubMenu {
+
+    EditorMenu editorMenu;
+    StorageMenu viewerMenu;
+    SubMenu settingsMenu;
+
+    public void enterEditorMenu() {
+        editorMenu.show();
+    }
+
+    public void enterViewerMenu() {
+        viewerMenu.show();
+    }
+
+    public void openSettings() {
+        settingsMenu.show();
+    }
+
+    public void terminate() {
+        System.exit(0);
+    }
+
 }

@@ -1,4 +1,3 @@
-
 package mapmaker.editor;
 
 /**
@@ -6,7 +5,7 @@ package mapmaker.editor;
  * @author Simon Norup
  */
 public enum Mode {
-    
-    LANDSCAPING, CAMERA, PATH, PLACEMENT
-    
+
+    CAMERA, LANDMASS, BORDER, ROAD, WATER, LOCATION
+
 }

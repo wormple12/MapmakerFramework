@@ -1,14 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mapmaker.viewer.objects;
+
+import java.nio.file.Path;
 
 /**
  *
  * @author Simon Norup
  */
-public interface Player extends Marker {
-    
+public class Player extends UserMarker {
+
+    public Player(Path sprite, int x, int y) {
+        super(null, sprite, x, y);
+    }
+
 }
