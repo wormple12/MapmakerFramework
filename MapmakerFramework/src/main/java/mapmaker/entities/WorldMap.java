@@ -1,15 +1,15 @@
-package mapmaker.map;
+package mapmaker.entities;
 
 import java.nio.file.Path;
 import java.util.List;
-import mapmaker.map.objects.Location;
-import mapmaker.viewer.objects.UserMarker;
+import mapmaker.entities.sprites.Location;
+import mapmaker.entities.sprites.UserMarker;
 
 /**
  *
  * @author Simon Norup
  */
-public class Map {
+public class WorldMap {
 
     private final MapInfo info;
     private final Landmass landmass;
@@ -19,7 +19,7 @@ public class Map {
     private final List<UserMarker> markers;
     private Path filePath;
 
-    public Map(MapInfo info, Landmass landmass, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
+    public WorldMap(MapInfo info, Landmass landmass, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
         this.info = info;
         this.landmass = landmass;
         this.regions = regions;

@@ -26,9 +26,9 @@ public interface Camera {
     public void zoom(double factor);
 
     /**
-     * Rotates the camera on the x and y angles. This does not update the
-     * camera's position above the map level in any way, only the angle from
-     * which it allows the user to observe the map.
+     * Allowed to be unsupported. Rotates the camera on the x and y angles. This
+     * does not update the camera's position above the map level in any way,
+     * only the angle from which it allows the user to observe the map.
      *
      * @param angleX
      * @param angleY

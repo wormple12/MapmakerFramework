@@ -1,14 +1,14 @@
 
-package mapmaker.viewer.objects;
+package mapmaker.entities.sprites;
 
 import java.nio.file.Path;
-import mapmaker.map.objects.Marker;
+import mapmaker.entities.sprites.Sprite;
 
 /**
  *
  * @author Simon Norup
  */
-public class UserMarker extends Marker {
+public class UserMarker extends Sprite {
     
     private UserMarkerInfo info;
 

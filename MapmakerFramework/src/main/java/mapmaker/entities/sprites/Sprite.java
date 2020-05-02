@@ -1,4 +1,4 @@
-package mapmaker.map.objects;
+package mapmaker.entities.sprites;
 
 import java.nio.file.Path;
 
@@ -6,23 +6,23 @@ import java.nio.file.Path;
  *
  * @author Simon Norup
  */
-public class Marker {
+public class Sprite {
 
-    private Path sprite;
+    private Path spritePath;
     private int x, y;
 
-    public Marker(Path sprite, int x, int y) {
-        this.sprite = sprite;
+    public Sprite(Path spritePath, int x, int y) {
+        this.spritePath = spritePath;
         this.x = x;
         this.y = y;
     }
 
-    public Path getSprite() {
-        return sprite;
+    public Path getSpritePath() {
+        return spritePath;
     }
 
-    public void setSprite(Path sprite) {
-        this.sprite = sprite;
+    public void setSpritePath(Path spritePath) {
+        this.spritePath = spritePath;
     }
 
     public int getX() {

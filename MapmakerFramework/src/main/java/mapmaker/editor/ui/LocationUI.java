@@ -1,7 +1,7 @@
 package mapmaker.editor.ui;
 
 import java.util.List;
-import mapmaker.map.objects.Location;
+import mapmaker.entities.sprites.Location;
 
 /**
  *

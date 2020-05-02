@@ -1,4 +1,4 @@
-package mapmaker.viewer.objects;
+package mapmaker.entities.sprites;
 
 import java.nio.file.Path;
 

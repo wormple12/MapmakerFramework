@@ -1,8 +1,8 @@
 package mapmaker.general.menus;
 
 import mapmaker.general.UserRole;
-import mapmaker.map.Map;
-import mapmaker.map.MapInfo;
+import mapmaker.entities.WorldMap;
+import mapmaker.entities.MapInfo;
 
 /**
  *
@@ -17,7 +17,7 @@ abstract public class EditorMenu extends StorageMenu {
      */
     public void newMap() {
         MapInfo info = initMapInfo();
-        Map map = canvas.loadEmpty(info);
+        WorldMap map = canvas.loadEmpty(info);
         map.setFilePath(selectPath());
         canvas.setCurrentMap(map);
         saveMap();

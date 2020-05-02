@@ -1,5 +1,5 @@
 
-package mapmaker.map;
+package mapmaker.entities;
 
 /**
  *

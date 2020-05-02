@@ -1,8 +1,8 @@
 package mapmaker.viewer;
 
-import mapmaker.map.Region;
-import mapmaker.map.objects.Location;
-import mapmaker.viewer.objects.UserMarker;
+import mapmaker.entities.Region;
+import mapmaker.entities.sprites.Location;
+import mapmaker.entities.sprites.UserMarker;
 
 /**
  *

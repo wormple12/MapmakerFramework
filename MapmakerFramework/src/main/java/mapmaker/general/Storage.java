@@ -2,7 +2,7 @@ package mapmaker.general;
 
 import java.nio.file.FileSystemException;
 import java.nio.file.Path;
-import mapmaker.map.Map;
+import mapmaker.entities.WorldMap;
 
 /**
  *
@@ -18,7 +18,7 @@ public interface Storage {
      * @throws java.nio.file.FileSystemException, if the given path could not be
      * loaded as a map
      */
-    public Map attemptLoad(Path path) throws FileSystemException;
+    public WorldMap attemptLoad(Path path) throws FileSystemException;
 
     /**
      * Attempts to save a world map at a given file path.
@@ -27,7 +27,7 @@ public interface Storage {
      * @param path the file path to save it at
      * @return whether the map was successfully saved
      */
-    public boolean attemptSave(Map map, Path path);
+    public boolean attemptSave(WorldMap map, Path path);
 
     /**
      * @return the file path for the latest opened world map, or null if none

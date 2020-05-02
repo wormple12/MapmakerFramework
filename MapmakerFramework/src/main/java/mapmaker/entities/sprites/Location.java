@@ -1,5 +1,5 @@
 
-package mapmaker.map.objects;
+package mapmaker.entities.sprites;
 
 import java.nio.file.Path;
 
@@ -7,7 +7,7 @@ import java.nio.file.Path;
  *
  * @author Simon Norup
  */
-public class Location extends Marker {
+public class Location extends Sprite {
 
     private LocationInfo info;
 

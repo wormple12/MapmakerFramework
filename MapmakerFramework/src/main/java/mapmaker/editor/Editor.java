@@ -1,10 +1,10 @@
 package mapmaker.editor;
 
 import java.util.List;
-import mapmaker.map.Landmass;
-import mapmaker.map.Region;
-import mapmaker.map.Route;
-import mapmaker.map.objects.Location;
+import mapmaker.entities.Landmass;
+import mapmaker.entities.Region;
+import mapmaker.entities.Route;
+import mapmaker.entities.sprites.Location;
 
 /**
  *

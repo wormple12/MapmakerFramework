@@ -1,5 +1,9 @@
 package mapmaker.map;
 
+import mapmaker.entities.WorldMap;
+import mapmaker.entities.LocalMap;
+import mapmaker.entities.MapInfo;
+
 /**
  *
  * @author Simon Norup
@@ -13,7 +17,7 @@ public interface Canvas {
      * @param info the initial map info
      * @return the resulting Map object
      */
-    public Map loadEmpty(MapInfo info);
+    public WorldMap loadEmpty(MapInfo info);
 
     /**
      * Displays the given world map on the canvas, enabling the user to interact
@@ -21,12 +25,12 @@ public interface Canvas {
      *
      * @param map the map to display
      */
-    public void loadWorldMap(Map map);
+    public void loadWorldMap(WorldMap map);
 
     /**
      * @return the currently loaded world map
      */
-    public Map getCurrentMap();
+    public WorldMap getCurrentMap();
 
     /**
      * Updates the singular world map that should be remembered as the currently
@@ -34,8 +38,13 @@ public interface Canvas {
      *
      * @param map the map that is currently loaded
      */
-    public void setCurrentMap(Map map);
+    public void setCurrentMap(WorldMap map);
 
+    /**
+     * Allowed to be unsupported. Displays a given local location map.
+     *
+     * @param map
+     */
     default public void loadLocalMap(LocalMap map) {
         throw new UnsupportedOperationException("This framework does not support local maps for locations");
     }

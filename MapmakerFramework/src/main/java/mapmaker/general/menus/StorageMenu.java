@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import mapmaker.general.Storage;
 import mapmaker.general.UserRole;
 import mapmaker.map.Canvas;
-import mapmaker.map.Map;
+import mapmaker.entities.WorldMap;
 
 /**
  *
@@ -29,7 +29,7 @@ abstract public class StorageMenu implements SubMenu {
                 path = selectPath();
                 storage.setLatestMapPath(path);
             }
-            Map map = storage.attemptLoad(path);
+            WorldMap map = storage.attemptLoad(path);
             map.setFilePath(path);
             canvas.loadWorldMap(map);
             canvas.setCurrentMap(map);
@@ -43,7 +43,7 @@ abstract public class StorageMenu implements SubMenu {
      * Saves the currently loaded map to the file path defined for it.
      */
     public void saveMap() {
-        Map currentMap = canvas.getCurrentMap();
+        WorldMap currentMap = canvas.getCurrentMap();
         storage.attemptSave(currentMap, currentMap.getFilePath());
         storage.setLatestMapPath(currentMap.getFilePath());
     }
