@@ -3,19 +3,19 @@ package processing.general;
 import java.nio.file.FileSystemException;
 import java.nio.file.Path;
 import mapmaker.entities.WorldMap;
-import mapmaker.general.Storage;
 import processing.core.PApplet;
+import mapmaker.general.FileHandler;
 
 /**
  *
  * @author Simon Norup
  */
-public class StorageP3 implements Storage {
+public class FileHandlerP3 implements FileHandler {
 
     private final PApplet app;
     private Path latestMapPath = null;
 
-    public StorageP3(PApplet app) {
+    public FileHandlerP3(PApplet app) {
         this.app = app;
     }
 
@@ -37,6 +37,17 @@ public class StorageP3 implements Storage {
     @Override
     public void setLatestMapPath(Path path) {
         latestMapPath = path;
+    }
+
+    @Override
+    public Path selectPath() {
+        // open project file folder to get path and return file
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void handleFileSystemException(FileSystemException e) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

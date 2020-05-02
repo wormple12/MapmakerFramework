@@ -2,10 +2,10 @@ package mapmaker.general.menus;
 
 import java.nio.file.FileSystemException;
 import java.nio.file.Path;
-import mapmaker.general.Storage;
 import mapmaker.general.UserRole;
 import mapmaker.map.Canvas;
 import mapmaker.entities.WorldMap;
+import mapmaker.general.FileHandler;
 
 /**
  *
@@ -13,7 +13,7 @@ import mapmaker.entities.WorldMap;
  */
 abstract public class StorageMenu implements SubMenu {
 
-    Storage storage;
+    FileHandler storage;
     Canvas canvas;
 
     /**
@@ -26,7 +26,7 @@ abstract public class StorageMenu implements SubMenu {
         try {
             Path path = storage.getLatestMapPath();
             if (!loadLatest || path != null) {
-                path = selectPath();
+                path = storage.selectPath();
                 storage.setLatestMapPath(path);
             }
             WorldMap map = storage.attemptLoad(path);
@@ -35,7 +35,7 @@ abstract public class StorageMenu implements SubMenu {
             canvas.setCurrentMap(map);
             switchUserRole();
         } catch (FileSystemException e) {
-            handleFileSystemException(e);
+            storage.handleFileSystemException(e);
         }
     }
 
@@ -47,22 +47,6 @@ abstract public class StorageMenu implements SubMenu {
         storage.attemptSave(currentMap, currentMap.getFilePath());
         storage.setLatestMapPath(currentMap.getFilePath());
     }
-
-    /**
-     * Displays a user-friendly method of selecting a valid file path for a
-     * world map. This can be used to create new files, and load or override
-     * existing ones.
-     *
-     * @return the file path selected
-     */
-    abstract protected Path selectPath(); // open project file folder to get path and return file
-
-    /**
-     * Handles situations where a selected file fails to load.
-     *
-     * @param e the exception to handle
-     */
-    abstract protected void handleFileSystemException(FileSystemException e);
 
     /**
      * Switches to editor mode or viewer mode depending on the type of submenu

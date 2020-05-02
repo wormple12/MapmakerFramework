@@ -18,7 +18,7 @@ abstract public class EditorMenu extends StorageMenu {
     public void newMap() {
         MapInfo info = initMapInfo();
         WorldMap map = canvas.loadEmpty(info);
-        map.setFilePath(selectPath());
+        map.setFilePath(storage.selectPath());
         canvas.setCurrentMap(map);
         saveMap();
         switchUserRole();
@@ -29,7 +29,7 @@ abstract public class EditorMenu extends StorageMenu {
      *
      * @return the user-defined map data
      */
-    abstract protected MapInfo initMapInfo(); // define name and stuff
+    abstract protected MapInfo initMapInfo();
 
     @Override
     protected void switchUserRole() {

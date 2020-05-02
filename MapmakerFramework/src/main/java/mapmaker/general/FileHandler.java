@@ -8,7 +8,16 @@ import mapmaker.entities.WorldMap;
  *
  * @author Simon Norup
  */
-public interface Storage {
+public interface FileHandler {
+
+    /**
+     * Displays a user-friendly method of selecting a valid file path for a
+     * world map. This can be used to create new files, and load or override
+     * existing ones.
+     *
+     * @return the file path selected
+     */
+    public Path selectPath();
 
     /**
      * Attempts to convert a file at a given file path to a Map object.
@@ -36,5 +45,12 @@ public interface Storage {
     public Path getLatestMapPath();
 
     public void setLatestMapPath(Path path);
+
+    /**
+     * Handles situations where a selected file fails to load.
+     *
+     * @param e the exception to handle
+     */
+    public void handleFileSystemException(FileSystemException e);
 
 }
