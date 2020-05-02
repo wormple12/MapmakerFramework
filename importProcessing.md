@@ -7,7 +7,9 @@
 3. Run command;  mvn install:install-file -Dfile=<processing-folder>\core\library\core.jar -DgroupId=processing.java -DartifactId=core -Dversion=3.5.4 -Dpackaging=jar
 
 4. Check the project's pom.xml and make sure that there's a working dependancy for 
+  ```
   <groupId>processing.java</groupId>
   <artifactId>core</artifactId>
   <version>3.5.4</version>
-  Clean n build.
+  ```
+5. Clean n build.
