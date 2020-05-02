@@ -1,11 +1,27 @@
-
 package processing;
+
+import processing.core.PApplet;
 
 /**
  *
  * @author Simon Norup
  */
-public class ProcessingMapmaker {
+public class ProcessingMapmaker extends PApplet {
+
+    @Override
+    public void draw() {
+
+    }
+
+    @Override
+    public void mousePressed() {
+
+    }
+
+    @Override
+    public void mouseReleased() {
+
+    }
 
 }
 
