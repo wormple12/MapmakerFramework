@@ -19,7 +19,7 @@ public interface Editor {
      * @param x
      * @param y
      */
-    public void draw(int x, int y);
+    default public void draw(int x, int y) {}
 
     /**
      * Adds landmass to the world map based on pointer (mouse or controller)
@@ -29,7 +29,7 @@ public interface Editor {
      * @param y
      * @param radius
      */
-    public void drawGeography(int x, int y, double radius);
+    public void drawLandmass(int x, int y, double radius);
 
     /**
      * Removes landmass from the world map based on pointer (mouse or

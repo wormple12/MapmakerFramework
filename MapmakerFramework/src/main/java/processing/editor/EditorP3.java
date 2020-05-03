@@ -26,7 +26,7 @@ public class EditorP3 implements Editor {
     }
 
     @Override
-    public void drawGeography(int x, int y, double radius) {
+    public void drawLandmass(int x, int y, double radius) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
