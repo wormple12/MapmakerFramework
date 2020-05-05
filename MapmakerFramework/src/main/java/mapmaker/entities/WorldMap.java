@@ -1,5 +1,6 @@
 package mapmaker.entities;
 
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.List;
 import mapmaker.entities.sprites.Location;
@@ -9,9 +10,9 @@ import mapmaker.entities.sprites.UserMarker;
  *
  * @author Simon Norup
  */
-public class WorldMap {
+public class WorldMap implements Serializable {
 
-    private final MapInfo info;
+    private final EntityInfo info;
     private final Landmass landmass;
     private final List<Region> regions;
     private final List<Route> routes;
@@ -19,7 +20,7 @@ public class WorldMap {
     private final List<UserMarker> markers;
     private Path filePath;
 
-    public WorldMap(MapInfo info, Landmass landmass, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
+    public WorldMap(EntityInfo info, Landmass landmass, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
         this.info = info;
         this.landmass = landmass;
         this.regions = regions;
@@ -28,7 +29,7 @@ public class WorldMap {
         this.routes = routes;
     }
 
-    public MapInfo getInfo() {
+    public EntityInfo getInfo() {
         return info;
     }
 

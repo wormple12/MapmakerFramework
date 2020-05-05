@@ -1,7 +1,8 @@
 package temporary;
 
-import java.nio.file.Path;
-import processing.general.FileHandlerP3;
+import mapmaker.entities.WorldMap;
+import mapmaker.general.files.FileHandlerDefault;
+import mapmaker.general.files.FileStorage;
 
 /**
  *
@@ -10,9 +11,9 @@ import processing.general.FileHandlerP3;
 public class TestMain {
 
     public static void main(String[] args) {
-        FileHandlerP3 fileHandler = new FileHandlerP3(null);
-        Path path = fileHandler.selectPath();
-        System.out.println(path);
+        FileStorage storage = new FileStorage(new FileHandlerDefault());
+        WorldMap map = storage.attemptLoad(false);
+        System.out.println(map);
     }
 
 }

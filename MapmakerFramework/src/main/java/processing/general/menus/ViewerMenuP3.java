@@ -1,6 +1,8 @@
 package processing.general.menus;
 
+import mapmaker.general.Storage;
 import mapmaker.general.menus.StorageMenu;
+import mapmaker.map.Canvas;
 import processing.core.PApplet;
 
 /**
@@ -11,7 +13,8 @@ public class ViewerMenuP3 extends StorageMenu {
     
     private final PApplet app;
 
-    public ViewerMenuP3(PApplet app) {
+    public ViewerMenuP3(PApplet app, Storage storage, Canvas canvas) {
+        super(storage, canvas);
         this.app = app;
     }
 

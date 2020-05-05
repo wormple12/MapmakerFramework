@@ -1,10 +1,10 @@
 
 package processing.map;
 
-import mapmaker.entities.MapInfo;
 import mapmaker.entities.WorldMap;
 import mapmaker.map.Canvas;
 import processing.core.PApplet;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
@@ -19,7 +19,7 @@ public class CanvasP3 implements Canvas {
     }
 
     @Override
-    public WorldMap loadEmpty(MapInfo info) {
+    public WorldMap loadEmpty(EntityInfo info) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

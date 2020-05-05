@@ -7,10 +7,10 @@ package mapmaker.entities;
 public class Region {
 
     private Landmass area;
-    private RegionInfo info;
+    private EntityInfo info;
     private Biome biome;
 
-    public Region(Landmass area, RegionInfo info, Biome biome) {
+    public Region(Landmass area, EntityInfo info, Biome biome) {
         this.area = area;
         this.info = info;
         this.biome = biome;
@@ -24,11 +24,11 @@ public class Region {
         this.area = area;
     }
 
-    public RegionInfo getInfo() {
+    public EntityInfo getInfo() {
         return info;
     }
 
-    public void setInfo(RegionInfo info) {
+    public void setInfo(EntityInfo info) {
         this.info = info;
     }
 

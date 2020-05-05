@@ -1,23 +1,15 @@
 package processing.entities;
 
-import mapmaker.entities.MapInfo;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
  * @author Simon Norup
  */
-public class MapInfoP3 implements MapInfo {
+public class MapInfoP3 extends EntityInfo {
 
-    private String name;
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
+    public MapInfoP3(String name) {
+        super(name);
     }
 
 }

@@ -1,4 +1,4 @@
-## How to import Processing into a maven project
+## How to import Processing into a maven project (DEPRECATED)
 
 1. Download the Processing package to somewhere on your PC.
 

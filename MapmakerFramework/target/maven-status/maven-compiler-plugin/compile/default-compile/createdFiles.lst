@@ -20,6 +20,7 @@ mapmaker\editor\ui\ModeUI.class
 mapmaker\entities\Biome.class
 processing\editor\ui\LocationUI_P3.class
 processing\entities\RouteP3.class
+.netbeans_automatic_build
 mapmaker\general\FileHandler.class
 processing\general\menus\MainMenuP3.class
 processing\general\menus\EditorMenuP3.class

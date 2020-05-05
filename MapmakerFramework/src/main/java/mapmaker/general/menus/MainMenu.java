@@ -10,15 +10,21 @@ abstract public class MainMenu implements SubMenu {
     StorageMenu viewerMenu;
     SubMenu settingsMenu;
 
-    public void enterEditorMenu() {
+    public MainMenu(EditorMenu editorMenu, StorageMenu viewerMenu, SubMenu settingsMenu) {
+        this.editorMenu = editorMenu;
+        this.viewerMenu = viewerMenu;
+        this.settingsMenu = settingsMenu;
+    }
+
+    public final void enterEditorMenu() {
         editorMenu.show();
     }
 
-    public void enterViewerMenu() {
+    public final void enterViewerMenu() {
         viewerMenu.show();
     }
 
-    public void openSettings() {
+    public final void openSettings() {
         settingsMenu.show();
     }
 

@@ -2,6 +2,7 @@
 package mapmaker.entities.sprites;
 
 import java.nio.file.Path;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
@@ -9,18 +10,18 @@ import java.nio.file.Path;
  */
 public class Location extends Sprite {
 
-    private LocationInfo info;
+    private EntityInfo info;
 
-    public Location(LocationInfo info, Path sprite, int x, int y) {
+    public Location(EntityInfo info, Path sprite, int x, int y) {
         super(sprite, x, y);
         this.info = info;
     }
 
-    public LocationInfo getInfo() {
+    public EntityInfo getInfo() {
         return info;
     }
 
-    public void setInfo(LocationInfo info) {
+    public void setInfo(EntityInfo info) {
         this.info = info;
     }
     

@@ -1,11 +1,11 @@
 
 package processing.general.menus;
 
-import java.nio.file.FileSystemException;
-import java.nio.file.Path;
-import mapmaker.entities.MapInfo;
+import mapmaker.general.Storage;
 import mapmaker.general.menus.EditorMenu;
+import mapmaker.map.Canvas;
 import processing.core.PApplet;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
@@ -15,12 +15,13 @@ public class EditorMenuP3 extends EditorMenu {
     
     private final PApplet app;
 
-    public EditorMenuP3(PApplet app) {
+    public EditorMenuP3(PApplet app, Storage storage, Canvas canvas) {
+        super(storage, canvas);
         this.app = app;
     }
 
     @Override
-    protected MapInfo initMapInfo() {
+    protected EntityInfo initMapInfo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -13,9 +13,9 @@
     <name>Sem4-Mapmaker-Framework</name>
     <dependencies>
         <dependency>
-    <groupId>org.processing</groupId>
-        <artifactId>core</artifactId>
-    <version>3.3.7</version>
-</dependency>
+            <groupId>org.processing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.7</version>
+        </dependency>
     </dependencies> 
 </project>

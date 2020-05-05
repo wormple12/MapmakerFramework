@@ -2,23 +2,28 @@ package mapmaker.general.menus;
 
 import mapmaker.general.UserRole;
 import mapmaker.entities.WorldMap;
-import mapmaker.entities.MapInfo;
+import mapmaker.general.Storage;
+import mapmaker.map.Canvas;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
- * @author Simon Norup
+ * @author Simon Norup Example of wishful programming. See superclass as well.
  */
 abstract public class EditorMenu extends StorageMenu {
+
+    public EditorMenu(Storage storage, Canvas canvas) {
+        super(storage, canvas);
+    }
 
     /**
      * Creates a new, empty map, using user-defined core information. Loads an
      * empty canvas, and links it to map file at a file path of your choice. You
      * can create a new map file in this way, or override existing ones.
      */
-    public void newMap() {
-        MapInfo info = initMapInfo();
+    public final void newMap() {
+        EntityInfo info = initMapInfo();
         WorldMap map = canvas.loadEmpty(info);
-        map.setFilePath(storage.selectPath());
         canvas.setCurrentMap(map);
         saveMap();
         switchUserRole();
@@ -29,7 +34,7 @@ abstract public class EditorMenu extends StorageMenu {
      *
      * @return the user-defined map data
      */
-    abstract protected MapInfo initMapInfo();
+    abstract protected EntityInfo initMapInfo();
 
     @Override
     protected void switchUserRole() {

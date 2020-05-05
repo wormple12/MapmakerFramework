@@ -2,7 +2,7 @@ package mapmaker.map;
 
 import mapmaker.entities.WorldMap;
 import mapmaker.entities.LocalMap;
-import mapmaker.entities.MapInfo;
+import mapmaker.entities.EntityInfo;
 
 /**
  *
@@ -17,7 +17,7 @@ public interface Canvas {
      * @param info the initial map info
      * @return the resulting Map object
      */
-    public WorldMap loadEmpty(MapInfo info);
+    public WorldMap loadEmpty(EntityInfo info);
 
     /**
      * Displays the given world map on the canvas, enabling the user to interact

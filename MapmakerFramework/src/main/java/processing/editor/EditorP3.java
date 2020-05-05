@@ -20,6 +20,9 @@ public class EditorP3 implements Editor {
         this.app = app;
     }
 
+    // draw annotation that throws compile-time errors if there's not x and y integer parameters?
+    // possible to use annotation/reflection to call the draw() method, whenever an annotated method is called?
+    // so any draw function (e.g. drawLandmass) also calls the general draw method
     @Override
     public void draw(int x, int y) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
