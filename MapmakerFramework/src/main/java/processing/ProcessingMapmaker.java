@@ -1,6 +1,8 @@
 package processing;
 
+import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /**
  *
@@ -8,11 +10,7 @@ import processing.core.PApplet;
  */
 public class ProcessingMapmaker extends PApplet {
 
-    final int EDIT = 1;
-    final int RUN = 2;
-    final int CAM = 3;
-    final int OBJECT = 4;
-    int state = CAM;
+    ArrayList<PGraphics> layers = new ArrayList();
 
     int[] cp = {
         color(0, 126, 192),
@@ -32,9 +30,18 @@ public class ProcessingMapmaker extends PApplet {
         color(187, 76, 15),
         color(148, 56, 0)
     };
+    int col = 1;
 
-    int[] terrain;
-    int[] biome;
+    final int layer1 = 1;
+    final int layer2 = 2;
+    final int layer3 = 3;
+    final int layer4 = 4;
+    final int layer5 = 5;
+    int state = layer1;
+
+    final int edit = 1;
+    final int delete = 2;
+    int mode = edit;
 
     @Override
     public void settings() {
@@ -43,40 +50,68 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void setup() {
-        noiseSeed((long) random(10000000));
-        loadPixels();
-        terrain = new int[height * width];
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-                pixels[j * width + i] = cp[3];
-                terrain[j * width + i] = 3;
-            }
+        PGraphics pg = createGraphics(width, height);
+        pg.beginDraw();
+        pg.background(cp[0]);
+        pg.endDraw();
+        layers.add(pg);
+
+        for (int i = 0; i < 5; i++) {
+            layers.add(createGraphics(width, height));
         }
-        updatePixels();
     }
 
     @Override
     public void draw() {
+        background(255);
+        for (int i = 0; i < layers.size(); i++) {
+            image(layers.get(i), 0, 0);
+        }
         noLoop();
     }
 
-    public void randomMap() {
-        noiseSeed((long) random(10000000));
-        loadPixels();
-        float d0 = random(100, 200);
-        float d1 = random(25, 75);
-        terrain = new int[height * width];
-        for (int j = 0; j < height; j++) {
-            for (int i = 0; i < width; i++) {
-                float n0 = noise(i / d0, j / d0, 0);
-                float n1 = noise(i / d1, j / d1, 10);
-                float n = (float) (1 - (n0 * 0.75 + n1 * 0.25));
-                int k = (int) (n * cp.length);
-                pixels[j * width + i] = cp[k];
-                terrain[j * width + i] = k;
-            }
+    @Override
+    public void mouseDragged() {
+        loop();
+        if (mode == edit) {
+            editDraw(state, col);
+        } else if (mode == delete) {
+            deleteDraw(state);
         }
-        updatePixels();
+    }
+
+    public void editDraw(int i, int c) {
+        PGraphics pg = layers.get(i);
+        if (mousePressed) {
+            pg.beginDraw();
+            pg.stroke(cp[c]);
+            pg.strokeWeight(100);
+            pg.line(pmouseX, pmouseY, mouseX, mouseY);
+            pg.endDraw();
+        }
+        noStroke();
+        ellipse(mouseX, mouseY, 100, 100);
+    }
+
+    public void deleteDraw(int i) {
+        PGraphics pg = layers.get(i);
+        if (mousePressed) {
+            pg.beginDraw();
+            pg.loadPixels();
+            for (int x = 0; x < pg.width; x++) {
+                for (int y = 0; y < pg.height; y++) {
+                    float distance = dist(x, y, mouseX, mouseY);
+                    if (distance <= 25) {
+                        int loc = x + y * pg.width;
+                        pg.pixels[loc] = 0x0;
+                    }
+                }
+            }
+            pg.updatePixels();
+            pg.endDraw();
+        }
+        noStroke();
+        ellipse(mouseX, mouseY, 50, 50);
     }
 
     @Override
@@ -84,92 +119,37 @@ public class ProcessingMapmaker extends PApplet {
         loop();
         switch (key) {
             case '1':
-                state = EDIT;
+                state = layer1;
                 break;
             case '2':
-                state = RUN;
+                state = layer2;
                 break;
             case '3':
-                state = CAM;
+                state = layer3;
                 break;
             case '4':
-                state = OBJECT;
+                state = layer4;
+                break;
+            case '5':
+                state = layer5;
                 break;
             default:
                 break;
         }
-        keySwitch();
-    }
 
-    @Override
-    public void mouseDragged() {
-        loop();
-        mouseSwitch();
-    }
-
-    public void keySwitch() {
-        switch (state) {
-
-            case EDIT:
-                stateEdit();
-                break;
-
-            case RUN:
-                stateRun();
-                break;
-
-            case CAM:
-                stateCam();
-                break;
-
-            case OBJECT:
-                stateObject();
-                break;
+        if (key == 'q') {
+            if (col == cp.length - 1) {
+                col = 1;
+            } else {
+                col = col + 1;
+            }
         }
-    }
 
-    public void stateEdit() {
-        if (key == 'r') {
-            randomMap();
+        if (key == 'e') {
+            mode = edit;
+        } else if (key == 'd') {
+            mode = delete;
         }
-    }
-
-    public void stateRun() {
-    }
-
-    public void stateCam() {
-    }
-
-    public void stateObject() {
-    }
-
-    public void mouseSwitch() {
-        switch (state) {
-
-            case CAM:
-                mouseCam();
-                break;
-
-            case OBJECT:
-                mouseStateObject();
-                break;
-        }
-    }
-
-    public void mouseCam() {
-    }
-
-    public void mouseStateObject() {
-    }
-
-    @Override
-    public void mousePressed() {
-
-    }
-
-    @Override
-    public void mouseReleased() {
-
     }
 
     public static void main(String[] passedArgs) {

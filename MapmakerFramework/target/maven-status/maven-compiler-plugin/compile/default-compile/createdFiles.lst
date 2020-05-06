@@ -1,9 +1,8 @@
 mapmaker\general\menus\StorageMenu.class
+mapmaker\general\Storage.class
 mapmaker\editor\Mode.class
-processing\general\FileHandlerP3.class
 mapmaker\viewer\Viewer.class
 mapmaker\entities\Route.class
-mapmaker\entities\sprites\LocationInfo.class
 mapmaker\general\menus\SubMenu.class
 processing\entities\RegionInfoP3.class
 mapmaker\entities\WorldMap.class
@@ -13,15 +12,14 @@ processing\entities\sprites\LocationInfoP3.class
 mapmaker\entities\sprites\Player.class
 mapmaker\entities\sprites\Location.class
 processing\ProcessingMapmaker.class
+mapmaker\general\files\FileHandlerDefault.class
 mapmaker\map\Canvas.class
-mapmaker\entities\MapInfo.class
+mapmaker\entities\EntityInfo.class
 mapmaker\entities\sprites\UserMarker.class
 mapmaker\editor\ui\ModeUI.class
 mapmaker\entities\Biome.class
 processing\editor\ui\LocationUI_P3.class
 processing\entities\RouteP3.class
-.netbeans_automatic_build
-mapmaker\general\FileHandler.class
 processing\general\menus\MainMenuP3.class
 processing\general\menus\EditorMenuP3.class
 processing\general\menus\ViewerMenuP3.class
@@ -32,8 +30,7 @@ mapmaker\editor\Editor.class
 mapmaker\general\menus\SettingsMenu.class
 processing\entities\MapInfoP3.class
 mapmaker\general\UserRole.class
-mapmaker\entities\RegionInfo.class
-mapmaker\entities\sprites\UserMarkerInfo.class
+mapmaker\general\files\FileStorage.class
 mapmaker\general\menus\EditorMenu.class
 mapmaker\entities\sprites\Sprite.class
 processing\editor\EditorP3.class
@@ -41,6 +38,7 @@ processing\map\CanvasP3.class
 mapmaker\general\menus\MainMenu.class
 mapmaker\entities\LocalMap.class
 processing\map\CameraP3.class
+mapmaker\general\files\FileHandler.class
 processing\entities\sprites\UserMarkerInfoP3.class
 temporary\TestMain.class
 mapmaker\entities\Landmass.class
