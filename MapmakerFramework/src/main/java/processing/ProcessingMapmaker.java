@@ -1,8 +1,20 @@
 package processing;
 
 import java.util.ArrayList;
+import java.util.List;
+import mapmaker.entities.EntityInfo;
+import mapmaker.entities.Region;
+import mapmaker.entities.Route;
+import mapmaker.entities.WorldMap;
+import mapmaker.entities.sprites.Location;
+import mapmaker.entities.sprites.UserMarker;
+import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PShape;
+import processing.core.PVector;
+import processing.entities.LandmassP3;
+import processing.entities.RouteP3;
 
 /**
  *
@@ -10,7 +22,31 @@ import processing.core.PGraphics;
  */
 public class ProcessingMapmaker extends PApplet {
 
+    FileStorage fileStore = new FileStorage();
+
     ArrayList<PGraphics> layers = new ArrayList();
+
+    EntityInfo info = new EntityInfo("NewWorldTest");
+    List<Region> region = new ArrayList();
+    List<Location> location = new ArrayList();
+    List<UserMarker> userMarker = new ArrayList();
+    List<Route> route = new ArrayList<>();
+
+    public void saveWorld() {
+        LandmassP3 land = new LandmassP3(layers.get(1));
+        RouteP3 routeImpl = new RouteP3(layers.get(2));
+        route.add(routeImpl);
+
+        WorldMap world = new WorldMap(info, land, region, location, userMarker, route);
+        boolean success = fileStore.attemptSave(world);
+        System.out.println("Success on save : " + success);
+    }
+
+    public void loadWorld() {
+        WorldMap world = fileStore.attemptLoad(true);
+        layers.set(1, world.getLandmass().getLandMass());
+        layers.set(2, world.getRoutes().get(0).getRoute());
+    }
 
     int[] cp = {
         color(0, 126, 192),
@@ -43,6 +79,9 @@ public class ProcessingMapmaker extends PApplet {
     final int delete = 2;
     int mode = edit;
 
+    ArrayList<PVector> points;
+    PShape path;
+
     @Override
     public void settings() {
         size(1920, 1080);
@@ -59,6 +98,8 @@ public class ProcessingMapmaker extends PApplet {
         for (int i = 0; i < 5; i++) {
             layers.add(createGraphics(width, height));
         }
+
+        points = new ArrayList<>();
     }
 
     @Override
@@ -67,6 +108,7 @@ public class ProcessingMapmaker extends PApplet {
         for (int i = 0; i < layers.size(); i++) {
             image(layers.get(i), 0, 0);
         }
+
         noLoop();
     }
 
@@ -74,9 +116,25 @@ public class ProcessingMapmaker extends PApplet {
     public void mouseDragged() {
         loop();
         if (mode == edit) {
-            editDraw(state, col);
+            if (state == layer1) {
+                editDraw(state, col);
+            }
         } else if (mode == delete) {
             deleteDraw(state);
+        }
+    }
+
+    @Override
+    public void mousePressed() {
+        loop();
+        if (mode == edit) {
+            if (state == layer2) {
+                editPath(state);
+            }
+        } else if (mode == delete) {
+            if (state == layer2) {
+                deletePath(state);
+            }
         }
     }
 
@@ -114,6 +172,49 @@ public class ProcessingMapmaker extends PApplet {
         ellipse(mouseX, mouseY, 50, 50);
     }
 
+    public void editPath(int i) {
+        points.add(new PVector(mouseX, mouseY));
+        PGraphics pg = layers.get(i);
+        pg.beginDraw();
+        pg.noFill();
+        pg.beginShape();
+        if (points.size() > 0) {
+            pg.curveVertex(points.get(0).x, points.get(0).y);
+            points.stream().map((p) -> {
+                pg.curveVertex(p.x, p.y);
+                return p;
+            }).forEachOrdered((p) -> {
+                pg.ellipse(p.x, p.y, 3, 3);
+            });
+        }
+        pg.endShape();
+        pg.endDraw();
+    }
+
+    public void deletePath(int i) {
+        if (points.size() > 2) {
+            points.remove(points.size() - 1);
+        }
+        PGraphics pg = layers.get(i);
+        pg.beginDraw();
+        pg.clear();
+        pg.endDraw();
+        pg.beginDraw();
+        pg.noFill();
+        pg.beginShape();
+        if (points.size() > 0) {
+            pg.curveVertex(points.get(0).x, points.get(0).y);
+            points.stream().map((p) -> {
+                pg.curveVertex(p.x, p.y);
+                return p;
+            }).forEachOrdered((p) -> {
+                pg.ellipse(p.x, p.y, 3, 3);
+            });
+        }
+        pg.endShape();
+        pg.endDraw();
+    }
+
     @Override
     public void keyPressed() {
         loop();
@@ -149,6 +250,14 @@ public class ProcessingMapmaker extends PApplet {
             mode = edit;
         } else if (key == 'd') {
             mode = delete;
+        }
+
+        if (key == 's') {
+            saveWorld();
+        }
+
+        if (key == 'l') {
+            loadWorld();
         }
     }
 
