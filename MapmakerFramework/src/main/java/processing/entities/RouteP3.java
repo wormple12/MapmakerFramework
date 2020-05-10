@@ -10,18 +10,18 @@ import processing.core.PGraphics;
  */
 public class RouteP3 implements Route, Serializable {
 
-    private PGraphics route;
+    private PGraphics graphics;
 
-    public RouteP3(PGraphics route) {
-        this.route = route;
+    public RouteP3(PGraphics graphics) {
+        this.graphics = graphics;
     }
 
-    public PGraphics getRoute() {
-        return route;
+    public PGraphics getGraphics() {
+        return graphics;
     }
 
-    public void setRoute(PGraphics route) {
-        this.route = route;
+    public void setGraphics(PGraphics graphics) {
+        this.graphics = graphics;
     }
 
 }

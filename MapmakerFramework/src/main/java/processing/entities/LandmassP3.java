@@ -10,18 +10,18 @@ import processing.core.PGraphics;
  */
 public class LandmassP3 implements Landmass, Serializable {
 
-    private PGraphics landMass;
+    private PGraphics graphics;
 
-    public LandmassP3(PGraphics landMass) {
-        this.landMass = landMass;
+    public LandmassP3(PGraphics graphics) {
+        this.graphics = graphics;
     }
 
-    public PGraphics getLandMass() {
-        return landMass;
+    public PGraphics getGraphics() {
+        return graphics;
     }
 
-    public void setLandMass(PGraphics landMass) {
-        this.landMass = landMass;
+    public void setGraphics(PGraphics graphics) {
+        this.graphics = graphics;
     }
 
 }

@@ -44,8 +44,8 @@ public class ProcessingMapmaker extends PApplet {
 
     public void loadWorld() {
         WorldMap world = fileStore.attemptLoad(true);
-        layers.set(1, ((LandmassP3) world.getLandmass()).getLandMass());
-        layers.set(2, ((RouteP3) world.getRoutes().get(0)).getRoute());
+        layers.set(1, ((LandmassP3) world.getLandmass()).getGraphics());
+        layers.set(2, ((RouteP3) world.getRoutes().get(0)).getGraphics());
     }
 
     int[] cp = {
