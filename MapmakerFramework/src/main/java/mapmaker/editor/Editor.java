@@ -29,6 +29,7 @@ public interface Editor {
      * @param y
      * @param radius
      */
+    @DrawFunction
     public void drawLandmass(int x, int y, double radius);
 
     /**
@@ -39,6 +40,7 @@ public interface Editor {
      * @param y
      * @param radius
      */
+    @DrawFunction
     public void drawWater(int x, int y, double radius);
 
     /**
@@ -59,6 +61,7 @@ public interface Editor {
      * @param optionalRegion if this is not null, the drawn border attempts to
      * replace the existing border of the given region
      */
+    @DrawFunction
     public void drawBorder(int x, int y, Region optionalRegion);
 
     /**
@@ -95,6 +98,7 @@ public interface Editor {
      * @param y
      * @param radius
      */
+    @DrawFunction
     public void drawRoute(int x, int y, double radius);
 
     /**
@@ -105,6 +109,7 @@ public interface Editor {
      * @param y
      * @param radius
      */
+    @DrawFunction
     public void eraseRoute(int x, int y, double radius);
 
     /**
