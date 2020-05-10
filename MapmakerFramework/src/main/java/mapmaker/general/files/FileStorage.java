@@ -3,6 +3,7 @@ package mapmaker.general.files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import mapmaker.entities.FilePath;
 import mapmaker.entities.WorldMap;
 import mapmaker.general.Storage;
 
@@ -13,7 +14,7 @@ import mapmaker.general.Storage;
 public class FileStorage implements Storage {
 
     private final FileHandler fileHandler;
-    private Path latestMapPath = null;
+    private FilePath latestMapPath = null;
 
     public FileStorage() {
         this.fileHandler = new FileHandlerDefault();
@@ -95,12 +96,12 @@ public class FileStorage implements Storage {
      * @return the file path for the latest opened world map, or null if none
      * was found
      */
-    public final Path getLatestMapPath() {
+    public final FilePath getLatestMapPath() {
         return latestMapPath;
     }
 
     public final void setLatestMapPath(Path path) {
-        latestMapPath = path;
+        latestMapPath = (FilePath) path;
     }
 
 }

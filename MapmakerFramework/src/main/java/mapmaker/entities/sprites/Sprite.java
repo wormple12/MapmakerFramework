@@ -1,27 +1,28 @@
 package mapmaker.entities.sprites;
 
-import java.nio.file.Path;
+import java.io.Serializable;
+import mapmaker.entities.FilePath;
 
 /**
  *
  * @author Simon Norup
  */
-public class Sprite {
+public class Sprite implements Serializable {
 
-    private Path spritePath;
+    private FilePath spritePath;
     private int x, y;
 
-    public Sprite(Path spritePath, int x, int y) {
+    public Sprite(FilePath spritePath, int x, int y) {
         this.spritePath = spritePath;
         this.x = x;
         this.y = y;
     }
 
-    public Path getSpritePath() {
+    public FilePath getSpritePath() {
         return spritePath;
     }
 
-    public void setSpritePath(Path spritePath) {
+    public void setSpritePath(FilePath spritePath) {
         this.spritePath = spritePath;
     }
 

@@ -1,11 +1,13 @@
 
 package mapmaker.entities;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Simon Norup
  */
-public class EntityInfo {
+public class EntityInfo implements Serializable {
     
     private String name;
 

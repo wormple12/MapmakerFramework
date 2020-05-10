@@ -1,10 +1,12 @@
 package mapmaker.entities;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Simon Norup
  */
-public class Region {
+public class Region implements Serializable {
 
     private Landmass area;
     private EntityInfo info;

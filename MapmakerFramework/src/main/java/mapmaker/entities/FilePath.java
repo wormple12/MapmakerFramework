@@ -1,12 +1,12 @@
-
 package mapmaker.entities;
 
 import java.io.Serializable;
+import java.nio.file.Path;
 
 /**
  *
  * @author Simon Norup
  */
-public interface LocalMap extends Serializable {
+public interface FilePath extends Path, Serializable {
 
 }
