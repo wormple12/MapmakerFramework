@@ -20,6 +20,7 @@ mapmaker\editor\Editor.class
 mapmaker\general\menus\SettingsMenu.class
 mapmaker\general\files\FileStorage.class
 mapmaker\general\menus\EditorMenu.class
+mapmaker\entities\FilePath.class
 processing\editor\EditorP3.class
 processing\map\CanvasP3.class
 mapmaker\general\menus\MainMenu.class

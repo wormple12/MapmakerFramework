@@ -239,6 +239,31 @@ public class ProcessingMapmaker extends PApplet {
         pg.endDraw();
     }
 
+    public void randomMap() {
+        PGraphics pg = landMass.get(1);
+        float r = random(10000000);
+        this.noiseSeed((long) r);
+        pg.beginDraw();
+        pg.loadPixels();
+        float d0 = random(100, 200);
+        float d1 = random(25, 75);
+        int[] terrain;
+        terrain = new int[height * width];
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                float n0 = noise(i / d0, j / d0, 0);
+                float n1 = noise(i / d1, j / d1, 10);
+                float n = (float) (1 - (n0 * 0.75 + n1 * 0.25));
+                int k = (int) (n * cp.length);
+                pg.pixels[j * width + i] = cp[k];
+                terrain[j * width + i] = k;
+            }
+        }
+        pg.updatePixels();
+        pg.endDraw();
+        loop();
+    }
+
     @Override
     public void keyPressed() {
         loop();
@@ -360,6 +385,10 @@ public class ProcessingMapmaker extends PApplet {
 
         if (key == 's') {
             saveWorld();
+        }
+
+        if (key == 'r' & state == state1) {
+            randomMap();
         }
 //
 //        if (key == 'o') {
