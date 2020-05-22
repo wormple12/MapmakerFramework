@@ -1,7 +1,7 @@
 package mapmaker.editor;
 
 import java.util.List;
-import mapmaker.entities.Landmass;
+import mapmaker.entities.Biome;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.sprites.Location;
@@ -15,26 +15,38 @@ public interface Editor {
     /**
      * General use function that is called whenever a user draws on the map,
      * independant of editor mode and other draw-based functionalities.
+     * <p>
+     * Add the '@DrawFunction' annotation to an Editor method to define a
+     * draw-based functionality.
      *
      * @param x
      * @param y
      */
-    default public void draw(int x, int y) {}
+    default public void draw(int x, int y) {
+    }
 
     /**
      * Adds landmass to the world map based on pointer (mouse or controller)
-     * movement.
+     * movement, either creating a new region, or changing an existing one.
      *
      * @param x
      * @param y
      * @param radius
+     * @param optionalRegion if this is not null, landmass is added to the given
+     * existing region, instead of creating a new one.
      */
     @DrawFunction
-    public void drawLandmass(int x, int y, double radius);
+    public void drawLandmass(int x, int y, double radius, Region optionalRegion);
+
+    @DrawFunction
+    default public void drawNewLandmass(int x, int y, double radius) {
+        drawLandmass(x, y, radius, null);
+    }
 
     /**
-     * Removes landmass from the world map based on pointer (mouse or
-     * controller) movement.
+     * REVISE!!! Should this delete landmass from a selected region only
+     * (easiest), or from all regions simultaneously (best)? Removes landmass
+     * from the world map based on pointer (mouse or controller) movement.
      *
      * @param x
      * @param y
@@ -44,34 +56,16 @@ public interface Editor {
     public void drawWater(int x, int y, double radius);
 
     /**
-     * Finalizes landmass addition/removal, for example at mouse release. This
-     * should update the current Map object, if this is not taken care of during
-     * drawing.
+     * Finalizes landmass addition/removal, for example at mouse release, either
+     * creating a new region, or changing existing ones. This should update the
+     * current Map object, if this is not taken care of during drawing.
+     * <p>
+     * If a new region is created, the user should be prompted to define initial
+     * region info, like a name and a biome.
      *
-     * @return the updated lassmass
+     * @return the created/updated regions(s)
      */
-    public Landmass updateLandmass();
-
-    /**
-     * Draws a border line on the landmass based on pointer (mouse or
-     * controller) movement.This should not be able to draw on water surfaces.
-     *
-     * @param x
-     * @param y
-     * @param optionalRegion if this is not null, the drawn border attempts to
-     * replace the existing border of the given region
-     */
-    @DrawFunction
-    public void drawBorder(int x, int y, Region optionalRegion);
-
-    /**
-     * Finalizes the drawing of borders, for example at mouse release. Attempts
-     * to split the drawn upon landmass into regions based on the borders drawn
-     * and borders already existing. This should update the current Map object.
-     *
-     * @return the resulting regions, if any
-     */
-    public List<Region> createRegions();
+    public List<Region> updateRegions();
 
     /**
      * Displays all information about a given region in a user-friendly manner.
@@ -161,4 +155,24 @@ public interface Editor {
      */
     public void editLocationInfo(Location original, Location updated);
 
+    // ============= LEGACY ============
+    /**
+     * Draws a border line on the landmass based on pointer (mouse or
+     * controller) movement.This should not be able to draw on water surfaces.
+     *
+     * @param x
+     * @param y
+     * @param optionalRegion if this is not null, the drawn border attempts to
+     * replace the existing border of the given region
+     */
+//    @DrawFunction
+//    public void drawBorder(int x, int y, Region optionalRegion);
+    /**
+     * Finalizes the drawing of borders, for example at mouse release. Attempts
+     * to split the drawn upon landmass into regions based on the borders drawn
+     * and borders already existing. This should update the current Map object.
+     *
+     * @return the resulting regions, if any
+     */
+//    public List<Region> createRegions();
 }

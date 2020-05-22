@@ -1,6 +1,7 @@
 package processing;
 
 import java.util.ArrayList;
+import mapmaker.entities.Biome;
 import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
@@ -36,10 +37,11 @@ public class ProcessingMapmaker extends PApplet {
         route.stream().map((r) -> new RouteP3(r)).forEachOrdered(routeList::add);
 
         ArrayList<Region> regionList = new ArrayList();
+        regionList.add(new Region(land, info, Biome.HILLS));
         ArrayList<Location> locationList = new ArrayList();
         ArrayList<UserMarker> userMarkerList = new ArrayList();
 
-        WorldMap world = new WorldMap(info, land, regionList, locationList, userMarkerList, routeList);
+        WorldMap world = new WorldMap(info, regionList, locationList, userMarkerList, routeList);
         boolean success = fileStore.attemptSave(world);
         System.out.println("Success on save : " + success);
     }
