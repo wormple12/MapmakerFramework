@@ -1,7 +1,8 @@
 package mapmaker.entities.sprites;
 
 import java.io.Serializable;
-import mapmaker.entities.FilePath;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -9,21 +10,21 @@ import mapmaker.entities.FilePath;
  */
 public class Sprite implements Serializable {
 
-    private FilePath spritePath;
+    private String spritePath;
     private int x, y;
 
-    public Sprite(FilePath spritePath, int x, int y) {
-        this.spritePath = spritePath;
+    public Sprite(Path spritePath, int x, int y) {
+        this.spritePath = spritePath.toString();
         this.x = x;
         this.y = y;
     }
 
-    public FilePath getSpritePath() {
-        return spritePath;
+    public Path getSpritePath() {
+        return Paths.get(spritePath);
     }
 
-    public void setSpritePath(FilePath spritePath) {
-        this.spritePath = spritePath;
+    public void setSpritePath(Path spritePath) {
+        this.spritePath = spritePath.toString();
     }
 
     public int getX() {

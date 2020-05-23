@@ -2,7 +2,7 @@ package processing.entities;
 
 import java.io.Serializable;
 import mapmaker.entities.Route;
-import processing.core.PGraphics;
+import processing.general.files.MapStorageP3;
 
 /**
  *
@@ -10,18 +10,31 @@ import processing.core.PGraphics;
  */
 public class RouteP3 implements Route, Serializable {
 
-    private PGraphics graphics;
+    private String id;
+    private String graphicsPath;
 
-    public RouteP3(PGraphics graphics) {
-        this.graphics = graphics;
+    public RouteP3() {
+        this.id = MapStorageP3.generateId();
     }
 
-    public PGraphics getGraphics() {
-        return graphics;
+    public RouteP3(String id) {
+        this.id = id;
     }
 
-    public void setGraphics(PGraphics graphics) {
-        this.graphics = graphics;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGraphicsPath() {
+        return graphicsPath;
+    }
+
+    public void setGraphicsPath(String graphicsPath) {
+        this.graphicsPath = graphicsPath;
     }
 
 }

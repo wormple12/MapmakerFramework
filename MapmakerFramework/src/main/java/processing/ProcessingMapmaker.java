@@ -1,6 +1,7 @@
 package processing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import mapmaker.entities.Biome;
 import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
@@ -11,9 +12,11 @@ import mapmaker.entities.sprites.UserMarker;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.entities.LandmassP3;
 import processing.entities.RouteP3;
+import processing.general.files.MapStorageP3;
 
 /**
  *
@@ -21,7 +24,7 @@ import processing.entities.RouteP3;
  */
 public class ProcessingMapmaker extends PApplet {
 
-    FileStorage fileStore = new FileStorage();
+    MapStorageP3 fileStore = new MapStorageP3();
 
     ArrayList<PGraphics> landMass = new ArrayList();
     ArrayList<PGraphics> region = new ArrayList();
@@ -30,27 +33,52 @@ public class ProcessingMapmaker extends PApplet {
     ArrayList<PGraphics> route = new ArrayList<>();
 
     public void saveWorld() {
-        EntityInfo info = new EntityInfo("NewWorldTest");
-        LandmassP3 land = new LandmassP3(landMass.get(1));
-
-        ArrayList<Route> routeList = new ArrayList<>();
-        route.stream().map((r) -> new RouteP3(r)).forEachOrdered(routeList::add);
+        EntityInfo regionInfo = new EntityInfo("NewRegionTest");
+        EntityInfo mapInfo = new EntityInfo("NewWorldTest");
 
         ArrayList<Region> regionList = new ArrayList();
-        regionList.add(new Region(land, info, Biome.HILLS));
+        regionList.add(new Region(new LandmassP3(), regionInfo, Biome.HILLS)); // replace this with the line below, when region layers are used correctly
+//        region.stream().map((r) -> new Region(new LandmassP3(), regionInfo, Biome.HILLS))
+//                .forEachOrdered(regionList::add);
+
+        ArrayList<Route> routeList = new ArrayList<>();
+        route.stream().map((r) -> new RouteP3())
+                .forEachOrdered(routeList::add);
+
         ArrayList<Location> locationList = new ArrayList();
         ArrayList<UserMarker> userMarkerList = new ArrayList();
 
-        WorldMap world = new WorldMap(info, regionList, locationList, userMarkerList, routeList);
-        boolean success = fileStore.attemptSave(world);
+        WorldMap world = new WorldMap(mapInfo, regionList, locationList, userMarkerList, routeList);
+        boolean success = fileStore.attemptSave(world, Arrays.asList(landMass.get(1)), route); // replace this with the line below, when region layers are used correctly
+//        boolean success = fileStore.attemptSave(world, region, route);
         System.out.println("Success on save : " + success);
     }
 
-//    public void loadWorld() {
-//        WorldMap world = fileStore.attemptLoad(true);
-//        landMass.set(1, ((LandmassP3) world.getLandmass()).getGraphics());
-//        landMass.set(2, ((RouteP3) world.getRoutes().get(0)).getGraphics());
-//    }
+    public void loadWorld() {
+        WorldMap world = fileStore.attemptLoad(false);
+        if (world != null) {
+            System.out.println("Loaded Map: " + world.getInfo().getName());
+            loop();
+            for (int i = 0; i < world.getRegions().size(); i++) {
+                LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
+                PImage regionImg = loadImage(area.getGraphicsPath());
+                // change to region.get/set(i), when region layers are used correctly
+                landMass.set(1, createGraphics(regionImg.width, regionImg.height));
+                landMass.get(1).beginDraw();
+                landMass.get(1).image(regionImg, 0, 0);
+                landMass.get(1).endDraw();
+            }
+            for (int i = 0; i < world.getRoutes().size(); i++) {
+                RouteP3 r = (RouteP3) world.getRoutes().get(i);
+                PImage routeImg = loadImage(r.getGraphicsPath());
+                route.set(i, createGraphics(routeImg.width, routeImg.height));
+                route.get(i).beginDraw();
+                route.get(i).image(routeImg, 0, 0);
+                route.get(i).endDraw();
+            }
+        }
+    }
+
     int[] cp = {
         color(0, 126, 192),
         color(24, 154, 208),
@@ -100,6 +128,11 @@ public class ProcessingMapmaker extends PApplet {
         landMass.add(pg);
 
         landMass.add(createGraphics(width, height));
+        landMass.get(1).beginDraw();
+        landMass.get(1).background(0f, 0f);
+        landMass.get(1).endDraw();
+        // should be created when starting to draw/place elements instead
+        // otherwise, save functionality will act weirdly
         region.add(createGraphics(width, height));
         location.add(createGraphics(width, height));
         userMarker.add(createGraphics(width, height));
@@ -108,6 +141,8 @@ public class ProcessingMapmaker extends PApplet {
         pointsForPaths = new ArrayList<>();
         ArrayList<PVector> points = new ArrayList<>();
         pointsForPaths.add(points);
+
+        hint(DISABLE_ASYNC_SAVEFRAME); // prevents the black-box saving issue, when exporting PGraphics layers to files
     }
 
     @Override
@@ -392,10 +427,10 @@ public class ProcessingMapmaker extends PApplet {
         if (key == 'r' & state == state1) {
             randomMap();
         }
-//
-//        if (key == 'o') {
-//            loadWorld();
-//        }
+
+        if (key == 'o') {
+            loadWorld();
+        }
     }
 
     public static void main(String[] passedArgs) {

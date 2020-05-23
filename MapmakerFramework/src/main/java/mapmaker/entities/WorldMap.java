@@ -2,6 +2,7 @@ package mapmaker.entities;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import mapmaker.entities.sprites.Location;
 import mapmaker.entities.sprites.UserMarker;
@@ -18,7 +19,7 @@ public class WorldMap implements Serializable {
     private final List<Route> routes;
     private final List<Location> locations;
     private final List<UserMarker> markers;
-    private FilePath filePath;
+    private String filePath;
 
     public WorldMap(EntityInfo info, /*Landmass landmass,*/ List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
         this.info = info;
@@ -69,12 +70,31 @@ public class WorldMap implements Serializable {
         markers.add(marker);
     }
 
-    public FilePath getFilePath() {
-        return filePath;
+    public Path getFilePath() {
+        if (filePath != null) {
+            return Paths.get(filePath);
+        } else {
+            return null;
+        }
+    }
+
+    public String getFileName() {
+        if (filePath != null) {
+            String[] parts;
+            if (filePath.contains("/")) {
+                parts = filePath.split("/");
+            } else if (filePath.contains("\\")) {
+                parts = filePath.split("\\\\");
+            } else {
+                return null;
+            }
+            return parts[parts.length - 1].split("\\.")[0];
+        }
+        return null;
     }
 
     public void setFilePath(Path filePath) {
-        this.filePath = (FilePath) filePath;
+        this.filePath = filePath.toString();
     }
 
 }

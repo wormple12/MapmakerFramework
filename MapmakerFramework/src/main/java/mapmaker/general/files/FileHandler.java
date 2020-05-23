@@ -42,7 +42,7 @@ public interface FileHandler {
                 objectOut.writeObject(map);
             }
         } catch (IOException ex) {
-            throw new UnsupportedOperationException("FileNotFoundException/IOException has not been handled yet.");
+            throw new UnsupportedOperationException("FileNotFoundException/IOException was thrown but has not been handled yet. Object could not be written to file.");
         }
     }
 

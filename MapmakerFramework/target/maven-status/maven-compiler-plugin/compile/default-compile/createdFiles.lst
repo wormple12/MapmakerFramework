@@ -3,11 +3,13 @@ mapmaker\entities\Route.class
 processing\entities\RegionInfoP3.class
 mapmaker\entities\WorldMap.class
 mapmaker\map\Camera.class
+temporary\FileLoadSave$2.class
 processing\entities\sprites\LocationInfoP3.class
 mapmaker\entities\sprites\Player.class
 temporary\EditorProxyTest$TestEditorImpl.class
 temporary\EditorProxyTest$TestEditor.class
 mapmaker\entities\EntityInfo.class
+temporary\FileLoadTest.class
 mapmaker\editor\EditorProxy.class
 mapmaker\editor\ui\ModeUI.class
 mapmaker\entities\Biome.class
@@ -20,7 +22,6 @@ mapmaker\editor\Editor.class
 mapmaker\general\menus\SettingsMenu.class
 mapmaker\general\files\FileStorage.class
 mapmaker\general\menus\EditorMenu.class
-mapmaker\entities\FilePath.class
 processing\editor\EditorP3.class
 processing\map\CanvasP3.class
 mapmaker\general\menus\MainMenu.class
@@ -41,6 +42,8 @@ mapmaker\entities\sprites\UserMarker.class
 processing\entities\RouteP3.class
 mapmaker\entities\Region.class
 processing\entities\LandmassP3.class
+temporary\FileLoadSave.class
+temporary\FileLoadSave$1.class
 processing\entities\MapInfoP3.class
 mapmaker\general\UserRole.class
 mapmaker\entities\sprites\Sprite.class
@@ -48,4 +51,3 @@ mapmaker\editor\DrawFunction.class
 mapmaker\entities\LocalMap.class
 mapmaker\general\files\FileHandler.class
 processing\entities\sprites\UserMarkerInfoP3.class
-temporary\TestMain.class

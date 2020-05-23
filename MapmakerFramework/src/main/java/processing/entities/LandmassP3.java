@@ -2,7 +2,7 @@ package processing.entities;
 
 import java.io.Serializable;
 import mapmaker.entities.Landmass;
-import processing.core.PGraphics;
+import processing.general.files.MapStorageP3;
 
 /**
  *
@@ -10,18 +10,31 @@ import processing.core.PGraphics;
  */
 public class LandmassP3 implements Landmass, Serializable {
 
-    private PGraphics graphics;
-
-    public LandmassP3(PGraphics graphics) {
-        this.graphics = graphics;
+    private String id;
+    private String graphicsPath;
+    
+    public LandmassP3() {
+        this.id = MapStorageP3.generateId();
     }
 
-    public PGraphics getGraphics() {
-        return graphics;
+    public LandmassP3(String id) {
+        this.id = id;
     }
 
-    public void setGraphics(PGraphics graphics) {
-        this.graphics = graphics;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGraphicsPath() {
+        return graphicsPath;
+    }
+
+    public void setGraphicsPath(String graphicsPath) {
+        this.graphicsPath = graphicsPath;
     }
 
 }

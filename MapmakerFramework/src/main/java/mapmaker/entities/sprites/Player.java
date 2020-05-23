@@ -1,6 +1,6 @@
 package mapmaker.entities.sprites;
 
-import mapmaker.entities.FilePath;
+import java.nio.file.Path;
 
 /**
  *
@@ -8,7 +8,7 @@ import mapmaker.entities.FilePath;
  */
 public class Player extends UserMarker {
 
-    public Player(FilePath sprite, int x, int y) {
+    public Player(Path sprite, int x, int y) {
         super(null, sprite, x, y);
     }
 

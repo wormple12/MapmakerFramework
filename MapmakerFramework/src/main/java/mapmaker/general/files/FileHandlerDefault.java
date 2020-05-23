@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public final class FileHandlerDefault implements FileHandler {
 
     private static final String DEFAULT_ROOT = "./worldmaps";
-    private static final String DEFAULT_FILE_EXTENSION = "txt"; // .p3map
+    private static final String DEFAULT_FILE_EXTENSION = "p3map";
 
     private final JFileChooser J_FILE_CHOOSER;
 
