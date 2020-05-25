@@ -32,52 +32,53 @@ public class ProcessingMapmaker extends PApplet {
     ArrayList<PGraphics> userMarker = new ArrayList();
     ArrayList<PGraphics> route = new ArrayList<>();
 
-    public void saveWorld() {
-        EntityInfo regionInfo = new EntityInfo("NewRegionTest");
-        EntityInfo mapInfo = new EntityInfo("NewWorldTest");
-
-        ArrayList<Region> regionList = new ArrayList();
-        regionList.add(new Region(new LandmassP3(), regionInfo, Biome.HILLS)); // replace this with the line below, when region layers are used correctly
-//        region.stream().map((r) -> new Region(new LandmassP3(), regionInfo, Biome.HILLS))
-//                .forEachOrdered(regionList::add);
-
-        ArrayList<Route> routeList = new ArrayList<>();
-        route.stream().map((r) -> new RouteP3())
-                .forEachOrdered(routeList::add);
-
-        ArrayList<Location> locationList = new ArrayList();
-        ArrayList<UserMarker> userMarkerList = new ArrayList();
-
-        WorldMap world = new WorldMap(mapInfo, regionList, locationList, userMarkerList, routeList);
-        boolean success = fileStore.attemptSave(world, Arrays.asList(landMass.get(1)), route); // replace this with the line below, when region layers are used correctly
-//        boolean success = fileStore.attemptSave(world, region, route);
-        System.out.println("Success on save : " + success);
-    }
-
-    public void loadWorld() {
-        WorldMap world = fileStore.attemptLoad(false);
-        if (world != null) {
-            System.out.println("Loaded Map: " + world.getInfo().getName());
-            loop();
-            for (int i = 0; i < world.getRegions().size(); i++) {
-                LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
-                PImage regionImg = loadImage(area.getGraphicsPath());
-                // change to region.get/set(i), when region layers are used correctly
-                landMass.set(1, createGraphics(regionImg.width, regionImg.height));
-                landMass.get(1).beginDraw();
-                landMass.get(1).image(regionImg, 0, 0);
-                landMass.get(1).endDraw();
-            }
-            for (int i = 0; i < world.getRoutes().size(); i++) {
-                RouteP3 r = (RouteP3) world.getRoutes().get(i);
-                PImage routeImg = loadImage(r.getGraphicsPath());
-                route.set(i, createGraphics(routeImg.width, routeImg.height));
-                route.get(i).beginDraw();
-                route.get(i).image(routeImg, 0, 0);
-                route.get(i).endDraw();
-            }
-        }
-    }
+//    public void saveWorld() {
+//        EntityInfo regionInfo = new EntityInfo("NewRegionTest");
+//        EntityInfo mapInfo = new EntityInfo("NewWorldTest");
+//
+//        ArrayList<Region> regionList = new ArrayList();
+//        regionList.add(new Region(new LandmassP3(), regionInfo, Biome.HILLS)); // replace this with the line below, when region layers are used correctly
+////        region.stream().map((r) -> new Region(new LandmassP3(), regionInfo, Biome.HILLS))
+////                .forEachOrdered(regionList::add);
+//
+//        ArrayList<Route> routeList = new ArrayList<>();
+//        route.stream().map((r) -> new RouteP3())
+//                .forEachOrdered(routeList::add);
+//
+//        ArrayList<Location> locationList = new ArrayList();
+//        ArrayList<UserMarker> userMarkerList = new ArrayList();
+//
+//        WorldMap world = new WorldMap(mapInfo, regionList, locationList, userMarkerList, routeList);
+//        boolean success = fileStore.attemptSave(world, Arrays.asList(landMass.get(1)), route); // replace this with the line below, when region layers are used correctly
+////        boolean success = fileStore.attemptSave(world, region, route);
+//        System.out.println("Success on save : " + success);
+//    }
+//
+//    public void loadWorld() {
+//        WorldMap world = fileStore.attemptLoad(false);
+//        if (world != null) {
+//            System.out.println("Loaded Map: " + world.getInfo().getName());
+//            loop();
+//            for (int i = 0; i < world.getRegions().size(); i++) {
+//                LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
+//                PImage regionImg = loadImage(area.getGraphicsPath());
+//                // change to region.get/set(i), when region layers are used correctly
+//                landMass.set(1, createGraphics(regionImg.width, regionImg.height));
+//                landMass.get(1).beginDraw();
+//                landMass.get(1).image(regionImg, 0, 0);
+//                landMass.get(1).endDraw();
+//            }
+//            for (int i = 0; i < world.getRoutes().size(); i++) {
+//                RouteP3 r = (RouteP3) world.getRoutes().get(i);
+//                PImage routeImg = loadImage(r.getGraphicsPath());
+//                route.set(i, createGraphics(routeImg.width, routeImg.height));
+//                route.get(i).beginDraw();
+//                route.get(i).image(routeImg, 0, 0);
+//                route.get(i).endDraw();
+//            }
+//        }
+//    }
+    ArrayList<PGraphics> border = new ArrayList();
 
     int[] cp = {
         color(0, 126, 192),
@@ -103,7 +104,6 @@ public class ProcessingMapmaker extends PApplet {
     final int state2 = 2;
     final int state3 = 3;
     final int state4 = 4;
-    final int state5 = 5;
     int state = state1;
 
     int layer = 0;
@@ -127,12 +127,11 @@ public class ProcessingMapmaker extends PApplet {
         pg.endDraw();
         landMass.add(pg);
 
-        landMass.add(createGraphics(width, height));
-        landMass.get(1).beginDraw();
-        landMass.get(1).background(0f, 0f);
-        landMass.get(1).endDraw();
+//        landMass.add(createGraphics(width, height));
         // should be created when starting to draw/place elements instead
         // otherwise, save functionality will act weirdly
+        border.add(createGraphics(width, height));
+
         region.add(createGraphics(width, height));
         location.add(createGraphics(width, height));
         userMarker.add(createGraphics(width, height));
@@ -153,6 +152,7 @@ public class ProcessingMapmaker extends PApplet {
         }
 
         for (int i = 0; i < region.size(); i++) {
+            image(border.get(i), 0, 0);
             image(region.get(i), 0, 0);
         }
 
@@ -176,11 +176,11 @@ public class ProcessingMapmaker extends PApplet {
         loop();
         if (mode == edit) {
             if (state == state1) {
-                editDraw(1, col);
+                editDraw(layer, col);
             }
         } else if (mode == delete) {
             if (state == state1) {
-                deleteDraw(1);
+                deleteDraw(layer);
             }
         }
     }
@@ -189,32 +189,42 @@ public class ProcessingMapmaker extends PApplet {
     public void mousePressed() {
         loop();
         if (mode == edit) {
-            if (state == state5) {
+            if (state == state4) {
                 editPath(layer);
             }
         } else if (mode == delete) {
-            if (state == state5) {
+            if (state == state4) {
                 deletePath(layer);
             }
         }
     }
 
     public void editDraw(int i, int c) {
-        PGraphics pg = landMass.get(i);
+        PGraphics pg = region.get(i);
+        PGraphics pgb = border.get(i);
         if (mousePressed) {
             pg.beginDraw();
             pg.stroke(cp[c]);
             pg.strokeWeight(100);
             pg.line(pmouseX, pmouseY, mouseX, mouseY);
             pg.endDraw();
+
+            pgb.beginDraw();
+            pgb.stroke(255);
+            pgb.strokeWeight(110);
+            pgb.line(pmouseX, pmouseY, mouseX, mouseY);
+            pgb.endDraw();
         }
         noStroke();
         ellipse(mouseX, mouseY, 100, 100);
     }
 
     public void deleteDraw(int i) {
-        PGraphics pg = landMass.get(i);
+        PGraphics pg = region.get(i);
+        PGraphics pgb = border.get(i);
         if (mousePressed) {
+            pgb.beginDraw();
+            pgb.loadPixels();
             pg.beginDraw();
             pg.loadPixels();
             for (int x = 0; x < pg.width; x++) {
@@ -224,10 +234,16 @@ public class ProcessingMapmaker extends PApplet {
                         int loc = x + y * pg.width;
                         pg.pixels[loc] = 0x0;
                     }
+                    if (distance <= 20) {
+                        int loc = x + y * pg.width;
+                        pgb.pixels[loc] = 0x0;
+                    }
                 }
             }
             pg.updatePixels();
             pg.endDraw();
+            pgb.updatePixels();
+            pgb.endDraw();
         }
         noStroke();
         ellipse(mouseX, mouseY, 50, 50);
@@ -277,7 +293,7 @@ public class ProcessingMapmaker extends PApplet {
     }
 
     public void randomMap() {
-        PGraphics pg = landMass.get(1);
+        PGraphics pg = landMass.get(0);
         float r = random(10000000);
         this.noiseSeed((long) r);
         pg.beginDraw();
@@ -308,23 +324,23 @@ public class ProcessingMapmaker extends PApplet {
         switch (key) {
             case '1':
                 state = state1;
+                layer = 0;
                 System.out.println("state1 active");
                 break;
             case '2':
                 state = state2;
+                layer = 0;
                 System.out.println("state2 active");
                 break;
             case '3':
                 state = state3;
+                layer = 0;
                 System.out.println("state3 active");
                 break;
             case '4':
                 state = state4;
+                layer = 0;
                 System.out.println("state4 active");
-                break;
-            case '5':
-                state = state5;
-                System.out.println("state5 active");
                 break;
             default:
                 break;
@@ -333,13 +349,15 @@ public class ProcessingMapmaker extends PApplet {
         if (key == 'l') {
             switch (state) {
                 case state1:
-                    if (state == 1) {
-                        layer = 1;
+                    if (layer < region.size() - 1) {
+                        layer = layer + 1;
+                    } else {
+                        layer = 0;
                     }
                     System.out.println("state1 layer switch");
                     break;
                 case state2:
-                    if (layer < region.size() - 1) {
+                    if (layer < location.size() - 1) {
                         layer = layer + 1;
                     } else {
                         layer = 0;
@@ -347,7 +365,7 @@ public class ProcessingMapmaker extends PApplet {
                     System.out.println("state2 layer switch");
                     break;
                 case state3:
-                    if (layer < location.size() - 1) {
+                    if (layer < userMarker.size() - 1) {
                         layer = layer + 1;
                     } else {
                         layer = 0;
@@ -355,20 +373,12 @@ public class ProcessingMapmaker extends PApplet {
                     System.out.println("state3 layer switch");
                     break;
                 case state4:
-                    if (layer < userMarker.size() - 1) {
-                        layer = layer + 1;
-                    } else {
-                        layer = 0;
-                    }
-                    System.out.println("state4 layer switch");
-                    break;
-                case state5:
                     if (layer < route.size() - 1) {
                         layer = layer + 1;
                     } else {
                         layer = 0;
                     }
-                    System.out.println("state5 layer switch");
+                    System.out.println("state4 layer switch");
                     break;
                 default:
                     break;
@@ -377,27 +387,29 @@ public class ProcessingMapmaker extends PApplet {
 
         if (key == 'n') {
             switch (state) {
-                case state2:
+                case state1:
                     PGraphics pg2 = createGraphics(width, height);
                     region.add(pg2);
+                    PGraphics pgBorder = createGraphics(width, height);
+                    border.add(pgBorder);
+                    System.out.println("Adding for layer 1");
+                    break;
+                case state2:
+                    PGraphics pg3 = createGraphics(width, height);
+                    location.add(pg3);
                     System.out.println("Adding for layer 2");
                     break;
                 case state3:
-                    PGraphics pg3 = createGraphics(width, height);
-                    location.add(pg3);
+                    PGraphics pg4 = createGraphics(width, height);
+                    userMarker.add(pg4);
                     System.out.println("Adding for layer 3");
                     break;
                 case state4:
-                    PGraphics pg4 = createGraphics(width, height);
-                    userMarker.add(pg4);
-                    System.out.println("Adding for layer 4");
-                    break;
-                case state5:
                     PGraphics pg5 = createGraphics(width, height);
                     route.add(pg5);
                     ArrayList<PVector> points = new ArrayList<>();
                     pointsForPaths.add(points);
-                    System.out.println("Adding for layer 5");
+                    System.out.println("Adding for layer 4");
                     break;
                 default:
                     break;
@@ -420,17 +432,17 @@ public class ProcessingMapmaker extends PApplet {
             mode = delete;
         }
 
-        if (key == 's') {
-            saveWorld();
-        }
-
         if (key == 'r' & state == state1) {
             randomMap();
         }
 
-        if (key == 'o') {
-            loadWorld();
-        }
+//        if (key == 's') {
+//            saveWorld();
+//        }
+//
+//        if (key == 'o') {
+//            loadWorld();
+//        }
     }
 
     public static void main(String[] passedArgs) {
