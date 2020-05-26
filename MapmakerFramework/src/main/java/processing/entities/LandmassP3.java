@@ -12,7 +12,7 @@ public class LandmassP3 implements Landmass, Serializable {
 
     private String id;
     private String graphicsPath;
-    
+
     public LandmassP3() {
         this.id = MapStorageP3.generateId();
     }
@@ -35,6 +35,11 @@ public class LandmassP3 implements Landmass, Serializable {
 
     public void setGraphicsPath(String graphicsPath) {
         this.graphicsPath = graphicsPath;
+    }
+
+    public String getBorderGraphicsPath() {
+        String[] parts = graphicsPath.split("\\.");
+        return parts[0] + "_border.png";
     }
 
 }
