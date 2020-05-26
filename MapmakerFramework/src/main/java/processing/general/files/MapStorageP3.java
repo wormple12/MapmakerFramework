@@ -2,7 +2,6 @@ package processing.general.files;
 
 import java.util.List;
 import java.util.Random;
-import mapmaker.entities.Region;
 import mapmaker.entities.WorldMap;
 import mapmaker.general.files.FileHandler;
 import mapmaker.general.files.FileStorage;
@@ -26,7 +25,7 @@ public class MapStorageP3 {
         infoStorage = new FileStorage(fileHandler);
     }
 
-    public boolean attemptSave(WorldMap map, List<PGraphics> regionLayers, List<PGraphics> routeLayers) {
+    public boolean attemptSave(WorldMap map, List<PGraphics> regionLayers, List<PGraphics> borderLayers, List<PGraphics> routeLayers) {
         if (map.getRegions().size() != regionLayers.size()) {
             throw new IllegalArgumentException("There's a discrepancy between the number of regions in the map and the number of region graphics layers.");
         }
@@ -38,15 +37,17 @@ public class MapStorageP3 {
         if (!success) {
             return false;
         }
+        String mapFileName = map.getFileName();
+        
         try {
-            String mapFileName = map.getFileName();
-
             for (int i = 0; i < map.getRegions().size(); i++) {
                 LandmassP3 area = (LandmassP3) map.getRegions().get(i).getArea();
                 String regionPath = updateRegionPath(mapFileName, area);
                 regionLayers.get(i).save(regionPath);
+                String borderPath = area.getBorderGraphicsPath();
+                borderLayers.get(i).save(borderPath);
             }
-
+            
             for (int i = 0; i < map.getRoutes().size(); i++) {
                 RouteP3 route = (RouteP3) map.getRoutes().get(i);
                 String routePath = updateRoutePath(mapFileName, route);
