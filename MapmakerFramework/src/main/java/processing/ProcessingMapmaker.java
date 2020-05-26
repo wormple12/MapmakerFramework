@@ -127,7 +127,6 @@ public class ProcessingMapmaker extends PApplet {
         pg.endDraw();
         landMass.add(pg);
 
-//        landMass.add(createGraphics(width, height));
         // should be created when starting to draw/place elements instead
         // otherwise, save functionality will act weirdly
         border.add(createGraphics(width, height));
