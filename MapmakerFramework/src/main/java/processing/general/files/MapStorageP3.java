@@ -2,7 +2,6 @@ package processing.general.files;
 
 import java.util.List;
 import java.util.Random;
-import mapmaker.entities.Region;
 import mapmaker.entities.WorldMap;
 import mapmaker.general.files.FileHandler;
 import mapmaker.general.files.FileStorage;
