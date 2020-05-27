@@ -6,8 +6,10 @@ import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.WorldMap;
+import mapmaker.entities.sprites.LocationImp;
 import mapmaker.entities.sprites.Location;
 import mapmaker.entities.sprites.UserMarker;
+import mapmaker.entities.sprites.UserMarkerImp;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -25,62 +27,63 @@ public class ProcessingMapmaker extends PApplet {
     MapStorageP3 fileStore = new MapStorageP3();
 
     ArrayList<PGraphics> seaLevel = new ArrayList();
-    ArrayList<PGraphics> border = new ArrayList();
 
     ArrayList<PGraphics> region = new ArrayList();
-    ArrayList<PGraphics> location = new ArrayList();
-    ArrayList<PGraphics> userMarker = new ArrayList();
+    ArrayList<PGraphics> border = new ArrayList();
+
+    ArrayList<LocationImp> locations = new ArrayList();
+    ArrayList<UserMarkerImp> userMarkers = new ArrayList();
+
     ArrayList<PGraphics> route = new ArrayList<>();
 
-    public void saveWorld() {
-        EntityInfo regionInfo = new EntityInfo("NewRegionTest");
-        EntityInfo mapInfo = new EntityInfo("NewWorldTest");
-
-        ArrayList<Region> regionList = new ArrayList();
-        region.stream().map((r) -> new Region(new LandmassP3(), regionInfo, Biome.HILLS))
-                .forEachOrdered(regionList::add);
-
-        ArrayList<Route> routeList = new ArrayList<>();
-        route.stream().map((r) -> new RouteP3())
-                .forEachOrdered(routeList::add);
-
-        ArrayList<Location> locationList = new ArrayList();
-        ArrayList<UserMarker> userMarkerList = new ArrayList();
-
-        WorldMap world = new WorldMap(mapInfo, regionList, locationList, userMarkerList, routeList);
-        boolean success = fileStore.attemptSave(world, region, border, route);
-        System.out.println("Success on save : " + success);
-    }
-
-    public void loadWorld() {
-        WorldMap world = fileStore.attemptLoad(false);
-        if (world != null) {
-            System.out.println("Loaded Map: " + world.getInfo().getName());
-            loop();
-            for (int i = 0; i < world.getRegions().size(); i++) {
-                LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
-                PImage regionImg = loadImage(area.getGraphicsPath());
-                region.set(i, createGraphics(regionImg.width, regionImg.height));
-                region.get(i).beginDraw();
-                region.get(i).image(regionImg, 0, 0);
-                region.get(i).endDraw();
-                PImage borderImg = loadImage(area.getBorderGraphicsPath());
-                border.set(i, createGraphics(regionImg.width, regionImg.height));
-                border.get(i).beginDraw();
-                border.get(i).image(borderImg, 0, 0);
-                border.get(i).endDraw();
-            }
-            for (int i = 0; i < world.getRoutes().size(); i++) {
-                RouteP3 r = (RouteP3) world.getRoutes().get(i);
-                PImage routeImg = loadImage(r.getGraphicsPath());
-                route.set(i, createGraphics(routeImg.width, routeImg.height));
-                route.get(i).beginDraw();
-                route.get(i).image(routeImg, 0, 0);
-                route.get(i).endDraw();
-            }
-        }
-    }
-
+//    public void saveWorld() {
+//        EntityInfo regionInfo = new EntityInfo("NewRegionTest");
+//        EntityInfo mapInfo = new EntityInfo("NewWorldTest");
+//
+//        ArrayList<Region> regionList = new ArrayList();
+//        region.stream().sign((r) -> new Region(new LandmassP3(), regionInfo, Biome.HILLS))
+//                .forEachOrdered(regionList::add);
+//
+//        ArrayList<Route> routeList = new ArrayList<>();
+//        route.stream().sign((r) -> new RouteP3())
+//                .forEachOrdered(routeList::add);
+//
+//        ArrayList<Location> locationList = new ArrayList();
+//        ArrayList<UserMarker> userMarkerList = new ArrayList();
+//
+//        WorldMap world = new WorldMap(mapInfo, regionList, locationList, userMarkerList, routeList);
+//        boolean success = fileStore.attemptSave(world, region, border, route);
+//        System.out.println("Success on save : " + success);
+//    }
+//
+//    public void loadWorld() {
+//        WorldMap world = fileStore.attemptLoad(false);
+//        if (world != null) {
+//            System.out.println("Loaded Map: " + world.getInfo().getName());
+//            loop();
+//            for (int i = 0; i < world.getRegions().size(); i++) {
+//                LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
+//                PImage regionImg = loadImage(area.getGraphicsPath());
+//                region.set(i, createGraphics(regionImg.width, regionImg.height));
+//                region.get(i).beginDraw();
+//                region.get(i).image(regionImg, 0, 0);
+//                region.get(i).endDraw();
+//                PImage borderImg = loadImage(area.getBorderGraphicsPath());
+//                border.set(i, createGraphics(regionImg.width, regionImg.height));
+//                border.get(i).beginDraw();
+//                border.get(i).image(borderImg, 0, 0);
+//                border.get(i).endDraw();
+//            }
+//            for (int i = 0; i < world.getRoutes().size(); i++) {
+//                RouteP3 r = (RouteP3) world.getRoutes().get(i);
+//                PImage routeImg = loadImage(r.getGraphicsPath());
+//                route.set(i, createGraphics(routeImg.width, routeImg.height));
+//                route.get(i).beginDraw();
+//                route.get(i).image(routeImg, 0, 0);
+//                route.get(i).endDraw();
+//            }
+//        }
+//    }
     int[] cp = {
         color(0, 126, 192),
         color(24, 154, 208),
@@ -115,6 +118,32 @@ public class ProcessingMapmaker extends PApplet {
 
     ArrayList<ArrayList<PVector>> pointsForPaths;
 
+    //Drag drop locations
+    final int DRAG_NONE = 0;
+    final int DRAG_1 = 1;
+    final int DRAG_2 = 2;
+    final int DRAG_3 = 3;
+    int dragging = DRAG_NONE;
+    final int UNDEFINED = -1;
+    int draggingAnExistingRectClass = UNDEFINED;
+    int active = 0;
+    final PVector pv1 = new PVector(40, 110);
+    final PVector pv2 = new PVector(40, 180);
+    final PVector pv3 = new PVector(40, 250);
+    PImage sign;
+    PImage circle;
+    PImage square;
+
+    //Drag drop userMarkers
+    final int USER_DRAG_NONE = 0;
+    final int USER_DRAG_1 = 1;
+    int draggingUser = USER_DRAG_NONE;
+    final int USER_UNDEFINED = -1;
+    int draggingAnExistingUserMarker = USER_UNDEFINED;
+    int activeMarker = 0;
+    final PVector userPv1 = new PVector(40, 110);
+    PImage user;
+
     @Override
     public void settings() {
         size(1920, 1080);
@@ -130,16 +159,20 @@ public class ProcessingMapmaker extends PApplet {
 
         // should be created when starting to draw/place elements instead
         // otherwise, save functionality will act weirdly
-        border.add(createGraphics(width, height));
-
+        // to start with they are empty!
         region.add(createGraphics(width, height));
-        location.add(createGraphics(width, height));
-        userMarker.add(createGraphics(width, height));
+        border.add(createGraphics(width, height));
         route.add(createGraphics(width, height));
 
         pointsForPaths = new ArrayList<>();
         ArrayList<PVector> points = new ArrayList<>();
         pointsForPaths.add(points);
+
+        sign = loadImage("C:\\Users\\rasmu\\Desktop\\sketch_200501b\\sign.png");
+        circle = loadImage("C:\\Users\\rasmu\\Desktop\\sketch_200501b\\circle.png");
+        square = loadImage("C:\\Users\\rasmu\\Desktop\\sketch_200501b\\square.png");
+
+        user = loadImage("C:\\Users\\rasmu\\Desktop\\sketch_200501b\\map.png");
 
         hint(DISABLE_ASYNC_SAVEFRAME); // prevents the black-box saving issue, when exporting PGraphics layers to files
     }
@@ -156,24 +189,29 @@ public class ProcessingMapmaker extends PApplet {
             image(region.get(i), 0, 0);
         }
 
-        for (int i = 0; i < location.size(); i++) {
-            image(location.get(i), 0, 0);
-        }
-
-        for (int i = 0; i < userMarker.size(); i++) {
-            image(userMarker.get(i), 0, 0);
-        }
-
         for (int i = 0; i < route.size(); i++) {
             image(route.get(i), 0, 0);
         }
 
-        noLoop();
+        for (int i = 0; i < locations.size(); i++) {
+            LocationImp currentNode = locations.get(i);
+            image(currentNode.getImage(), currentNode.getX(), currentNode.getY(), currentNode.getW(), currentNode.getH());
+        }
+        if (state == state2) {
+            drawForStateEdit();
+        }
+
+        for (int i = 0; i < userMarkers.size(); i++) {
+            UserMarkerImp currentUserNode = userMarkers.get(i);
+            image(currentUserNode.getImage(), currentUserNode.getX(), currentUserNode.getY(), currentUserNode.getW(), currentUserNode.getH());
+        }
+        if (state == state3) {
+            userDrawForStateEdit();
+        }
     }
 
     @Override
     public void mouseDragged() {
-        loop();
         if (mode == edit) {
             if (state == state1) {
                 editDraw(layer, col);
@@ -187,7 +225,6 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void mousePressed() {
-        loop();
         if (mode == edit) {
             if (state == state4) {
                 editPath(layer);
@@ -196,6 +233,119 @@ public class ProcessingMapmaker extends PApplet {
             if (state == state4) {
                 deletePath(layer);
             }
+        }
+
+        draggingAnExistingRectClass = UNDEFINED;
+        if (state == state2) {
+            if (dist(mouseX, mouseY, pv1.x, pv1.y) < 20) {
+                dragging = DRAG_1;
+            } else if (dist(mouseX, mouseY, pv2.x, pv2.y) < 20) {
+                dragging = DRAG_2;
+            } else if (dist(mouseX, mouseY, pv3.x, pv3.y) < 20) {
+                dragging = DRAG_3;
+            } else {
+                for (int i = 0; i < locations.size(); i++) {
+                    LocationImp RectClass = locations.get(i);
+                    if (RectClass.over(mouseX, mouseY)) {
+                        draggingAnExistingRectClass = i;
+                        active = i;
+                    }
+                }
+            }
+        }
+
+        draggingAnExistingUserMarker = USER_UNDEFINED;
+        if (state == state3) {
+            if (dist(mouseX, mouseY, userPv1.x, userPv1.y) < 20) {
+                draggingUser = USER_DRAG_1;
+            } else {
+                for (int i = 0; i < userMarkers.size(); i++) {
+                    UserMarkerImp RectClass = userMarkers.get(i);
+                    if (RectClass.over(mouseX, mouseY)) {
+                        draggingAnExistingUserMarker = i;
+                        activeMarker = i;
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseReleased() {
+        if (state == state2) {
+            switch (dragging) {
+                case DRAG_1:
+                    dragging = DRAG_NONE;
+                    locations.add(new LocationImp(mouseX, mouseY,
+                            30, 30, circle));
+                    break;
+                case DRAG_2:
+                    dragging = DRAG_NONE;
+                    locations.add(new LocationImp(mouseX, mouseY,
+                            30, 30, square));
+                    break;
+                case DRAG_3:
+                    dragging = DRAG_NONE;
+                    locations.add(new LocationImp(mouseX, mouseY,
+                            25, 35, sign));
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        draggingAnExistingRectClass = UNDEFINED;
+
+        if (state == state3) {
+            switch (draggingUser) {
+                case USER_DRAG_1:
+                    draggingUser = USER_DRAG_NONE;
+                    userMarkers.add(new UserMarkerImp(mouseX, mouseY,
+                            25, 35, user));
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        draggingAnExistingUserMarker = USER_UNDEFINED;
+    }
+
+    void drawForStateEdit() {
+        fill(255);
+        rect(1, pv1.y - 30, 76, 60);
+        image(circle, 23, 95, 30, 30);
+
+        fill(255);
+        rect(1, pv2.y - 30, 76, 60);
+        image(square, 23, 166, 30, 30);
+
+        fill(255);
+        rect(1, pv3.y - 30, 76, 60);
+        image(sign, 27, 235, 25, 35);
+
+        if (dragging == DRAG_1) {
+            image(circle, mouseX, mouseY, 30, 30);
+        } else if (dragging == DRAG_2) {
+            image(square, mouseX, mouseY, 30, 30);
+        } else if (dragging == DRAG_3) {
+            image(sign, mouseX, mouseY, 25, 35);
+        } else if (draggingAnExistingRectClass != UNDEFINED) {
+            LocationImp RectClass = locations.get(draggingAnExistingRectClass);
+            RectClass.incrementXY(mouseX - pmouseX, mouseY - pmouseY);
+        }
+    }
+
+    void userDrawForStateEdit() {
+        fill(255);
+        rect(1, userPv1.y - 30, 76, 60);
+        image(user, 23, 95, 25, 35);
+
+        if (draggingUser == USER_DRAG_1) {
+            image(user, mouseX, mouseY, 25, 35);
+        } else if (draggingAnExistingUserMarker != USER_UNDEFINED) {
+            UserMarkerImp UserRectClass = userMarkers.get(draggingAnExistingUserMarker);
+            UserRectClass.incrementXY(mouseX - pmouseX, mouseY - pmouseY);
         }
     }
 
@@ -210,7 +360,7 @@ public class ProcessingMapmaker extends PApplet {
             pg.endDraw();
 
             pgb.beginDraw();
-            pgb.stroke(255);
+            pgb.stroke(0);
             pgb.strokeWeight(110);
             pgb.line(pmouseX, pmouseY, mouseX, mouseY);
             pgb.endDraw();
@@ -314,13 +464,10 @@ public class ProcessingMapmaker extends PApplet {
         }
         pg.updatePixels();
         pg.endDraw();
-        loop();
     }
 
     @Override
     public void keyPressed() {
-        loop();
-
         switch (key) {
             case '1':
                 state = state1;
@@ -357,19 +504,9 @@ public class ProcessingMapmaker extends PApplet {
                     System.out.println("state1 layer switch");
                     break;
                 case state2:
-                    if (layer < location.size() - 1) {
-                        layer = layer + 1;
-                    } else {
-                        layer = 0;
-                    }
                     System.out.println("state2 layer switch");
                     break;
                 case state3:
-                    if (layer < userMarker.size() - 1) {
-                        layer = layer + 1;
-                    } else {
-                        layer = 0;
-                    }
                     System.out.println("state3 layer switch");
                     break;
                 case state4:
@@ -395,14 +532,8 @@ public class ProcessingMapmaker extends PApplet {
                     System.out.println("Adding for layer 1");
                     break;
                 case state2:
-                    PGraphics pg3 = createGraphics(width, height);
-                    location.add(pg3);
-                    System.out.println("Adding for layer 2");
                     break;
                 case state3:
-                    PGraphics pg4 = createGraphics(width, height);
-                    userMarker.add(pg4);
-                    System.out.println("Adding for layer 3");
                     break;
                 case state4:
                     PGraphics pg5 = createGraphics(width, height);
@@ -436,12 +567,27 @@ public class ProcessingMapmaker extends PApplet {
             randomMap();
         }
 
-        if (key == 's') {
-            saveWorld();
+//        if (key == 's') {
+//            saveWorld();
+//        }
+//
+//        if (key == 'o') {
+//            loadWorld();
+//        }
+        if (state == state2) {
+            if (key == BACKSPACE) {
+                if (locations.size() > 0 && locations.size() > active) {
+                    locations.remove(active);
+                }
+            }
         }
 
-        if (key == 'o') {
-            loadWorld();
+        if (state == state3) {
+            if (key == BACKSPACE) {
+                if (userMarkers.size() > 0 && userMarkers.size() > activeMarker) {
+                    userMarkers.remove(activeMarker);
+                }
+            }
         }
     }
 
@@ -452,17 +598,3 @@ public class ProcessingMapmaker extends PApplet {
     }
 
 }
-
-//public class MySketch extends PApplet {
-//
-//    public void draw() {
-//        Canvas canvas = new Canvas(this);
-//        canvas.drawMap();
-//    }
-//
-//}
-
-/* public onKeyDragged() {
-    if (enum)
-    Editor.drawLandmass(x, y, r);
- */
