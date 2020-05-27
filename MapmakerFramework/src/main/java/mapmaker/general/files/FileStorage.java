@@ -73,7 +73,7 @@ public class FileStorage implements Storage {
                 }
                 if (!file.exists() || fileHandler.getOverwriteConfirmation(file)) {
                     map.setFilePath(file.toPath());
-                    return attemptSave(map);
+                    return this.attemptSave(map);
                 }
             }
             return false;

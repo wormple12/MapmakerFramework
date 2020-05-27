@@ -2,6 +2,7 @@ package processing.entities;
 
 import java.io.Serializable;
 import mapmaker.entities.Route;
+import processing.core.PGraphics;
 import processing.general.files.MapStorageP3;
 
 /**
@@ -13,12 +14,16 @@ public class RouteP3 implements Route, Serializable {
     private String id;
     private String graphicsPath;
 
-    public RouteP3() {
-        this.id = MapStorageP3.generateId();
+    private PGraphics graphics = null;
+
+    public RouteP3(PGraphics graphics) {
+        this(MapStorageP3.generateId(), graphics);
+
     }
 
-    public RouteP3(String id) {
+    public RouteP3(String id, PGraphics graphics) {
         this.id = id;
+        this.graphics = graphics;
     }
 
     public String getId() {
@@ -35,6 +40,14 @@ public class RouteP3 implements Route, Serializable {
 
     public void setGraphicsPath(String graphicsPath) {
         this.graphicsPath = graphicsPath;
+    }
+
+    public PGraphics getGraphics() {
+        return graphics;
+    }
+
+    public void setGraphics(PGraphics graphics) {
+        this.graphics = graphics;
     }
 
 }

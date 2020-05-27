@@ -14,16 +14,14 @@ import mapmaker.entities.sprites.UserMarker;
 public class WorldMap implements Serializable {
 
     private EntityInfo info;
-    //private final Landmass landmass;
-    private final List<Region> regions;
-    private final List<Route> routes;
+    private List<Region> regions;
+    private List<Route> routes;
     private final List<Location> locations;
     private final List<UserMarker> markers;
     private String filePath;
 
-    public WorldMap(EntityInfo info, /*Landmass landmass,*/ List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
+    public WorldMap(EntityInfo info, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
         this.info = info;
-//        this.landmass = landmass;
         this.regions = regions;
         this.locations = locations;
         this.markers = markers;
@@ -46,12 +44,20 @@ public class WorldMap implements Serializable {
         regions.add(region);
     }
 
+    public void setRegions(List<Region> regions) {
+        this.regions = regions;
+    }
+
     public List<Route> getRoutes() {
         return routes;
     }
 
     public void addRoute(Route route) {
         routes.add(route);
+    }
+
+    public void setRoutes(List<Route> routes) {
+        this.routes = routes;
     }
 
     public List<Location> getLocations() {

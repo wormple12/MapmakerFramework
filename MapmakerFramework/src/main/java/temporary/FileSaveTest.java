@@ -10,7 +10,7 @@ import mapmaker.general.files.FileStorage;
  *
  * @author Simon Norup
  */
-public class FileLoadSave {
+public class FileSaveTest {
 
     public static void main(String[] args) {
         FileStorage storage = new FileStorage();

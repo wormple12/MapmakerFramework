@@ -4,28 +4,64 @@ import mapmaker.general.Storage;
 import mapmaker.general.menus.StorageMenu;
 import mapmaker.map.Canvas;
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.general.menus.components.PMenuDisplay;
+import temporary.ProcessingMenuTest;
 
 /**
  *
  * @author Simon Norup
  */
 public class ViewerMenuP3 extends StorageMenu {
-    
-    private final PApplet app;
 
-    public ViewerMenuP3(PApplet app, Storage storage, Canvas canvas) {
+    private final PApplet app;
+    private final PGraphics layer;
+    private final PMenuDisplay menuDisplay;
+    private final String[] menuOptions = {"Continue", "Load", "Return"};
+
+    public ViewerMenuP3(Storage storage, Canvas canvas, PApplet app) {
         super(storage, canvas);
         this.app = app;
+
+        layer = app.createGraphics(app.width, app.height);
+        menuDisplay = new PMenuDisplay("Map Viewer", menuOptions, layer, app);
+        layer.beginDraw();
+        layer.background(102);
+        menuDisplay.setup();
+        layer.endDraw();
     }
 
     @Override
     public void show() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ((ProcessingMenuTest) app).setAppState(3);
+    }
+
+    public void draw() {
+        layer.beginDraw();
+        menuDisplay.draw();
+        layer.endDraw();
+        app.image(layer, 0, 0);
+    }
+
+    public void mousePressed() {
+        switch (menuDisplay.getButtonPressed()) {
+            case 0:
+                loadMap(true);
+                break;
+            case 1:
+                loadMap(false);
+                break;
+            case 2:
+                returnToPrevious();
+                break;
+            default:
+            // nothing
+        }
     }
 
     @Override
     public void returnToPrevious() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ((ProcessingMenuTest) app).setAppState(1);
     }
 
 }
