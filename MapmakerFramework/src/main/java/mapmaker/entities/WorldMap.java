@@ -16,8 +16,8 @@ public class WorldMap implements Serializable {
     private EntityInfo info;
     private List<Region> regions;
     private List<Route> routes;
-    private final List<Location> locations;
-    private final List<UserMarker> markers;
+    private List<Location> locations;
+    private List<UserMarker> markers;
     private String filePath;
 
     public WorldMap(EntityInfo info, List<Region> regions, List<Location> locations, List<UserMarker> markers, List<Route> routes) {
@@ -68,12 +68,20 @@ public class WorldMap implements Serializable {
         locations.add(location);
     }
 
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
+
     public List<UserMarker> getMarkers() {
         return markers;
     }
 
     public void addMarker(UserMarker marker) {
         markers.add(marker);
+    }
+
+    public void setMarkers(List<UserMarker> markers) {
+        this.markers = markers;
     }
 
     public Path getFilePath() {

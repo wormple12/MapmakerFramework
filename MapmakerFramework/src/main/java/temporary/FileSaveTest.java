@@ -17,8 +17,8 @@ public class FileSaveTest {
         WorldMap map = new WorldMap(new EntityInfo("TestMap"),
                 Arrays.asList(new Region(new Landmass() {
                 }, new EntityInfo("TestRegion"), Biome.HILLS)),
-                Arrays.asList(new Location(new EntityInfo("TestLocation"), Paths.get("/"), 5, 10)),
-                Arrays.asList(new UserMarker(new EntityInfo("TestMarker"), Paths.get("/"), 0, -4)),
+                Arrays.asList(new Location(new EntityInfo("TestLocation"), "/", 5, 10, 5, 5)),
+                Arrays.asList(new UserMarker(new EntityInfo("TestMarker"), "/", 0, -4, 5, 5)),
                 Arrays.asList(new Route() {
                 }));
         storage.attemptSave(map);

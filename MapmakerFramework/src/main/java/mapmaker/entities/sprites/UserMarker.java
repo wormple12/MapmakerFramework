@@ -9,20 +9,8 @@ import mapmaker.entities.EntityInfo;
  * @author Simon Norup
  */
 public class UserMarker extends Sprite {
-    
-    private EntityInfo info;
 
-    public UserMarker(EntityInfo info, Path sprite, int x, int y) {
-        super(sprite, x, y);
-        this.info = info;
+    public UserMarker(EntityInfo info, String spritePath, float x, float y, float w, float h) {
+        super(info, spritePath, x, y, w, h);
     }
-
-    public EntityInfo getInfo() {
-        return info;
-    }
-
-    public void setInfo(EntityInfo info) {
-        this.info = info;
-    }
-    
 }

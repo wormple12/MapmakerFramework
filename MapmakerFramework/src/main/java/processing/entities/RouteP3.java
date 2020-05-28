@@ -18,7 +18,6 @@ public class RouteP3 implements Route, Serializable {
 
     public RouteP3(PGraphics graphics) {
         this(MapStorageP3.generateId(), graphics);
-
     }
 
     public RouteP3(String id, PGraphics graphics) {

@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.WorldMap;
+import mapmaker.entities.sprites.Location;
+import mapmaker.entities.sprites.UserMarker;
 import mapmaker.general.files.FileHandler;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
@@ -15,85 +17,83 @@ import processing.entities.LandmassP3;
 import processing.entities.LandmassP3_DTO;
 import processing.entities.RouteP3;
 import processing.entities.RouteP3_DTO;
+import processing.entities.sprites.LocationInfoP3;
+import processing.entities.sprites.LocationP3;
+import processing.entities.sprites.LocationP3_DTO;
+import processing.entities.sprites.UserMarkerInfoP3;
+import processing.entities.sprites.UserMarkerP3;
+import processing.entities.sprites.UserMarkerP3_DTO;
 
 /**
  *
  * @author Simon Norup
  */
 public class MapStorageP3 extends FileStorage {
-
+    
     private final PApplet app;
-
+    private final FileStorage infoStorage;
+    
     public MapStorageP3(PApplet app) {
         super();
         this.app = app;
+        this.infoStorage = new FileStorage();
     }
-
+    
     public MapStorageP3(FileHandler fileHandler, PApplet app) {
         super(fileHandler);
         this.app = app;
+        this.infoStorage = new FileStorage(fileHandler);
     }
-
-    private List<Region> regions;
-    private List<Route> routes;
-    private boolean graphicsWasConverted = false;
-
+    
     @Override
-    public boolean attemptSave(WorldMap map) {
+    public boolean attemptSave(WorldMap world) {
         // converting to DTO
-        if (!graphicsWasConverted) {
-            regions = map.getRegions();
-            routes = map.getRoutes();
-            map.setRegions(new ArrayList<>());
-            regions.forEach((r) -> map.addRegion(new Region(new LandmassP3_DTO((LandmassP3) r.getArea()), r.getInfo(), r.getBiome())));
-            map.setRoutes(new ArrayList<>());
-            routes.forEach((r) -> map.addRoute(new RouteP3_DTO((RouteP3) r)));
-            graphicsWasConverted = true;
-        }
+        List<Region> regions = world.getRegions().stream().map(r -> new Region(new LandmassP3_DTO((LandmassP3) r.getArea()), r.getInfo(), r.getBiome())).collect(Collectors.toList());
+        List<Route> routes = world.getRoutes().stream().map(r -> new RouteP3_DTO((RouteP3) r)).collect(Collectors.toList());
+        List<Location> locations = world.getLocations().stream().map(loc -> new LocationP3_DTO((LocationP3) loc)).collect(Collectors.toList());
+        List<UserMarker> markers = world.getMarkers().stream().map(m -> new UserMarkerP3_DTO((UserMarkerP3) m)).collect(Collectors.toList());
+        WorldMap worldDTO = new WorldMap(world.getInfo(), regions, locations, markers, routes);
+
         // saving map file
-        boolean success = super.attemptSave(map);
-
-        // reverting from DTO
-        map.setRegions(regions);
-        map.setRoutes(routes);
-        graphicsWasConverted = false;
-
-        if (!success) {
-            return false;
-        }
-        String mapFileName = map.getFileName();
-        // saving graphics
-        try {
-            for (int i = 0; i < map.getRegions().size(); i++) {
-                LandmassP3 area = (LandmassP3) map.getRegions().get(i).getArea();
-                String regionPath = updateRegionPath(mapFileName, area);
-                area.getGraphics().save(regionPath);
-                String borderPath = area.getBorderGraphicsPath();
-                area.getBorderGraphics().save(borderPath);
+        boolean success = infoStorage.attemptSave(worldDTO);
+        world.setFilePath(worldDTO.getFilePath());
+        
+        if (success) {
+            String mapFileName = world.getFileName();
+            // saving graphics
+            try {
+                for (int i = 0; i < world.getRegions().size(); i++) {
+                    LandmassP3 area = (LandmassP3) world.getRegions().get(i).getArea();
+                    String regionPath = updateRegionPath(mapFileName, area);
+                    area.getGraphics().save(regionPath);
+                    String borderPath = area.getBorderGraphicsPath();
+                    area.getBorderGraphics().save(borderPath);
+                }
+                
+                for (int i = 0; i < world.getRoutes().size(); i++) {
+                    RouteP3 route = (RouteP3) world.getRoutes().get(i);
+                    String routePath = updateRoutePath(mapFileName, route);
+                    route.getGraphics().save(routePath);
+                }
+            } catch (Exception e) {
+                success = false;
             }
-
-            for (int i = 0; i < map.getRoutes().size(); i++) {
-                RouteP3 route = (RouteP3) map.getRoutes().get(i);
-                String routePath = updateRoutePath(mapFileName, route);
-                route.getGraphics().save(routePath);
-            }
-        } catch (Exception e) {
-            return false;
         }
-        return true;
+        return success;
     }
-
+    
     @Override
     public WorldMap attemptLoad(boolean useLatestMap) {
-        WorldMap map = super.attemptLoad(useLatestMap);
-
-        if (map != null) {
-            String mapFileName = map.getFileName();
-
-            map.getRegions().forEach((r) -> {
+        WorldMap world = super.attemptLoad(useLatestMap);
+        
+        if (world != null) {
+            String mapFileName = world.getFileName();
+            
+            world.getRegions().forEach((r) -> {
                 LandmassP3_DTO dto = (LandmassP3_DTO) r.getArea();
                 LandmassP3 area = new LandmassP3(dto.getId(), null, null);
                 updateRegionPath(mapFileName, area);
+                
                 PImage regionImg = app.loadImage(area.getGraphicsPath());
                 area.setGraphics(app.createGraphics(regionImg.width, regionImg.height));
                 area.getGraphics().beginDraw();
@@ -104,44 +104,71 @@ public class MapStorageP3 extends FileStorage {
                 area.getBorderGraphics().beginDraw();
                 area.getBorderGraphics().image(borderImg, 0, 0);
                 area.getBorderGraphics().endDraw();
+                
                 r.setArea(area);
             });
-
-            map.setRoutes(
-                    map.getRoutes().stream().map((r) -> {
+            
+            world.setRoutes(
+                    world.getRoutes().stream().map((r) -> {
                         RouteP3_DTO dto = (RouteP3_DTO) r;
                         RouteP3 route = new RouteP3(dto.getId(), null);
                         updateRoutePath(mapFileName, route);
+                        
                         PImage routeImg = app.loadImage(route.getGraphicsPath());
                         route.setGraphics(app.createGraphics(routeImg.width, routeImg.height));
                         route.getGraphics().beginDraw();
                         route.getGraphics().image(routeImg, 0, 0);
                         route.getGraphics().endDraw();
+                        
                         return route;
                     }).collect(Collectors.toList())
             );
+            
+            world.setLocations(
+                    world.getLocations().stream().map(loc -> {
+                        LocationP3_DTO dto = (LocationP3_DTO) loc;
+                        LocationP3 location = new LocationP3((LocationInfoP3) dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
+                        
+                        PImage sprite = app.loadImage(location.getSpritePath());
+                        location.setImage(sprite);
+                        
+                        return location;
+                    }).collect(Collectors.toList())
+            );
+            
+            world.setMarkers(
+                    world.getMarkers().stream().map(m -> {
+                        UserMarkerP3_DTO dto = (UserMarkerP3_DTO) m;
+                        UserMarkerP3 marker = new UserMarkerP3((UserMarkerInfoP3) dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
+                        
+                        PImage sprite = app.loadImage(marker.getSpritePath());
+                        marker.setImage(sprite);
+                        
+                        return marker;
+                    }).collect(Collectors.toList())
+            );
         }
-        return map;
+        return world;
     }
-
+    
     private String updateRegionPath(String mapFileName, LandmassP3 landmass) {
         String regionPath = "worldmaps/" + mapFileName + "/regions/" + landmass.getId() + ".png";
         landmass.setGraphicsPath(regionPath);
         return regionPath;
     }
-
+    
     private String updateRoutePath(String mapFileName, RouteP3 route) {
         String routePath = "worldmaps/" + mapFileName + "/routes/" + route.getId() + ".png";
         route.setGraphicsPath(routePath);
         return routePath;
     }
-
+    
     public static String generateId() {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 8;
         Random random = new Random();
-
+        
         String generatedString = random.ints(leftLimit, rightLimit + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
                 .limit(targetStringLength)
@@ -149,5 +176,5 @@ public class MapStorageP3 extends FileStorage {
                 .toString();
         return generatedString;
     }
-
+    
 }

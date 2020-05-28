@@ -10,19 +10,8 @@ import mapmaker.entities.EntityInfo;
  */
 public class Location extends Sprite {
 
-    private EntityInfo info;
-
-    public Location(EntityInfo info, Path sprite, int x, int y) {
-        super(sprite, x, y);
-        this.info = info;
-    }
-
-    public EntityInfo getInfo() {
-        return info;
-    }
-
-    public void setInfo(EntityInfo info) {
-        this.info = info;
+    public Location(EntityInfo info, String spritePath, float x, float y, float w, float h) {
+        super(info, spritePath, x, y, w, h);
     }
     
 }
