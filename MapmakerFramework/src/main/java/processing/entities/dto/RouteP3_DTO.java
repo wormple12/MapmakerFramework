@@ -1,10 +1,11 @@
-package processing.entities;
+package processing.entities.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
 import mapmaker.entities.Route;
+import processing.entities.RouteP3;
 
 /**
  *

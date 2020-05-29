@@ -1,7 +1,8 @@
-package processing.entities;
+package processing.entities.dto;
 
 import java.io.Serializable;
 import mapmaker.entities.Landmass;
+import processing.entities.LandmassP3;
 
 /**
  *

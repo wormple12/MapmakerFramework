@@ -136,10 +136,13 @@ public class ProcessingMapmaker extends PApplet {
     final int UNDEFINED = -1;
     int draggingAnExistingLocation = UNDEFINED;
     List<SpriteTypeP3> locationTypes = new ArrayList<>();
+    PGraphics locationUI;
+    float spriteTypeBounds = 30;
 
     //Drag drop userMarkers
     int draggingAnExistingUserMarker = UNDEFINED;
     List<SpriteTypeP3> userMarkerTypes = new ArrayList<>();
+    PGraphics userMarkerUI;
 
     @Override
     public void settings() {
@@ -157,18 +160,20 @@ public class ProcessingMapmaker extends PApplet {
         ArrayList<PVector> points = new ArrayList<>();
         pointsForPaths.add(points);
 
-        loadSpritesFromConfig(locationTypes, "sprites/locations/");
-        loadSpritesFromConfig(userMarkerTypes, "sprites/markers/");
+        locationUI = createGraphics(width, height);
+        loadSpritesFromConfig(locationTypes, "sprites/locations/", locationUI);
+        userMarkerUI = createGraphics(width, height);
+        loadSpritesFromConfig(userMarkerTypes, "sprites/markers/", userMarkerUI);
 
-        hint(DISABLE_ASYNC_SAVEFRAME); // prevents the black-box saving issue, when exporting PGraphics layers to files
+        //hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
 
-    private void loadSpritesFromConfig(List<SpriteTypeP3> listToLoadInto, String configPath) {
+    private void loadSpritesFromConfig(List<SpriteTypeP3> listToLoadInto, String configPath, PGraphics uiLayer) {
         try {
-            int vectorY = 110;
-
+            // read config and load sprites
             try (FileReader fr = new FileReader(configPath + "settings.config")) {
                 BufferedReader br = new BufferedReader(fr);  //creates a buffering character input stream  
+                int vectorY = 110;
                 String line;
                 while ((line = br.readLine()) != null) {
                     String[] spriteArgs = line.split(" ");
@@ -178,6 +183,16 @@ public class ProcessingMapmaker extends PApplet {
                     vectorY += 70;
                     listToLoadInto.add(new SpriteTypeP3(vector, sprite, imagePath, Float.parseFloat(spriteArgs[1]), Float.parseFloat(spriteArgs[2])));
                 }
+            }
+            // load UI menu
+            int imageY = 95;
+            for (SpriteTypeP3 type : listToLoadInto) {
+                uiLayer.beginDraw();
+                uiLayer.fill(255);
+                uiLayer.rect(1, type.getVector().y - 30, spriteTypeBounds * 2.5f, spriteTypeBounds * 2);
+                uiLayer.image(type.getImage(), 23, imageY, type.getWidth(), type.getHeight());
+                uiLayer.endDraw();
+                imageY += 70;
             }
         } catch (IOException ex) {
             System.out.println("Couldn't load " + configPath);
@@ -244,7 +259,7 @@ public class ProcessingMapmaker extends PApplet {
         if (state == state2) {
             for (int i = 0; i < locationTypes.size(); i++) {
                 SpriteTypeP3 type = locationTypes.get(i);
-                if (dist(mouseX, mouseY, type.getVector().x, type.getVector().y) < 20) {
+                if (dist(mouseX, mouseY, type.getVector().x, type.getVector().y) < spriteTypeBounds) {
                     dragging = i;
                     break;
                 }
@@ -263,7 +278,7 @@ public class ProcessingMapmaker extends PApplet {
         if (state == state3) {
             for (int i = 0; i < userMarkerTypes.size(); i++) {
                 SpriteTypeP3 type = userMarkerTypes.get(i);
-                if (dist(mouseX, mouseY, type.getVector().x, type.getVector().y) < 20) {
+                if (dist(mouseX, mouseY, type.getVector().x, type.getVector().y) < spriteTypeBounds) {
                     dragging = i;
                     break;
                 }
@@ -307,13 +322,7 @@ public class ProcessingMapmaker extends PApplet {
     }
 
     void drawForStateEdit() {
-        int imageY = 95;
-        for (SpriteTypeP3 type : locationTypes) {
-            fill(255);
-            rect(1, type.getVector().y - 30, 76, 60);
-            image(type.getImage(), 23, imageY, type.getWidth(), type.getHeight());
-            imageY += 70;
-        }
+        image(locationUI, 0, 0);
         if (dragging != DRAG_NONE) {
             SpriteTypeP3 currentType = locationTypes.get(dragging);
             image(currentType.getImage(), mouseX, mouseY, currentType.getWidth(), currentType.getHeight());
@@ -324,13 +333,7 @@ public class ProcessingMapmaker extends PApplet {
     }
 
     void userDrawForStateEdit() {
-        int imageY = 95;
-        for (SpriteTypeP3 type : userMarkerTypes) {
-            fill(255);
-            rect(1, type.getVector().y - 30, 76, 60);
-            image(type.getImage(), 23, imageY, type.getWidth(), type.getHeight());
-            imageY += 70;
-        }
+        image(userMarkerUI, 0, 0);
         if (dragging != DRAG_NONE) {
             SpriteTypeP3 currentType = userMarkerTypes.get(dragging);
             image(currentType.getImage(), mouseX, mouseY, currentType.getWidth(), currentType.getHeight());

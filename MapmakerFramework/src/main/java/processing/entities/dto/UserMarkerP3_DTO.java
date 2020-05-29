@@ -1,6 +1,7 @@
-package processing.entities.sprites;
+package processing.entities.dto;
 
 import mapmaker.entities.sprites.UserMarker;
+import processing.entities.sprites.UserMarkerP3;
 
 /**
  *

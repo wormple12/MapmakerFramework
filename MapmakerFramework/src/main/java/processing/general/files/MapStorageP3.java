@@ -15,15 +15,15 @@ import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.entities.LandmassP3;
-import processing.entities.LandmassP3_DTO;
+import processing.entities.dto.LandmassP3_DTO;
 import processing.entities.RouteP3;
-import processing.entities.RouteP3_DTO;
+import processing.entities.dto.RouteP3_DTO;
 import processing.entities.sprites.LocationInfoP3;
 import processing.entities.sprites.LocationP3;
-import processing.entities.sprites.LocationP3_DTO;
+import processing.entities.dto.LocationP3_DTO;
 import processing.entities.sprites.UserMarkerInfoP3;
 import processing.entities.sprites.UserMarkerP3;
-import processing.entities.sprites.UserMarkerP3_DTO;
+import processing.entities.dto.UserMarkerP3_DTO;
 
 /**
  *
