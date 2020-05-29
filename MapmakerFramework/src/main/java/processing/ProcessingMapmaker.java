@@ -32,9 +32,9 @@ import processing.general.files.MapStorageP3;
  */
 public class ProcessingMapmaker extends PApplet {
 
-    MapStorageP3 fileStore = new MapStorageP3(this);
+    private final MapStorageP3 mapStorage = new MapStorageP3(this);
 
-    List<PGraphics> water = new ArrayList();
+    private PGraphics water;
 
     List<PGraphics> regions = new ArrayList();
     List<PGraphics> borders = new ArrayList();
@@ -67,16 +67,15 @@ public class ProcessingMapmaker extends PApplet {
         }
 
         WorldMap world = new WorldMap(mapInfo, regionList, locations, userMarkers, routeList);
-        boolean success = fileStore.attemptSave(world);
+        boolean success = mapStorage.attemptSave(world);
         System.out.println("Success on save : " + success);
     }
 
     // TEMPORARY LOADING METHOD
     // Instead the map components should be stored in a WorldMap object in CanvasP3
     public void loadWorld() {
-        WorldMap world = fileStore.attemptLoad(false);
+        WorldMap world = mapStorage.attemptLoad(false);
         if (world != null) {
-            loop();
             regions = world.getRegions().stream()
                     .map(r -> ((LandmassP3) r.getArea()).getGraphics())
                     .collect(Collectors.toList());
@@ -89,6 +88,9 @@ public class ProcessingMapmaker extends PApplet {
             pointsForPaths = world.getRoutes().stream()
                     .map(r -> ((RouteP3) r).getPoints())
                     .collect(Collectors.toList());
+            for (int i = 0; i < routes.size(); i++) {
+                drawPath(i);
+            }
             locations = world.getLocations();
             userMarkers = world.getMarkers();
         }
@@ -133,13 +135,10 @@ public class ProcessingMapmaker extends PApplet {
     int dragging = DRAG_NONE;
     final int UNDEFINED = -1;
     int draggingAnExistingLocation = UNDEFINED;
-    int active = 0;
     List<SpriteTypeP3> locationTypes = new ArrayList<>();
 
     //Drag drop userMarkers
-    final int USER_UNDEFINED = -1;
-    int draggingAnExistingUserMarker = USER_UNDEFINED;
-    int activeMarker = 0;
+    int draggingAnExistingUserMarker = UNDEFINED;
     List<SpriteTypeP3> userMarkerTypes = new ArrayList<>();
 
     @Override
@@ -149,11 +148,10 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void setup() {
-        PGraphics pg = createGraphics(width, height);
-        pg.beginDraw();
-        pg.background(cp[0]);
-        pg.endDraw();
-        water.add(pg);
+        water = createGraphics(width, height);
+        water.beginDraw();
+        water.background(cp[0]);
+        water.endDraw();
 
         pointsForPaths = new ArrayList<>();
         ArrayList<PVector> points = new ArrayList<>();
@@ -189,31 +187,29 @@ public class ProcessingMapmaker extends PApplet {
     @Override
     public void draw() {
         background(255);
-        for (int i = 0; i < water.size(); i++) {
-            image(water.get(i), 0, 0);
-        }
+        image(water, 0, 0);
 
         for (int i = 0; i < regions.size(); i++) {
             image(borders.get(i), 0, 0);
             image(regions.get(i), 0, 0);
         }
 
-        for (int i = 0; i < routes.size(); i++) {
-            image(routes.get(i), 0, 0);
-        }
+        routes.forEach((route) -> {
+            image(route, 0, 0);
+        });
 
-        for (int i = 0; i < locations.size(); i++) {
-            LocationP3 currentNode = (LocationP3) locations.get(i);
-            image(currentNode.getImage(), currentNode.getX(), currentNode.getY(), currentNode.getWidth(), currentNode.getHeight());
-        }
+        locations.stream().map((location) -> (LocationP3) location)
+                .forEachOrdered((location) -> {
+                    image(location.getImage(), location.getX(), location.getY(), location.getWidth(), location.getHeight());
+                });
         if (state == state2) {
             drawForStateEdit();
         }
 
-        for (int i = 0; i < userMarkers.size(); i++) {
-            UserMarkerP3 currentUserNode = (UserMarkerP3) userMarkers.get(i);
-            image(currentUserNode.getImage(), currentUserNode.getX(), currentUserNode.getY(), currentUserNode.getWidth(), currentUserNode.getHeight());
-        }
+        userMarkers.stream().map((marker) -> (UserMarkerP3) marker)
+                .forEachOrdered((marker) -> {
+                    image(marker.getImage(), marker.getX(), marker.getY(), marker.getWidth(), marker.getHeight());
+                });
         if (state == state3) {
             userDrawForStateEdit();
         }
@@ -258,13 +254,12 @@ public class ProcessingMapmaker extends PApplet {
                     LocationP3 location = (LocationP3) locations.get(i);
                     if (location.over(mouseX, mouseY)) {
                         draggingAnExistingLocation = i;
-                        active = i;
                     }
                 }
             }
         }
 
-        draggingAnExistingUserMarker = USER_UNDEFINED;
+        draggingAnExistingUserMarker = UNDEFINED;
         if (state == state3) {
             for (int i = 0; i < userMarkerTypes.size(); i++) {
                 SpriteTypeP3 type = userMarkerTypes.get(i);
@@ -278,7 +273,6 @@ public class ProcessingMapmaker extends PApplet {
                     UserMarkerP3 marker = (UserMarkerP3) userMarkers.get(i);
                     if (marker.over(mouseX, mouseY)) {
                         draggingAnExistingUserMarker = i;
-                        activeMarker = i;
                     }
                 }
             }
@@ -291,7 +285,7 @@ public class ProcessingMapmaker extends PApplet {
             if (dragging != DRAG_NONE) {
                 SpriteTypeP3 type = locationTypes.get(dragging);
                 locations.add(new LocationP3(
-                        new LocationInfoP3("TO DO"), type.getSpritePath(),
+                        new LocationInfoP3("New Location"), type.getSpritePath(),
                         mouseX, mouseY, type.getWidth(), type.getHeight(), type.getImage()
                 ));
                 dragging = DRAG_NONE;
@@ -303,13 +297,13 @@ public class ProcessingMapmaker extends PApplet {
             if (dragging != DRAG_NONE) {
                 SpriteTypeP3 type = userMarkerTypes.get(dragging);
                 userMarkers.add(new UserMarkerP3(
-                        new UserMarkerInfoP3("TO DO"), type.getSpritePath(),
+                        new UserMarkerInfoP3("Custom Marker"), type.getSpritePath(),
                         mouseX, mouseY, type.getWidth(), type.getHeight(), type.getImage()
                 ));
                 dragging = DRAG_NONE;
             }
         }
-        draggingAnExistingUserMarker = USER_UNDEFINED;
+        draggingAnExistingUserMarker = UNDEFINED;
     }
 
     void drawForStateEdit() {
@@ -400,54 +394,55 @@ public class ProcessingMapmaker extends PApplet {
         ellipse(mouseX, mouseY, 50, 50);
     }
 
+    void drawPath(int i) {
+        PGraphics pg = routes.get(i);
+        pg.beginDraw();
+        pg.clear();
+        pg.endDraw();
+
+        List<PVector> points = pointsForPaths.get(i);
+        PVector first = points.get(0);
+        PVector last = points.get(points.size() - 1);
+        pg.beginDraw();
+        pg.beginShape();
+        if (points.size() > 0) {
+            float strokeWeightOriginal = pg.strokeWeight;
+            // curves
+            pg.strokeWeight(2);
+            pg.curveVertex(first.x, first.y);
+            points.forEach((vector) -> {
+                pg.curveVertex(vector.x, vector.y);
+            });
+            pg.curveVertex(last.x, last.y);
+            // points
+            pg.stroke(strokeWeightOriginal);
+            pg.fill(255, 0, 0);
+            points.forEach((vector) -> {
+                pg.ellipse(vector.x, vector.y, 7, 7); // should only be shown in editor mode
+            });
+            pg.noFill();
+        }
+        pg.endShape();
+        pg.endDraw();
+    }
+
     public void editPath(int i) {
         if (routes.isEmpty()) {
             routes.add(createGraphics(width, height));
         }
         pointsForPaths.get(i).add(new PVector(mouseX, mouseY));
-        PGraphics pg = routes.get(i);
-        pg.beginDraw();
-        pg.noFill();
-        pg.beginShape();
-        if (pointsForPaths.get(i).size() > 0) {
-            pg.curveVertex(pointsForPaths.get(i).get(0).x, pointsForPaths.get(i).get(0).y);
-            pointsForPaths.get(i).stream().map((p) -> {
-                pg.curveVertex(p.x, p.y);
-                return p;
-            }).forEachOrdered((p) -> {
-                pg.ellipse(p.x, p.y, 3, 3);
-            });
-        }
-        pg.endShape();
-        pg.endDraw();
+        drawPath(i);
     }
 
     public void deletePath(int i) {
         if (pointsForPaths.get(i).size() > 2) {
             pointsForPaths.get(i).remove(pointsForPaths.get(i).size() - 1);
         }
-        PGraphics pg = routes.get(i);
-        pg.beginDraw();
-        pg.clear();
-        pg.endDraw();
-        pg.beginDraw();
-        pg.noFill();
-        pg.beginShape();
-        if (pointsForPaths.get(i).size() > 0) {
-            pg.curveVertex(pointsForPaths.get(i).get(0).x, pointsForPaths.get(i).get(0).y);
-            pointsForPaths.get(i).stream().map((p) -> {
-                pg.curveVertex(p.x, p.y);
-                return p;
-            }).forEachOrdered((p) -> {
-                pg.ellipse(p.x, p.y, 3, 3);
-            });
-        }
-        pg.endShape();
-        pg.endDraw();
+        drawPath(i);
     }
 
     public void randomMap() {
-        PGraphics pg = water.get(0);
+        PGraphics pg = water;
         float r = random(10000000);
         this.noiseSeed((long) r);
         pg.beginDraw();
@@ -581,16 +576,18 @@ public class ProcessingMapmaker extends PApplet {
 
         if (state == state2) {
             if (key == BACKSPACE) {
-                if (locations.size() > 0 && locations.size() > active) {
-                    locations.remove(active);
+                if (locations.size() > 0 && draggingAnExistingLocation != UNDEFINED) {
+                    locations.remove(draggingAnExistingLocation);
+                    draggingAnExistingLocation = UNDEFINED;
                 }
             }
         }
 
         if (state == state3) {
             if (key == BACKSPACE) {
-                if (userMarkers.size() > 0 && userMarkers.size() > activeMarker) {
-                    userMarkers.remove(activeMarker);
+                if (userMarkers.size() > 0 && draggingAnExistingUserMarker != UNDEFINED) {
+                    userMarkers.remove(draggingAnExistingUserMarker);
+                    draggingAnExistingUserMarker = UNDEFINED;
                 }
             }
         }

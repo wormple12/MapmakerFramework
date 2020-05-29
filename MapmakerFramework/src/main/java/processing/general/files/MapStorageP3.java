@@ -70,12 +70,6 @@ public class MapStorageP3 extends FileStorage {
                     String borderPath = area.getBorderGraphicsPath();
                     area.getBorderGraphics().save(borderPath);
                 }
-
-//                for (int i = 0; i < world.getRoutes().size(); i++) {
-//                    RouteP3 route = (RouteP3) world.getRoutes().get(i);
-//                    String routePath = updateRoutePath(mapFileName, route);
-//                    route.getGraphics().save(routePath);
-//                }
             } catch (Exception e) {
                 success = false;
             }
