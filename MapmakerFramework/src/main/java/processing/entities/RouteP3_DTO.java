@@ -1,6 +1,9 @@
 package processing.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.util.Pair;
 import mapmaker.entities.Route;
 
 /**
@@ -9,28 +12,16 @@ import mapmaker.entities.Route;
  */
 public class RouteP3_DTO implements Route, Serializable {
 
-    private String id;
-    private String graphicsPath;
+    private final List<Pair<Float, Float>> coordinates = new ArrayList();
 
     public RouteP3_DTO(RouteP3 route) {
-        this.id = route.getId();
-        this.graphicsPath = route.getGraphicsPath();
+        route.getPoints().forEach((point) -> {
+            coordinates.add(new Pair<>(point.x, point.y));
+        });
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getGraphicsPath() {
-        return graphicsPath;
-    }
-
-    public void setGraphicsPath(String graphicsPath) {
-        this.graphicsPath = graphicsPath;
+    public List<Pair<Float, Float>> getCoordinates() {
+        return coordinates;
     }
 
 }

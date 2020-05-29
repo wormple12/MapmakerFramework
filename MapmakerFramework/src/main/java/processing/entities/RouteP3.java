@@ -1,9 +1,11 @@
 package processing.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import mapmaker.entities.Route;
 import processing.core.PGraphics;
-import processing.general.files.MapStorageP3;
+import processing.core.PVector;
 
 /**
  *
@@ -11,34 +13,11 @@ import processing.general.files.MapStorageP3;
  */
 public class RouteP3 implements Route, Serializable {
 
-    private String id;
-    private String graphicsPath;
-
     private PGraphics graphics = null;
+    private List<PVector> points = new ArrayList<>();
 
     public RouteP3(PGraphics graphics) {
-        this(MapStorageP3.generateId(), graphics);
-    }
-
-    public RouteP3(String id, PGraphics graphics) {
-        this.id = id;
         this.graphics = graphics;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getGraphicsPath() {
-        return graphicsPath;
-    }
-
-    public void setGraphicsPath(String graphicsPath) {
-        this.graphicsPath = graphicsPath;
     }
 
     public PGraphics getGraphics() {
@@ -47,6 +26,18 @@ public class RouteP3 implements Route, Serializable {
 
     public void setGraphics(PGraphics graphics) {
         this.graphics = graphics;
+    }
+
+    public List<PVector> getPoints() {
+        return points;
+    }
+
+    public void addPoint(float x, float y) {
+        points.add(new PVector(x, y));
+    }
+
+    public void setPoints(List<PVector> points) {
+        this.points = points;
     }
 
 }

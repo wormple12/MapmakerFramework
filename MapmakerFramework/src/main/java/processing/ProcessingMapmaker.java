@@ -58,8 +58,13 @@ public class ProcessingMapmaker extends PApplet {
         }
 
         ArrayList<Route> routeList = new ArrayList<>();
-        routes.stream().map((r) -> new RouteP3(r))
-                .forEachOrdered(routeList::add);
+        for (int i = 0; i < routes.size(); i++) {
+            RouteP3 route = new RouteP3(routes.get(i));
+            for (PVector vector : pointsForPaths.get(i)) {
+                route.addPoint(vector.x, vector.y);
+            }
+            routeList.add(route);
+        }
 
         WorldMap world = new WorldMap(mapInfo, regionList, locations, userMarkers, routeList);
         boolean success = fileStore.attemptSave(world);
@@ -73,13 +78,16 @@ public class ProcessingMapmaker extends PApplet {
         if (world != null) {
             loop();
             regions = world.getRegions().stream()
-                    .map((r) -> ((LandmassP3) r.getArea()).getGraphics())
+                    .map(r -> ((LandmassP3) r.getArea()).getGraphics())
                     .collect(Collectors.toList());
             borders = world.getRegions().stream()
-                    .map((r) -> ((LandmassP3) r.getArea()).getBorderGraphics())
+                    .map(b -> ((LandmassP3) b.getArea()).getBorderGraphics())
                     .collect(Collectors.toList());
             routes = world.getRoutes().stream()
-                    .map((r) -> ((RouteP3) r).getGraphics())
+                    .map(r -> ((RouteP3) r).getGraphics())
+                    .collect(Collectors.toList());
+            pointsForPaths = world.getRoutes().stream()
+                    .map(r -> ((RouteP3) r).getPoints())
                     .collect(Collectors.toList());
             locations = world.getLocations();
             userMarkers = world.getMarkers();
@@ -118,7 +126,7 @@ public class ProcessingMapmaker extends PApplet {
     final int delete = 2;
     int mode = edit;
 
-    ArrayList<ArrayList<PVector>> pointsForPaths;
+    List<List<PVector>> pointsForPaths;
 
     //Drag drop locations
     final int DRAG_NONE = -1;
@@ -147,8 +155,6 @@ public class ProcessingMapmaker extends PApplet {
         pg.endDraw();
         water.add(pg);
 
-//        location.add(createGraphics(width, height));
-//        userMarker.add(createGraphics(width, height));
         pointsForPaths = new ArrayList<>();
         ArrayList<PVector> points = new ArrayList<>();
         pointsForPaths.add(points);
