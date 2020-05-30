@@ -3,6 +3,7 @@ package processing.map.ui;
 import mapmaker.editor.Mode;
 import mapmaker.map.ui.ModeUI;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /**
  *
@@ -21,7 +22,16 @@ public final class ModeUI_P3 implements ModeUI {
 
     @Override
     public void display() {
-        // currently hotkeys only
+        app.image(loadModeUIGraphics(), 0, 0);
+    }
+
+    private PGraphics loadModeUIGraphics() {
+        PGraphics uiLayer = app.createGraphics(app.width, app.height);
+        uiLayer.beginDraw();
+        uiLayer.textSize(37);
+        uiLayer.text("Mode: " + currentMode.name(), 1, 50);
+        uiLayer.endDraw();
+        return uiLayer;
     }
 
     @Override

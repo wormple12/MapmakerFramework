@@ -58,6 +58,33 @@ public class EditorP3 implements Editor {
         if (modeUI.getCurrentMode() == Mode.MARKER) {
             locationUI.display();
         }
+        if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.ROUTE) {
+            app.image(loadLayerUIGraphics(), 0, 0);
+        }
+        if (modeUI.getCurrentMode() == Mode.LANDMASS) {
+            app.image(loadColorUIGraphics(), 0, 0);
+        }
+    }
+
+    private PGraphics loadLayerUIGraphics() {
+        PGraphics uiLayer = app.createGraphics(app.width, app.height);
+        uiLayer.beginDraw();
+        uiLayer.textSize(37);
+        uiLayer.text("Active layer: " + layer, app.displayWidth - 270, 50);
+        uiLayer.endDraw();
+        return uiLayer;
+    }
+
+    private PGraphics loadColorUIGraphics() {
+        PGraphics uiLayer = app.createGraphics(app.width, app.height);
+        uiLayer.beginDraw();
+        uiLayer.fill(colors[selectedBrushColor]);
+        uiLayer.rect(390, 10, 120, 50);
+        uiLayer.fill(255);
+        uiLayer.textSize(37);
+        uiLayer.text("Color", 400, 50);
+        uiLayer.endDraw();
+        return uiLayer;
     }
 
     public void run() {
@@ -70,7 +97,7 @@ public class EditorP3 implements Editor {
         if (modeUI.getCurrentMode() == Mode.MARKER) {
             selectedLocation = attemptSelectLocation(app.mouseX, app.mouseY);
 
-        } 
+        }
         if (modeUI.getCurrentMode() == Mode.ROUTE || modeUI.getPreviousMode() == Mode.ROUTE) {
             Route optionalRoute = null;
             try {
