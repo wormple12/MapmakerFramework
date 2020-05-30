@@ -152,6 +152,9 @@ public class EditorP3 implements Editor {
 
     @Override
     public void drawLandmass(int x, int y, double radius, Region optionalRegion) {
+        if (canvas.getCurrentMap().getRegions().size() < layer) {
+            layer = 0;
+        }
         float fRadius = (float) radius;
         if (app.mousePressed) {
             if (optionalRegion == null) {
