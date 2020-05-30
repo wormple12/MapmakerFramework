@@ -1,5 +1,6 @@
 package processing.entities.sprites;
 
+import mapmaker.entities.sprites.Sprite;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -7,19 +8,15 @@ import processing.core.PVector;
  *
  * @author Simon Norup
  */
-public class SpriteTypeP3 {
+public class SpriteTypeP3 extends Sprite {
 
     private final PVector vector;
     private final PImage image;
-    private final String spritePath;
-    private final float w, h;
 
     public SpriteTypeP3(PVector vector, PImage image, String spritePath, float w, float h) {
+        super(spritePath, w, h);
         this.vector = vector;
         this.image = image;
-        this.spritePath = spritePath;
-        this.w = w;
-        this.h = h;
     }
 
     public PVector getVector() {
@@ -28,18 +25,6 @@ public class SpriteTypeP3 {
 
     public PImage getImage() {
         return image;
-    }
-
-    public String getSpritePath() {
-        return spritePath;
-    }
-
-    public float getWidth() {
-        return w;
-    }
-
-    public float getHeight() {
-        return h;
     }
 
 }

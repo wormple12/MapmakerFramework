@@ -1,7 +1,6 @@
 package mapmaker.editor;
 
 import java.util.List;
-import mapmaker.entities.Biome;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.sprites.Location;
@@ -38,15 +37,9 @@ public interface Editor {
     @DrawFunction
     public void drawLandmass(int x, int y, double radius, Region optionalRegion);
 
-    @DrawFunction
-    default public void drawNewLandmass(int x, int y, double radius) {
-        drawLandmass(x, y, radius, null);
-    }
-
     /**
-     * REVISE!!! Should this delete landmass from a selected region only
-     * (easiest), or from all regions simultaneously (best)? Removes landmass
-     * from the world map based on pointer (mouse or controller) movement.
+     * Removes landmass from the world map based on pointer (mouse or
+     * controller) movement. Deletes landmass from all regions simultaneously.
      *
      * @param x
      * @param y
@@ -54,6 +47,18 @@ public interface Editor {
      */
     @DrawFunction
     public void drawWater(int x, int y, double radius);
+
+    /**
+     * Removes landmass from the world map based on pointer (mouse or
+     * controller) movement. Deletes landmass from a single region.
+     *
+     * @param x
+     * @param y
+     * @param radius
+     * @param region region to delete from
+     */
+    @DrawFunction
+    public void deleteLandmassFromRegion(int x, int y, double radius, Region region);
 
     /**
      * Finalizes landmass addition/removal, for example at mouse release, either
@@ -85,35 +90,39 @@ public interface Editor {
     public void editRegion(Region original, Region updated);
 
     /**
-     * Draws a route, road, river, or similar line on the landmass based on
-     * pointer (mouse or controller) movement.
+     * Draws a route, road, river, or similar line on the map based on pointer
+     * (mouse or controller) movement, either creating a new route, or changing
+     * an existing one.
      *
      * @param x
      * @param y
      * @param radius
+     * @param optionalRoute if this is not null, an existing route is changed
+     * instead of creating a new one.
      */
     @DrawFunction
-    public void drawRoute(int x, int y, double radius);
+    public void drawRoute(int x, int y, double radius, Route optionalRoute);
 
     /**
-     * Erases routes, roads, rivers, or similar lines from the landmass based on
+     * Erases a route, road, river, or similar line from the map based on
      * pointer (mouse or controller) movement.
      *
      * @param x
      * @param y
      * @param radius
+     * @param route
      */
     @DrawFunction
-    public void eraseRoute(int x, int y, double radius);
+    public void eraseRoute(int x, int y, double radius, Route route);
 
     /**
      * Finalizes the addition/removal of routes, roads, rivers, or similar
      * lines, for example at mouse release. This should update the current Map
      * object.
      *
-     * @return the created route line
+     * @return the updated route line
      */
-    public Route createRoute();
+    public Route updateRoute();
 
     /**
      * Moves the given location from its current position (if any) to a set of

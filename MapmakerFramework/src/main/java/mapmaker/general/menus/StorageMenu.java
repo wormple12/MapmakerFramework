@@ -26,10 +26,15 @@ abstract public class StorageMenu implements SubMenu {
      * of selecting a map file manually.
      */
     public final void loadMap(boolean loadLatest) {
-        WorldMap map = storage.attemptLoad(loadLatest);
-        if (map != null) {
-            canvas.loadWorldMap(map);
-            canvas.setCurrentMap(map);
+        WorldMap mapToLoad;
+        if (loadLatest && canvas.getCurrentMap() != null) {
+            mapToLoad = canvas.getCurrentMap();
+        } else {
+            mapToLoad = storage.attemptLoad(loadLatest);
+        }
+        if (mapToLoad != null) {
+            canvas.loadWorldMap(mapToLoad);
+            canvas.setCurrentMap(mapToLoad);
             switchUserRole();
         }
     }

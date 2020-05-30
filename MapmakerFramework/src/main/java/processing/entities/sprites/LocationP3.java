@@ -1,6 +1,8 @@
 package processing.entities.sprites;
 
+import java.util.Objects;
 import mapmaker.entities.sprites.Location;
+import mapmaker.entities.sprites.Marker;
 import static processing.core.PApplet.dist;
 import static processing.core.PApplet.max;
 import processing.core.PImage;
@@ -30,4 +32,44 @@ public class LocationP3 extends Location {
         this.image = image;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.getInfo());
+        hash = 23 * hash + Float.floatToIntBits(this.getX());
+        hash = 23 * hash + Float.floatToIntBits(this.getY());
+        hash = 23 * hash + Float.floatToIntBits(this.getWidth());
+        hash = 23 * hash + Float.floatToIntBits(this.getHeight());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Marker other = (Marker) obj;
+        if (Float.floatToIntBits(this.getX()) != Float.floatToIntBits(other.getX())) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.getY()) != Float.floatToIntBits(other.getY())) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.getWidth()) != Float.floatToIntBits(other.getWidth())) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.getWidth()) != Float.floatToIntBits(other.getHeight())) {
+            return false;
+        }
+        if (!Objects.equals(this.getInfo(), other.getInfo())) {
+            return false;
+        }
+        return true;
+    }
 }

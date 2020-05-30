@@ -6,7 +6,7 @@ import mapmaker.map.Canvas;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.general.menus.components.PMenuDisplay;
-import temporary.ProcessingMenuTest;
+import processing.ProcessingMapmaker;
 
 /**
  *
@@ -33,10 +33,10 @@ public class ViewerMenuP3 extends StorageMenu {
 
     @Override
     public void show() {
-        ((ProcessingMenuTest) app).setAppState(3);
+        ((ProcessingMapmaker) app).setAppState(3);
     }
 
-    public void draw() {
+    public void run() {
         layer.beginDraw();
         menuDisplay.draw();
         layer.endDraw();
@@ -61,7 +61,7 @@ public class ViewerMenuP3 extends StorageMenu {
 
     @Override
     public void returnToPrevious() {
-        ((ProcessingMenuTest) app).setAppState(1);
+        ((ProcessingMapmaker) app).setAppState(1);
     }
 
 }

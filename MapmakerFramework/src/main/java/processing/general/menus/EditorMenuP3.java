@@ -9,7 +9,7 @@ import mapmaker.entities.EntityInfo;
 import processing.core.PGraphics;
 import processing.entities.MapInfoP3;
 import processing.general.menus.components.PMenuDisplay;
-import temporary.ProcessingMenuTest;
+import processing.ProcessingMapmaker;
 
 /**
  *
@@ -45,10 +45,10 @@ public class EditorMenuP3 extends EditorMenu {
 
     @Override
     public void show() {
-        ((ProcessingMenuTest) app).setAppState(2);
+        ((ProcessingMapmaker) app).setAppState(2);
     }
 
-    public void draw() {
+    public void run() {
         layer.beginDraw();
         menuDisplay.draw();
         layer.endDraw();
@@ -76,7 +76,7 @@ public class EditorMenuP3 extends EditorMenu {
 
     @Override
     public void returnToPrevious() {
-        ((ProcessingMenuTest) app).setAppState(1);
+        ((ProcessingMapmaker) app).setAppState(1);
     }
 
 }

@@ -6,6 +6,6 @@ package mapmaker.editor;
  */
 public enum Mode {
 
-    CAMERA, LANDMASS, BORDER, ROAD, WATER, LOCATION
+    CAMERA, LANDMASS, WATER, MARKER, ROUTE
 
 }

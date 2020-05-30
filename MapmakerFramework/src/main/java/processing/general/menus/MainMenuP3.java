@@ -7,7 +7,7 @@ import mapmaker.general.menus.SubMenu;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.general.menus.components.PMenuDisplay;
-import temporary.ProcessingMenuTest;
+import processing.ProcessingMapmaker;
 
 /**
  *
@@ -34,10 +34,10 @@ public class MainMenuP3 extends MainMenu {
 
     @Override
     public void show() {
-        ((ProcessingMenuTest) app).setAppState(1);
+        ((ProcessingMapmaker) app).setAppState(1);
     }
 
-    public void draw() {
+    public void run() {
         layer.beginDraw();
         menuDisplay.draw();
         layer.endDraw();
@@ -62,7 +62,7 @@ public class MainMenuP3 extends MainMenu {
 
     @Override
     public void returnToPrevious() {
-        ((ProcessingMenuTest) app).setAppState(0);
+        ((ProcessingMapmaker) app).setAppState(0);
     }
 
 }
