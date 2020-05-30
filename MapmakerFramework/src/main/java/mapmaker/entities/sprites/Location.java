@@ -8,7 +8,7 @@ import mapmaker.entities.EntityInfo;
  *
  * @author Simon Norup
  */
-public class Location extends Sprite {
+public class Location extends Marker {
 
     public Location(EntityInfo info, String spritePath, float x, float y, float w, float h) {
         super(info, spritePath, x, y, w, h);

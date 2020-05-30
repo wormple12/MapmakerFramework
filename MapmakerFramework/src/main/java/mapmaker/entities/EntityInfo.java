@@ -2,6 +2,7 @@
 package mapmaker.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *

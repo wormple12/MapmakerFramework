@@ -1,4 +1,4 @@
-package mapmaker.editor.ui;
+package mapmaker.map.ui;
 
 import mapmaker.editor.Mode;
 
@@ -21,5 +21,7 @@ public interface ModeUI {
      * @param mode the selected mode
      */
     public void switchMode(Mode mode);
+    
+    public Mode getCurrentMode();
 
 }

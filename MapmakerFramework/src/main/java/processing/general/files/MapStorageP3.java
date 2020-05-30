@@ -1,10 +1,8 @@
 package processing.general.files;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import javafx.util.Pair;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.WorldMap;
@@ -24,6 +22,7 @@ import processing.entities.dto.LocationP3_DTO;
 import processing.entities.sprites.UserMarkerInfoP3;
 import processing.entities.sprites.UserMarkerP3;
 import processing.entities.dto.UserMarkerP3_DTO;
+import processing.map.RouteLoaderP3;
 
 /**
  *
@@ -57,9 +56,9 @@ public class MapStorageP3 extends FileStorage {
 
         // saving map file
         boolean success = infoStorage.attemptSave(worldDTO);
-        world.setFilePath(worldDTO.getFilePath());
 
         if (success) {
+            world.setFilePath(worldDTO.getFilePath());
             String mapFileName = world.getFileName();
             // saving graphics
             try {
@@ -110,6 +109,7 @@ public class MapStorageP3 extends FileStorage {
                         dto.getCoordinates().forEach((coordinate) -> {
                             route.addPoint(coordinate.getKey(), coordinate.getValue());
                         });
+                        RouteLoaderP3.loadRoute(route);
                         return route;
                     }).collect(Collectors.toList())
             );
