@@ -7,7 +7,9 @@ import mapmaker.entities.*;
 import mapmaker.entities.sprites.*;
 import processing.core.PApplet;
 import static processing.core.PApplet.dist;
+import static processing.core.PConstants.ELLIPSE;
 import processing.core.PGraphics;
+import processing.core.PShape;
 import processing.map.ui.ModeUI_P3;
 import processing.map.ui.SpriteUI_P3;
 import processing.entities.*;
@@ -62,6 +64,7 @@ public class EditorP3 implements Editor {
             app.image(loadLayerUIGraphics(), 0, 0);
         }
         if (modeUI.getCurrentMode() == Mode.LANDMASS) {
+            draw(app.mouseX, app.mouseY);
             app.image(loadColorUIGraphics(), 0, 0);
         }
     }
@@ -70,7 +73,7 @@ public class EditorP3 implements Editor {
         PGraphics uiLayer = app.createGraphics(app.width, app.height);
         uiLayer.beginDraw();
         uiLayer.textSize(37);
-        uiLayer.text("Active layer: " + layer, app.displayWidth - 270, 50);
+        uiLayer.text("Active layer: " + layer, app.displayWidth - 285, 50);
         uiLayer.endDraw();
         return uiLayer;
     }
@@ -147,7 +150,10 @@ public class EditorP3 implements Editor {
 
     @Override
     public void draw(int x, int y) {
-        // do nothing
+        PShape circle = app.createShape(ELLIPSE, x, y, brushRadius, brushRadius);
+        circle.setFill(app.color(colors[selectedBrushColor]));
+        app.shape(circle);
+        //app.ellipse(x,y,brushRadius,brushRadius);
     }
 
     @Override
@@ -176,8 +182,8 @@ public class EditorP3 implements Editor {
             border.line(app.pmouseX, app.pmouseY, x, y);
             border.endDraw();
         }
-        app.noStroke();
-        app.ellipse(x, y, fRadius, fRadius);
+        //app.noStroke();
+        //app.ellipse(x, y, fRadius, fRadius);
     }
 
     @Override
