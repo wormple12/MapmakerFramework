@@ -3,6 +3,7 @@ package mapmaker.general.files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import mapmaker.entities.WorldMap;
 import mapmaker.general.Storage;
 
@@ -37,7 +38,7 @@ public class FileStorage implements Storage {
         File file = null;
         if (useLatestMap && getLatestMapPath() != null) {
             file = getLatestMapPath().toFile();
-        } else if (fileHandler.isOpenPathFound()) {
+        } else if (fileHandler.isOpenPathFound(getLatestMapPath())) {
             file = fileHandler.getSelectedFile();
         }
         if (file == null || !file.exists()) {
@@ -63,7 +64,7 @@ public class FileStorage implements Storage {
     public boolean attemptSave(WorldMap map) {
         if (map.getFilePath() == null) {
 
-            if (fileHandler.isSavePathFound()) {
+            if (fileHandler.isSavePathFound(Paths.get(map.getInfo().getName()))) {
                 File file = fileHandler.getSelectedFile();
                 String filename = file.toString();
                 String fileExtension = "." + fileHandler.getMapFileExtension();
@@ -73,22 +74,26 @@ public class FileStorage implements Storage {
                 }
                 if (!file.exists() || fileHandler.getOverwriteConfirmation(file)) {
                     map.setFilePath(file.toPath());
-                    return this.attemptSave(map);
+                    return doSave(map);
                 }
             }
             return false;
 
         } else {
-            File file = map.getFilePath().toFile();
-            try {
-                file.createNewFile(); //only creates if not already existing
-            } catch (IOException ex) {
-                return false;
-            }
-            fileHandler.overwriteFileWithMap(file, map);
-            setLatestMapPath(file.toPath());
-            return true;
+            return doSave(map);
         }
+    }
+
+    private boolean doSave(WorldMap map) {
+        File file = map.getFilePath().toFile();
+        try {
+            file.createNewFile(); //only creates if not already existing
+        } catch (IOException ex) {
+            return false;
+        }
+        fileHandler.overwriteFileWithMap(file, map);
+        setLatestMapPath(file.toPath());
+        return true;
     }
 
     /**

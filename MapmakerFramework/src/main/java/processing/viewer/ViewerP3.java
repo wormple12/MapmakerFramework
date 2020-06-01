@@ -18,15 +18,13 @@ import processing.map.CanvasP3;
 public class ViewerP3 implements Viewer {
 
     private final PApplet app;
-    private final ModeUI_P3 modeUI;
     private final SpriteUI_P3 userMarkerUI;
     private final CanvasP3 canvas;
 
     private UserMarkerP3 selectedMarker = null;
 
-    public ViewerP3(CanvasP3 canvas, ModeUI_P3 modeUI, PApplet app) {
+    public ViewerP3(CanvasP3 canvas, PApplet app) {
         this.app = app;
-        this.modeUI = modeUI;
         this.userMarkerUI = new SpriteUI_P3("sprites/markers/", app);
         this.canvas = canvas;
     }
@@ -35,39 +33,22 @@ public class ViewerP3 implements Viewer {
         userMarkerUI.display();
     }
 
-    public void run() {
-        if (selectedMarker != null) {
-            dragMarker(selectedMarker, app.mouseX, app.mouseY);
-        }
-    }
-
-    public void mousePressed() {
-        selectedMarker = attemptSelectMarker(app.mouseX, app.mouseY);
-    }
-
-    public void mouseReleased() {
-        if (selectedMarker != null) {
-            dropMarker(selectedMarker, app.mouseX, app.mouseY);
-        }
-    }
-
     public UserMarkerP3 getSelectedMarker() {
         return selectedMarker;
     }
 
-    public UserMarkerP3 attemptSelectMarker(int x, int y) {
-        UserMarkerP3 markerP3 = (UserMarkerP3) userMarkerUI.attemptSelectSpriteType();
-        if (markerP3 != null) {
-            return markerP3;
-        } else {
+    public void attemptSelectMarker(int x, int y) {
+        UserMarkerP3 result = (UserMarkerP3) userMarkerUI.attemptSelectSpriteType();
+        if (result == null) {
             for (UserMarker marker : canvas.getCurrentMap().getMarkers()) {
-                markerP3 = (UserMarkerP3) marker;
-                if (markerP3.over(x, y)) {
-                    return markerP3;
+                UserMarkerP3 markerP3 = (UserMarkerP3) marker;
+                if (markerP3.mouseIsOver(x, y)) {
+                    result = markerP3;
+                    break;
                 }
             }
         }
-        return null;
+        selectedMarker = result;
     }
 
     @Override

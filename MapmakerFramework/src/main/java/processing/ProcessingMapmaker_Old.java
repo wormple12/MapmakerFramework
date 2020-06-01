@@ -274,7 +274,7 @@ public class ProcessingMapmaker_Old extends PApplet {
             if (dragging == DRAG_NONE) {
                 for (int i = 0; i < locations.size(); i++) {
                     LocationP3 location = (LocationP3) locations.get(i);
-                    if (location.over(mouseX, mouseY)) {
+                    if (location.mouseIsOver(mouseX, mouseY)) {
                         draggingAnExistingLocation = i;
                     }
                 }
@@ -293,7 +293,7 @@ public class ProcessingMapmaker_Old extends PApplet {
             if (dragging == DRAG_NONE) {
                 for (int i = 0; i < userMarkers.size(); i++) {
                     UserMarkerP3 marker = (UserMarkerP3) userMarkers.get(i);
-                    if (marker.over(mouseX, mouseY)) {
+                    if (marker.mouseIsOver(mouseX, mouseY)) {
                         draggingAnExistingUserMarker = i;
                     }
                 }

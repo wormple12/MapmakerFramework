@@ -31,6 +31,24 @@ public final class ModeUI_P3 implements ModeUI {
         return currentMode;
     }
 
+    @Override
+    public boolean isCurrentMode(Mode... modes) {
+        for (Mode mode : modes) {
+            if (currentMode == mode) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCurrentOrPreviousMode(Mode mode) {
+        return isCurrentMode(mode) || isPreviousMode(mode);
+    }
+
+    public boolean isPreviousMode(Mode mode) {
+        return previousMode == mode;
+    }
+
     public Mode getPreviousMode() {
         return previousMode;
     }
@@ -38,7 +56,11 @@ public final class ModeUI_P3 implements ModeUI {
     public void setPreviousMode(Mode previousMode) {
         this.previousMode = previousMode;
     }
-    
+
+    public boolean isInCTRLMode() {
+        return currentMode == Mode.CAMERA;
+    }
+
     @Override
     public void display() {
         app.image(loadModeUIGraphics(), 0, 0);

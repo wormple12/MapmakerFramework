@@ -49,12 +49,18 @@ public final class FileHandlerDefault implements FileHandler {
     }
 
     @Override
-    public boolean isOpenPathFound() {
+    public boolean isOpenPathFound(Path defaultFilePath) {
+        if (defaultFilePath != null) {
+            J_FILE_CHOOSER.setSelectedFile(defaultFilePath.toFile());
+        }
         return J_FILE_CHOOSER.showOpenDialog((Component) null) == JFileChooser.APPROVE_OPTION;
     }
 
     @Override
-    public boolean isSavePathFound() {
+    public boolean isSavePathFound(Path defaultFilePath) {
+        if (defaultFilePath != null) {
+            J_FILE_CHOOSER.setSelectedFile(defaultFilePath.toFile());
+        }
         return J_FILE_CHOOSER.showSaveDialog((Component) null) == JFileChooser.APPROVE_OPTION;
     }
 

@@ -1,6 +1,5 @@
 package processing;
 
-import mapmaker.editor.Editor;
 import mapmaker.editor.EditorProxy;
 import mapmaker.editor.Mode;
 import mapmaker.general.UserRole;
@@ -10,8 +9,7 @@ import processing.editor.EditorP3;
 import processing.editor.IEditorP3;
 import processing.general.files.MapStorageP3;
 import processing.general.menus.*;
-import processing.map.CanvasP3;
-import processing.map.HotkeyManagerP3;
+import processing.map.*;
 import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 
@@ -34,7 +32,9 @@ public class ProcessingMapmaker extends PApplet {
     private IEditorP3 editor;
     private ViewerP3 viewer;
     private ModeUI_P3 modeUI;
-    private HotkeyManagerP3 hotkeys;
+    private MapMouseManagerP3 mapMouse;
+    private MapHotkeyManagerP3 mapHotkeys;
+    private MapRunnerP3 mapRunner;
 
     @Override
     public void settings() {
@@ -55,15 +55,18 @@ public class ProcessingMapmaker extends PApplet {
         editor = (IEditorP3) EditorProxy.getProxyInstance(
                 new EditorP3(canvas, modeUI, this),
                 IEditorP3.class);
-//        editor = new EditorP3(canvas, modeUI, this);
-        viewer = new ViewerP3(canvas, modeUI, this);
-        hotkeys = new HotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
+//        editor = new EditorP3(canvas, modeUI, this); // Using this instead will disable general draw() functionality
+        viewer = new ViewerP3(canvas, this);
+        mapMouse = new MapMouseManagerP3(this, editor, viewer, canvas, modeUI);
+        mapHotkeys = new MapHotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
+        mapRunner = new MapRunnerP3(this, editor, viewer, canvas);
 
         //hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
 
     public void setAppState(int state) {
         appState = state;
+        // setting the default Mode when entering a map:
         if (state == 0) {
             if (UserRole.getCurrentRole() == UserRole.EDITOR) {
                 modeUI.switchMode(Mode.LANDMASS);
@@ -74,33 +77,12 @@ public class ProcessingMapmaker extends PApplet {
     }
 
     @Override
-    public void keyPressed(processing.event.KeyEvent evt) {
-        if (appState == 0) {
-            hotkeys.keyPressed(evt);
-        }
-    }
-
-    @Override
-    public void keyReleased(processing.event.KeyEvent evt) {
-        if (appState == 0) {
-            hotkeys.keyReleased(evt);
-        }
-    }
-
-    @Override
     public void draw() {
         background(255);
 
         switch (appState) {
             case 0:
-                canvas.run();
-                if (UserRole.getCurrentRole() == UserRole.EDITOR) {
-                    editor.displayUI();
-                    editor.run();
-                } else {
-                    viewer.displayUI();
-                    viewer.run();
-                }
+                mapRunner.run();
                 break;
             case 1:
                 mainMenu.run();
@@ -114,18 +96,13 @@ public class ProcessingMapmaker extends PApplet {
             default:
                 throw new AssertionError();
         }
-        // image(currentLayer)
     }
 
     @Override
     public void mousePressed() {
         switch (appState) {
             case 0:
-                if (UserRole.getCurrentRole() == UserRole.EDITOR) {
-                    editor.mousePressed();
-                } else {
-                    viewer.mousePressed();
-                }
+                mapMouse.mousePressed();
                 break;
             case 1:
                 mainMenu.mousePressed();
@@ -143,19 +120,30 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void mouseDragged() {
-        if (appState == 0 && UserRole.getCurrentRole() == UserRole.EDITOR) {
-            editor.mouseDragged();
+        if (appState == 0) {
+            mapMouse.mouseDragged();
         }
     }
 
     @Override
     public void mouseReleased() {
         if (appState == 0) {
-            if (UserRole.getCurrentRole() == UserRole.EDITOR) {
-                editor.mouseReleased();
-            } else {
-                viewer.mouseReleased();
-            }
+            mapMouse.mouseReleased();
+        }
+    }
+
+    @Override
+    public void keyPressed(processing.event.KeyEvent evt) {
+        if (appState == 0) {
+            mapHotkeys.keyPressed(evt);
+        }
+        key = 0; // prevents Processing default hotkey behavior (e.g. terminating on Escape)
+    }
+
+    @Override
+    public void keyReleased(processing.event.KeyEvent evt) {
+        if (appState == 0) {
+            mapHotkeys.keyReleased(evt);
         }
     }
 

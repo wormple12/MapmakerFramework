@@ -12,21 +12,13 @@ public interface IEditorP3 extends Editor {
     
     public void displayUI();
     
-    public void run();
-    
-    public void mousePressed();
-    
-    public void mouseReleased();
-    
-    public void mouseDragged();
-    
     public void createNewRegionLayer();
     
     public void createNewRouteLayer();
     
     public LocationP3 getSelectedLocation();
     
-    public LocationP3 attemptSelectLocation(int x, int y);
+    public void attemptSelectLocation(int x, int y);
     
     public int getLayer();
     
