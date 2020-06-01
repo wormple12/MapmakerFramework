@@ -1,7 +1,6 @@
 package processing.editor;
 
 import java.util.List;
-import mapmaker.editor.Editor;
 import mapmaker.editor.Mode;
 import mapmaker.entities.*;
 import mapmaker.entities.sprites.*;
@@ -10,21 +9,21 @@ import static processing.core.PApplet.dist;
 import static processing.core.PConstants.ELLIPSE;
 import processing.core.PGraphics;
 import processing.core.PShape;
-import processing.map.ui.ModeUI_P3;
-import processing.map.ui.SpriteUI_P3;
 import processing.entities.*;
 import processing.entities.sprites.*;
 import processing.map.CanvasP3;
 import processing.map.RouteLoaderP3;
+import processing.map.ui.*;
 
 /**
  *
  * @author Simon Norup
  */
-public class EditorP3 implements Editor {
+public class EditorP3 implements IEditorP3 {
 
     private final PApplet app;
     private final ModeUI_P3 modeUI;
+    private final InfoUI_P3 infoUI;
     private final SpriteUI_P3 locationUI;
     private final CanvasP3 canvas;
 
@@ -39,6 +38,7 @@ public class EditorP3 implements Editor {
     public EditorP3(CanvasP3 canvas, ModeUI_P3 modeUI, PApplet app) {
         this.app = app;
         this.modeUI = modeUI;
+        this.infoUI = new InfoUI_P3(app);
         this.locationUI = new SpriteUI_P3("sprites/locations/", app);
         this.canvas = canvas;
         this.colors = new int[]{
@@ -55,47 +55,28 @@ public class EditorP3 implements Editor {
         };
     }
 
+    @Override
     public void displayUI() {
         modeUI.display();
         if (modeUI.getCurrentMode() == Mode.MARKER) {
             locationUI.display();
         }
         if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.ROUTE || modeUI.getCurrentMode() == Mode.WATER) {
-            app.image(loadLayerUIGraphics(), 0, 0);
+            infoUI.display(layer);
         }
         if (modeUI.getCurrentMode() == Mode.LANDMASS) {
-//            draw(app.mouseX, app.mouseY);
-            app.image(loadColorUIGraphics(), 0, 0);
+            loadColorUIGraphics();
         }
     }
 
-    private PGraphics loadLayerUIGraphics() {
-        PGraphics uiLayer = app.createGraphics(app.width, app.height);
-        uiLayer.beginDraw();
-        uiLayer.textSize(37);
-        uiLayer.text("Active layer: " + layer, app.displayWidth - 285, 50);
-        uiLayer.endDraw();
-        return uiLayer;
-    }
-
-    private PGraphics loadColorUIGraphics() {
-        PGraphics uiLayer = app.createGraphics(app.width, app.height);
-        uiLayer.beginDraw();
-        uiLayer.fill(colors[selectedBrushColor]);
-        uiLayer.rect(390, 10, 120, 50);
-        uiLayer.fill(255);
-        uiLayer.textSize(37);
-        uiLayer.text("Color", 400, 50);
-        uiLayer.endDraw();
-        return uiLayer;
-    }
-
+    @Override
     public void run() {
         if (selectedLocation != null) {
             dragLocation(selectedLocation, app.mouseX, app.mouseY);
         }
     }
 
+    @Override
     public void mousePressed() {
         if (modeUI.getCurrentMode() == Mode.MARKER) {
             selectedLocation = attemptSelectLocation(app.mouseX, app.mouseY);
@@ -115,6 +96,7 @@ public class EditorP3 implements Editor {
         }
     }
 
+    @Override
     public void mouseReleased() {
         if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.WATER) {
             updateRegions();
@@ -127,6 +109,7 @@ public class EditorP3 implements Editor {
         }
     }
 
+    @Override
     public void mouseDragged() {
         if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.WATER) {
             Region optionalRegion = null;
@@ -227,6 +210,7 @@ public class EditorP3 implements Editor {
         app.ellipse(x, y, fRadius, fRadius);
     }
 
+    @Override
     public void createNewRegionLayer() {
         canvas.getCurrentMap().addRegion(new Region(
                 new LandmassP3(app.createGraphics(app.width, app.height), app.createGraphics(app.width, app.height)),
@@ -267,6 +251,7 @@ public class EditorP3 implements Editor {
         routeP3.getPoints().remove(routeP3.getPoints().size() - 1);
     }
 
+    @Override
     public void createNewRouteLayer() {
         canvas.getCurrentMap().addRoute(new RouteP3(
                 app.createGraphics(app.width, app.height))
@@ -282,10 +267,12 @@ public class EditorP3 implements Editor {
         return route;
     }
 
+    @Override
     public LocationP3 getSelectedLocation() {
         return selectedLocation;
     }
 
+    @Override
     public LocationP3 attemptSelectLocation(int x, int y) {
         LocationP3 locP3 = (LocationP3) locationUI.attemptSelectSpriteType();
         if (locP3 != null) {
@@ -338,10 +325,12 @@ public class EditorP3 implements Editor {
         }
     }
 
+    @Override
     public int getLayer() {
         return layer;
     }
 
+    @Override
     public void setLayer(int layer) {
         if (layer == -1) {
             layer = canvas.getCurrentMap().getRegions().size();
@@ -349,18 +338,33 @@ public class EditorP3 implements Editor {
         this.layer = layer;
     }
 
+    @Override
     public void switchRegionLayer() {
         layer = (layer < canvas.getCurrentMap().getRegions().size()) ? layer + 1 : 0;
         System.out.println("LANDMASS layer switch");
     }
 
+    @Override
     public void switchRouteLayer() {
         layer = (layer < canvas.getCurrentMap().getRoutes().size()) ? layer + 1 : 0;
         System.out.println("ROUTE layer switch");
     }
 
+    @Override
     public void switchColorBrush() {
         selectedBrushColor = (selectedBrushColor == colors.length - 1) ? 1 : selectedBrushColor + 1;
+    }
+
+    private void loadColorUIGraphics() {
+        PGraphics uiLayer = app.createGraphics(app.width, app.height);
+        uiLayer.beginDraw();
+        uiLayer.fill(colors[selectedBrushColor]);
+        uiLayer.rect(390, 10, 120, 50);
+        uiLayer.fill(255);
+        uiLayer.textSize(37);
+        uiLayer.text("Color", 400, 50);
+        uiLayer.endDraw();
+        app.image(uiLayer, 0, 0);
     }
 
 }

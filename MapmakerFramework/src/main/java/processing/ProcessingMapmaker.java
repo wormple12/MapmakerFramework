@@ -7,6 +7,7 @@ import mapmaker.general.UserRole;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.editor.EditorP3;
+import processing.editor.IEditorP3;
 import processing.general.files.MapStorageP3;
 import processing.general.menus.*;
 import processing.map.CanvasP3;
@@ -19,7 +20,7 @@ import processing.viewer.ViewerP3;
  * @author Simon Norup
  */
 public class ProcessingMapmaker extends PApplet {
-    
+
     private int appState = 1;
     // 0 = actual map
     // 1 = main menu
@@ -30,35 +31,37 @@ public class ProcessingMapmaker extends PApplet {
     private EditorMenuP3 editorMenu;
     private ViewerMenuP3 viewerMenu;
     private CanvasP3 canvas;
-    private EditorP3 editor;
+    private IEditorP3 editor;
     private ViewerP3 viewer;
     private ModeUI_P3 modeUI;
     private HotkeyManagerP3 hotkeys;
-    
+
     @Override
     public void settings() {
         size(displayWidth, displayHeight);
     }
-    
+
     @Override
     public void setup() {
         surface.setTitle("Mapmaker (Processing 3)");
         surface.setResizable(true);
-        
+
         FileStorage mapStorage = new MapStorageP3(this);
         canvas = new CanvasP3(this);
         editorMenu = new EditorMenuP3(mapStorage, canvas, this);
         viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
         mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
         modeUI = new ModeUI_P3(this);
-        editor = (EditorP3) EditorProxy.getProxyInstance(new EditorP3(canvas, modeUI, this), Editor.class);
+        editor = (IEditorP3) EditorProxy.getProxyInstance(
+                new EditorP3(canvas, modeUI, this),
+                IEditorP3.class);
 //        editor = new EditorP3(canvas, modeUI, this);
         viewer = new ViewerP3(canvas, modeUI, this);
         hotkeys = new HotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
 
         //hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
-    
+
     public void setAppState(int state) {
         appState = state;
         if (state == 0) {
@@ -69,25 +72,25 @@ public class ProcessingMapmaker extends PApplet {
             }
         }
     }
-    
+
     @Override
     public void keyPressed(processing.event.KeyEvent evt) {
         if (appState == 0) {
             hotkeys.keyPressed(evt);
         }
     }
-    
+
     @Override
     public void keyReleased(processing.event.KeyEvent evt) {
         if (appState == 0) {
             hotkeys.keyReleased(evt);
         }
     }
-    
+
     @Override
     public void draw() {
         background(255);
-        
+
         switch (appState) {
             case 0:
                 canvas.run();
@@ -113,7 +116,7 @@ public class ProcessingMapmaker extends PApplet {
         }
         // image(currentLayer)
     }
-    
+
     @Override
     public void mousePressed() {
         switch (appState) {
@@ -137,14 +140,14 @@ public class ProcessingMapmaker extends PApplet {
                 throw new AssertionError();
         }
     }
-    
+
     @Override
     public void mouseDragged() {
         if (appState == 0 && UserRole.getCurrentRole() == UserRole.EDITOR) {
             editor.mouseDragged();
         }
     }
-    
+
     @Override
     public void mouseReleased() {
         if (appState == 0) {
@@ -155,11 +158,11 @@ public class ProcessingMapmaker extends PApplet {
             }
         }
     }
-    
+
     public static void main(String[] passedArgs) {
         String[] appletArgs = new String[]{"Mapmaker (Processing 3)"};
         ProcessingMapmaker mySketch = new ProcessingMapmaker();
         PApplet.runSketch(appletArgs, mySketch);
     }
-    
+
 }

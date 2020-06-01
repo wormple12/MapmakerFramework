@@ -3,17 +3,14 @@ package processing.map;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import mapmaker.editor.Mode;
 import mapmaker.general.UserRole;
 import processing.core.PApplet;
-import processing.editor.EditorP3;
 import processing.general.menus.EditorMenuP3;
 import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
+import processing.editor.IEditorP3;
 
 /**
  *
@@ -22,12 +19,12 @@ import processing.ProcessingMapmaker;
 public class HotkeyManagerP3 {
 
     private final PApplet app;
-    private final EditorP3 editor;
+    private final IEditorP3 editor;
     private final ViewerP3 viewer;
     private final ModeUI_P3 modeUI;
     private final EditorMenuP3 menu;
 
-    public HotkeyManagerP3(PApplet app, EditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu) {
+    public HotkeyManagerP3(PApplet app, IEditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu) {
         this.app = app;
         this.editor = editor;
         this.viewer = viewer;
