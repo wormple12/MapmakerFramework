@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Path;
 import mapmaker.entities.WorldMap;
 
 /**
@@ -18,9 +19,9 @@ public interface FileHandler {
 
     public String getMapFileExtension();
 
-    public boolean isOpenPathFound();
+    public boolean isOpenPathFound(Path defaultFilePath);
 
-    public boolean isSavePathFound();
+    public boolean isSavePathFound(Path defaultFilePath);
 
     public File getSelectedFile();
 
@@ -31,7 +32,7 @@ public interface FileHandler {
                 return (WorldMap) objectIn.readObject();
             }
         } catch (IOException | ClassNotFoundException ex) {
-            return null;
+            throw new UnsupportedOperationException("ClassNotFoundException/IOException was thrown but has not been handled yet. Object could not be read from file.");
         }
     }
 

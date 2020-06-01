@@ -13,10 +13,12 @@ import mapmaker.entities.sprites.Location;
  * @author Simon Norup
  */
 public class EditorProxyTest {
+    
+    private static TestEditor automaticDrawer;
 
     public static void main(String[] args) {
-        TestEditor automaticDrawer = (TestEditor) EditorProxy.getProxyInstance(new TestEditorImpl(), TestEditor.class);
-        automaticDrawer.drawLandmass(0, 5, 10, null);
+        automaticDrawer = (TestEditor) EditorProxy.getProxyInstance(new TestEditorImpl(), TestEditor.class);
+//        automaticDrawer.drawLandmass(0, 5, 10, null);
         automaticDrawer.drawWater(4, 14, 2.3);
         automaticDrawer.updateRoute();
         automaticDrawer.randomDraw(7, 5);
@@ -48,6 +50,7 @@ public class EditorProxyTest {
         @Override
         public void randomDraw(int x, Integer y) {
             System.out.println("randomDraw");
+            automaticDrawer.drawLandmass(x, y, 2, null);
         }
 
         @Override

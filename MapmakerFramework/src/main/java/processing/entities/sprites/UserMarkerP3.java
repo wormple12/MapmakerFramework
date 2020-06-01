@@ -20,7 +20,7 @@ public class UserMarkerP3 extends UserMarker {
         this.image = image;
     }
 
-    public boolean over(int mouse_x, int mouse_y) {
+    public boolean mouseIsOver(int mouse_x, int mouse_y) {
         return dist(mouse_x, mouse_y, getX(), getY()) < max(getWidth(), getHeight());
     }
 

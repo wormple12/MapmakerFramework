@@ -55,7 +55,7 @@ public class MapStorageP3 extends FileStorage {
         WorldMap worldDTO = new WorldMap(world.getInfo(), regions, locations, markers, routes);
 
         // saving map file
-        boolean success = infoStorage.attemptSave(worldDTO);
+        boolean success = super.attemptSave(worldDTO);
 
         if (success) {
             world.setFilePath(worldDTO.getFilePath());

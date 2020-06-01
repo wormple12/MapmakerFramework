@@ -21,6 +21,47 @@ public final class ModeUI_P3 implements ModeUI {
     }
 
     @Override
+    public void switchMode(Mode mode) {
+        currentMode = mode;
+        System.out.println(mode + " mode entered.");
+    }
+
+    @Override
+    public Mode getCurrentMode() {
+        return currentMode;
+    }
+
+    @Override
+    public boolean isCurrentMode(Mode... modes) {
+        for (Mode mode : modes) {
+            if (currentMode == mode) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCurrentOrPreviousMode(Mode mode) {
+        return isCurrentMode(mode) || isPreviousMode(mode);
+    }
+
+    public boolean isPreviousMode(Mode mode) {
+        return previousMode == mode;
+    }
+
+    public Mode getPreviousMode() {
+        return previousMode;
+    }
+
+    public void setPreviousMode(Mode previousMode) {
+        this.previousMode = previousMode;
+    }
+
+    public boolean isInCTRLMode() {
+        return currentMode == Mode.CAMERA;
+    }
+
+    @Override
     public void display() {
         app.image(loadModeUIGraphics(), 0, 0);
     }
@@ -32,25 +73,6 @@ public final class ModeUI_P3 implements ModeUI {
         uiLayer.text("Mode: " + currentMode.name(), 1, 50);
         uiLayer.endDraw();
         return uiLayer;
-    }
-
-    @Override
-    public void switchMode(Mode mode) {
-        currentMode = mode;
-        System.out.println(mode + " mode entered.");
-    }
-
-    @Override
-    public Mode getCurrentMode() {
-        return currentMode;
-    }
-
-    public Mode getPreviousMode() {
-        return previousMode;
-    }
-
-    public void setPreviousMode(Mode previousMode) {
-        this.previousMode = previousMode;
     }
 
 }

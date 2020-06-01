@@ -40,6 +40,14 @@ public class WorldMap implements Serializable {
         return regions;
     }
 
+    public Region getRegion(int i) {
+        try {
+            return regions.get(i);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
     public void addRegion(Region region) {
         regions.add(region);
     }
@@ -50,6 +58,14 @@ public class WorldMap implements Serializable {
 
     public List<Route> getRoutes() {
         return routes;
+    }
+
+    public Route getRoute(int i) {
+        try {
+            return routes.get(i);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public void addRoute(Route route) {

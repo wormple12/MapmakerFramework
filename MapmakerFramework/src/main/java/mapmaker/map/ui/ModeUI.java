@@ -23,5 +23,7 @@ public interface ModeUI {
     public void switchMode(Mode mode);
     
     public Mode getCurrentMode();
+    
+    public boolean isCurrentMode(Mode... mode);
 
 }

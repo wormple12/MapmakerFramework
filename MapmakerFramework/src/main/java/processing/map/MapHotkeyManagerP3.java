@@ -3,31 +3,28 @@ package processing.map;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import mapmaker.editor.Mode;
 import mapmaker.general.UserRole;
 import processing.core.PApplet;
-import processing.editor.EditorP3;
 import processing.general.menus.EditorMenuP3;
 import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
+import processing.editor.IEditorP3;
 
 /**
  *
  * @author Simon Norup
  */
-public class HotkeyManagerP3 {
+public class MapHotkeyManagerP3 {
 
     private final PApplet app;
-    private final EditorP3 editor;
+    private final IEditorP3 editor;
     private final ViewerP3 viewer;
     private final ModeUI_P3 modeUI;
     private final EditorMenuP3 menu;
 
-    public HotkeyManagerP3(PApplet app, EditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu) {
+    public MapHotkeyManagerP3(PApplet app, IEditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu) {
         this.app = app;
         this.editor = editor;
         this.viewer = viewer;
@@ -36,7 +33,7 @@ public class HotkeyManagerP3 {
     }
 
     public void keyPressed(processing.event.KeyEvent evt) {
-        if (evt.isControlDown() && modeUI.getCurrentMode() != Mode.CAMERA) {
+        if (evt.isControlDown() && !modeUI.isInCTRLMode()) {
             modeUI.setPreviousMode(modeUI.getCurrentMode());
             modeUI.switchMode(Mode.CAMERA);
         } else {
@@ -61,16 +58,10 @@ public class HotkeyManagerP3 {
 
                     // LAYER SWITCH FOR REGIONS AND ROUTES
                     case 'L':
-                        switch (modeUI.getCurrentMode()) {
-                            case LANDMASS:
-                            case WATER:
-                                editor.switchRegionLayer();
-                                break;
-                            case ROUTE:
-                                editor.switchRouteLayer();
-                                break;
-                            default:
-                            // ignore if in another mode
+                        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
+                            editor.switchRegionLayer();
+                        } else if (modeUI.isCurrentMode(Mode.ROUTE)) {
+                            editor.switchRouteLayer();
                         }
                         break;
 
@@ -89,7 +80,7 @@ public class HotkeyManagerP3 {
                     // DELETING LOCATIONS
                     case PApplet.BACKSPACE:
                     case PApplet.DELETE:
-                        if (modeUI.getCurrentMode() == Mode.MARKER) {
+                        if (modeUI.isCurrentMode(Mode.MARKER))  {
                             if (UserRole.getCurrentRole() == UserRole.EDITOR && editor.getSelectedLocation() != null) {
                                 editor.editLocationInfo(editor.getSelectedLocation(), null);
                             } else if (UserRole.getCurrentRole() == UserRole.VIEWER && viewer.getSelectedMarker() != null) {
@@ -99,20 +90,19 @@ public class HotkeyManagerP3 {
 
                     // SAVING/LOADING
                     case 'S':
-                        if (modeUI.getCurrentMode() == Mode.CAMERA) { // holding CTRL
+                        if (modeUI.isInCTRLMode())  { // holding CTRL
                             menu.saveMap();
                             new Robot().keyRelease(KeyEvent.VK_CONTROL); // 
                         }
                         break;
                     case 'O':
-                        if (modeUI.getCurrentMode() == Mode.CAMERA) { // holding CTRL
+                        if (modeUI.isInCTRLMode())  { // holding CTRL
                             menu.loadMap(false);
                             new Robot().keyRelease(KeyEvent.VK_CONTROL);
                         }
                         break;
 
                     case PApplet.ESC:
-                        app.key = 0;
                         ((ProcessingMapmaker) app).setAppState(1);
                         break;
 
@@ -125,7 +115,7 @@ public class HotkeyManagerP3 {
     }
 
     public void keyReleased(processing.event.KeyEvent evt) {
-        if (!evt.isControlDown() && modeUI.getCurrentMode() == Mode.CAMERA) {
+        if (!evt.isControlDown() && modeUI.isInCTRLMode()) {
             modeUI.switchMode(modeUI.getPreviousMode());
             modeUI.setPreviousMode(null);
         }
