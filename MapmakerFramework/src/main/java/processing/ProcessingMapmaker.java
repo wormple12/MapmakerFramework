@@ -51,8 +51,8 @@ public class ProcessingMapmaker extends PApplet {
         viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
         mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
         modeUI = new ModeUI_P3(this);
-        editor = (EditorP3) EditorProxy.getProxyInstance(new EditorP3(canvas, modeUI, this), Editor.class);
-//        editor = new EditorP3(canvas, modeUI, this);
+//        editor = (EditorP3) EditorProxy.getProxyInstance(new EditorP3(canvas, modeUI, this), Editor.class);
+        editor = new EditorP3(canvas, modeUI, this);
         viewer = new ViewerP3(canvas, modeUI, this);
         hotkeys = new HotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
 
