@@ -60,11 +60,11 @@ public class EditorP3 implements Editor {
         if (modeUI.getCurrentMode() == Mode.MARKER) {
             locationUI.display();
         }
-        if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.ROUTE) {
+        if (modeUI.getCurrentMode() == Mode.LANDMASS || modeUI.getCurrentMode() == Mode.ROUTE || modeUI.getCurrentMode() == Mode.WATER) {
             app.image(loadLayerUIGraphics(), 0, 0);
         }
         if (modeUI.getCurrentMode() == Mode.LANDMASS) {
-            draw(app.mouseX, app.mouseY);
+//            draw(app.mouseX, app.mouseY);
             app.image(loadColorUIGraphics(), 0, 0);
         }
     }
@@ -153,6 +153,7 @@ public class EditorP3 implements Editor {
         PShape circle = app.createShape(ELLIPSE, x, y, brushRadius, brushRadius);
         circle.setFill(app.color(colors[selectedBrushColor]));
         app.shape(circle);
+        System.out.println("HEY!");
         //app.ellipse(x,y,brushRadius,brushRadius);
     }
 
