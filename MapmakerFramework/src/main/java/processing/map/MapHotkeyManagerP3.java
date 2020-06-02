@@ -4,7 +4,6 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import mapmaker.editor.Mode;
-import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.general.UserRole;
 import processing.core.PApplet;
@@ -14,7 +13,6 @@ import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
 import processing.entities.RegionInfoP3;
-import processing.entities.RouteP3;
 import processing.entities.sprites.LocationInfoP3;
 import processing.entities.sprites.LocationP3;
 import processing.general.events.PEventListener;
@@ -66,7 +64,7 @@ public class MapHotkeyManagerP3 implements PEventListener {
                     editor.editLocationInfo(selectedLocation, new LocationInfoP3(infoUI.getText()));
                 }
                 infoUI.setText(null);
-            } else {
+            } else if (Character.isLetterOrDigit(app.key)) {
                 infoUI.writeToText(app.keyCode);
             }
 
