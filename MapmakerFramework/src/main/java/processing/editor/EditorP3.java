@@ -20,20 +20,22 @@ import processing.map.ui.*;
  * @author Simon Norup
  */
 public class EditorP3 implements IEditorP3 {
-    
+
     private final PApplet app;
     private final ModeUI_P3 modeUI;
     private final InfoUI_P3 infoUI;
     private final SpriteUI_P3 locationUI;
     private final CanvasP3 canvas;
-    
+
     private int layer = 0;
     private LocationP3 selectedLocation = null;
-    
+
     private final int[] colors;
     private final float borderThickness = 10;
     private int selectedBrushColor = 1;
-    
+    private int active = 0;
+    private String text = null;
+
     public EditorP3(CanvasP3 canvas, ModeUI_P3 modeUI, PApplet app) {
         this.app = app;
         this.modeUI = modeUI;
@@ -53,7 +55,7 @@ public class EditorP3 implements IEditorP3 {
             app.color(148, 56, 0)
         };
     }
-    
+
     @Override
     public void displayUI() {
         modeUI.display();
@@ -66,8 +68,9 @@ public class EditorP3 implements IEditorP3 {
         if (modeUI.isCurrentMode(Mode.LANDMASS)) {
             loadColorUIGraphics();
         }
+        loadLayerEntityInfoUIGraphics();
     }
-    
+
     @Override
     public void draw(int x, int y) {
 //        PShape circle = app.createShape(ELLIPSE, x, y, 100, 100);
@@ -76,7 +79,7 @@ public class EditorP3 implements IEditorP3 {
         app.noFill();
         app.ellipse(x, y, 10, 10);
     }
-    
+
     @Override
     public void drawLandmass(int x, int y, double radius, Region optionalRegion) {
         if (canvas.getCurrentMap().getRegions().size() < layer) {
@@ -90,13 +93,13 @@ public class EditorP3 implements IEditorP3 {
             final LandmassP3 area = (LandmassP3) canvas.getCurrentMap().getRegions().get(layer).getArea();
             final PGraphics land = area.getGraphics();
             final PGraphics border = area.getBorderGraphics();
-            
+
             land.beginDraw();
             land.stroke(colors[selectedBrushColor]);
             land.strokeWeight(fRadius - borderThickness);
             land.line(app.pmouseX, app.pmouseY, x, y);
             land.endDraw();
-            
+
             border.beginDraw();
             border.stroke(0);
             border.strokeWeight(fRadius);
@@ -106,14 +109,14 @@ public class EditorP3 implements IEditorP3 {
         //app.noStroke();
         //app.ellipse(x, y, fRadius, fRadius);
     }
-    
+
     @Override
     public void drawWater(int x, int y, double radius) {
         canvas.getCurrentMap().getRegions().forEach((region) -> {
             deleteLandmassFromRegion(x, y, radius, region);
         });
     }
-    
+
     @Override
     public void deleteLandmassFromRegion(int x, int y, double radius, Region region) {
         float fRadius = (float) radius;
@@ -146,7 +149,7 @@ public class EditorP3 implements IEditorP3 {
         app.noStroke();
         app.ellipse(x, y, fRadius, fRadius);
     }
-    
+
     @Override
     public void createNewRegionLayer() {
         canvas.getCurrentMap().addRegion(new Region(
@@ -156,23 +159,23 @@ public class EditorP3 implements IEditorP3 {
         );
         System.out.println("New REGION added");
     }
-    
+
     @Override
     public List<Region> updateRegions() {
         System.out.println("Regions updated.");
         return canvas.getCurrentMap().getRegions();
     }
-    
+
     @Override
     public void viewRegion(Region region) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void editRegion(Region original, Region updated) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void drawRoute(int x, int y, double radius, Route optionalRoute) {
         if (optionalRoute == null) {
@@ -181,13 +184,13 @@ public class EditorP3 implements IEditorP3 {
         RouteP3 route = (RouteP3) canvas.getCurrentMap().getRoutes().get(layer);
         route.addPoint(x, y);
     }
-    
+
     @Override
     public void eraseRoute(int x, int y, double radius, Route route) {
         RouteP3 routeP3 = (RouteP3) route;
         routeP3.getPoints().remove(routeP3.getPoints().size() - 1);
     }
-    
+
     @Override
     public void createNewRouteLayer() {
         canvas.getCurrentMap().addRoute(new RouteP3(
@@ -195,7 +198,7 @@ public class EditorP3 implements IEditorP3 {
         );
         System.out.println("New ROUTE added");
     }
-    
+
     @Override
     public Route updateRoute() {
         RouteP3 route = (RouteP3) canvas.getCurrentMap().getRoutes().get(layer);
@@ -203,18 +206,20 @@ public class EditorP3 implements IEditorP3 {
         System.out.println("Route updated.");
         return route;
     }
-    
+
     @Override
     public LocationP3 getSelectedLocation() {
         return selectedLocation;
     }
-    
+
     @Override
     public void attemptSelectLocation(int x, int y) {
         LocationP3 result = (LocationP3) locationUI.attemptSelectSpriteType();
         if (result == null) {
-            for (Location location : canvas.getCurrentMap().getLocations()) {
-                LocationP3 locP3 = (LocationP3) location;
+            //for (Location location : canvas.getCurrentMap().getLocations()) {
+            for (int i = 0; i < canvas.getCurrentMap().getLocations().size(); i++) {
+                active = i;
+                LocationP3 locP3 = (LocationP3) canvas.getCurrentMap().getLocations().get(i);
                 if (locP3.mouseIsOver(x, y)) {
                     result = locP3;
                     break;
@@ -223,7 +228,7 @@ public class EditorP3 implements IEditorP3 {
         }
         selectedLocation = result;
     }
-    
+
     @Override
     public void dragLocation(Location location, int x, int y) {
         LocationP3 locP3 = (LocationP3) location;
@@ -232,7 +237,7 @@ public class EditorP3 implements IEditorP3 {
         }
         locP3.incrementCoordinates(x - app.pmouseX, y - app.pmouseY);
     }
-    
+
     @Override
     public void dropLocation(Location location, int x, int y) {
         LocationP3 locP3 = (LocationP3) location;
@@ -243,12 +248,12 @@ public class EditorP3 implements IEditorP3 {
         locationUI.selectSpriteType(null);
         selectedLocation = null;
     }
-    
+
     @Override
     public void viewLocationInfo(Location location) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void editLocationInfo(Location original, Location updated) {
         final List<Location> locations = canvas.getCurrentMap().getLocations();
@@ -260,12 +265,12 @@ public class EditorP3 implements IEditorP3 {
             }
         }
     }
-    
+
     @Override
     public int getLayer() {
         return layer;
     }
-    
+
     @Override
     public void setLayer(int layer) {
         if (layer == -1) {
@@ -273,24 +278,24 @@ public class EditorP3 implements IEditorP3 {
         }
         this.layer = layer;
     }
-    
+
     @Override
     public void switchRegionLayer() {
         layer = (layer < canvas.getCurrentMap().getRegions().size()) ? layer + 1 : 0;
         System.out.println("LANDMASS layer switch");
     }
-    
+
     @Override
     public void switchRouteLayer() {
         layer = (layer < canvas.getCurrentMap().getRoutes().size()) ? layer + 1 : 0;
         System.out.println("ROUTE layer switch");
     }
-    
+
     @Override
     public void switchColorBrush() {
         selectedBrushColor = (selectedBrushColor == colors.length - 1) ? 1 : selectedBrushColor + 1;
     }
-    
+
     private void loadColorUIGraphics() {
         PGraphics uiLayer = app.createGraphics(app.width, app.height);
         uiLayer.beginDraw();
@@ -302,5 +307,59 @@ public class EditorP3 implements IEditorP3 {
         uiLayer.endDraw();
         app.image(uiLayer, 0, 0);
     }
-    
+
+    private String infoFromEntity() {
+        if (modeUI.isCurrentMode(Mode.LANDMASS) && canvas.getCurrentMap().getRegions().size() > layer) {
+            return canvas.getCurrentMap().getRegions().get(layer).getInfo().getName();
+        } else if (modeUI.isCurrentMode(Mode.MARKER) && canvas.getCurrentMap().getLocations().size() > active) {
+            return canvas.getCurrentMap().getLocations().get(active).getInfo().getName();
+        }
+        return null;
+    }
+
+    private void loadLayerEntityInfoUIGraphics() {
+        if (text != null) {
+            entityUI(text);
+        } else if (infoFromEntity() != null) {
+            entityUI(infoFromEntity());
+        }
+
+    }
+
+    private void entityUI(String info) {
+        PGraphics uiLayer = app.createGraphics(app.width, app.height);
+        uiLayer.beginDraw();
+        uiLayer.textSize(37);
+        uiLayer.text("Entity info: " + info, 1, app.displayHeight - 100);
+        uiLayer.endDraw();
+        app.image(uiLayer, 0, 0);
+    }
+
+    @Override
+    public void editEntityInfo() {
+        if (infoFromEntity() != null) {
+            text = infoFromEntity();
+        }
+    }
+
+    @Override
+    public void saveEntityInfo() {
+        if (modeUI.isCurrentMode(Mode.LANDMASS) && canvas.getCurrentMap().getRegions().size() > layer) {
+            canvas.getCurrentMap().getRegions().get(layer).getInfo().setName(text);
+        } else if (modeUI.isCurrentMode(Mode.MARKER) && canvas.getCurrentMap().getLocations().size() > active) {
+            canvas.getCurrentMap().getLocations().get(active).getInfo().setName(text);
+        }
+        text = null;
+    }
+
+    @Override
+    public void setText(String t) {
+        text = t;
+    }
+
+    @Override
+    public String getText() {
+        return text;
+    }
+
 }

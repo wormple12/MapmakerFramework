@@ -36,6 +36,8 @@ public class ProcessingMapmaker extends PApplet {
     private MapHotkeyManagerP3 mapHotkeys;
     private MapRunnerP3 mapRunner;
 
+    private Boolean isTyping = false;
+
     @Override
     public void settings() {
         size(displayWidth, displayHeight);
@@ -52,12 +54,6 @@ public class ProcessingMapmaker extends PApplet {
         viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
         mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
         modeUI = new ModeUI_P3(this);
-<<<<<<< HEAD
-//        editor = (EditorP3) EditorProxy.getProxyInstance(new EditorP3(canvas, modeUI, this), Editor.class);
-        editor = new EditorP3(canvas, modeUI, this);
-        viewer = new ViewerP3(canvas, modeUI, this);
-        hotkeys = new HotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
-=======
         editor = (IEditorP3) EditorProxy.getProxyInstance(
                 new EditorP3(canvas, modeUI, this),
                 IEditorP3.class);
@@ -66,7 +62,6 @@ public class ProcessingMapmaker extends PApplet {
         mapMouse = new MapMouseManagerP3(this, editor, viewer, canvas, modeUI);
         mapHotkeys = new MapHotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
         mapRunner = new MapRunnerP3(this, editor, viewer, canvas);
->>>>>>> 287664cc1201847e2eb244951874922b1064f209
 
         //hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
@@ -141,7 +136,30 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void keyPressed(processing.event.KeyEvent evt) {
-        if (appState == 0) {
+        if (keyCode == ENTER) {
+            isTyping = false;
+            editor.saveEntityInfo();
+        } else if (isTyping) {
+            String text = editor.getText();
+            System.out.println(text);
+            if (keyCode == BACKSPACE) {
+                if (!"".equals(text)) {
+                    text = text.substring(0, text.length() - 1);
+                }
+            } else {
+                text = text + key;
+            }
+            editor.setText(text);
+        }
+        if (keyCode == 'T') {
+            System.out.println("True");
+            if (isTyping == false) {
+                editor.editEntityInfo();
+            }
+            isTyping = true;
+        }
+
+        if (appState == 0 && isTyping == false) {
             mapHotkeys.keyPressed(evt);
         }
         key = 0; // prevents Processing default hotkey behavior (e.g. terminating on Escape)
