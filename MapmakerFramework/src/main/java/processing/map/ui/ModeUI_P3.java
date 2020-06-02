@@ -2,7 +2,7 @@ package processing.map.ui;
 
 import mapmaker.editor.Mode;
 import mapmaker.map.ui.ModeUI;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import processing.core.PGraphics;
 
 /**
@@ -11,12 +11,12 @@ import processing.core.PGraphics;
  */
 public final class ModeUI_P3 implements ModeUI {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
 
     private Mode currentMode = Mode.CAMERA;
     private Mode previousMode = null;
 
-    public ModeUI_P3(PApplet app) {
+    public ModeUI_P3(ProcessingMapmaker app) {
         this.app = app;
     }
 

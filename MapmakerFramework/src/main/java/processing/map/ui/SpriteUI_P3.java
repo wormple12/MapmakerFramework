@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import mapmaker.entities.sprites.Marker;
 import mapmaker.entities.sprites.Sprite;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.entities.sprites.SpriteTypeP3;
 import processing.general.files.SpriteLoaderP3;
 import mapmaker.map.ui.SpriteUI;
 import mapmaker.general.UserRole;
+import processing.ProcessingMapmaker;
 import static processing.core.PApplet.dist;
 import processing.core.PImage;
 import processing.entities.sprites.LocationInfoP3;
@@ -23,7 +23,7 @@ import processing.entities.sprites.UserMarkerP3;
  */
 public final class SpriteUI_P3 implements SpriteUI {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final PGraphics uiLayer;
     private final String spriteDirectory;
     private final List<SpriteTypeP3> spriteTypes;
@@ -32,7 +32,7 @@ public final class SpriteUI_P3 implements SpriteUI {
     private static final float SPRITE_TYPE_BOUNDS = 30;
     private Marker newSpriteType = null;
 
-    public SpriteUI_P3(String directoryToLoadFrom, PApplet app) {
+    public SpriteUI_P3(String directoryToLoadFrom, ProcessingMapmaker app) {
         this.app = app;
         uiLayer = app.createGraphics(app.width, app.height);
         spriteDirectory = directoryToLoadFrom;

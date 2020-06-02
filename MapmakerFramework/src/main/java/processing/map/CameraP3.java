@@ -2,7 +2,7 @@
 package processing.map;
 
 import mapmaker.map.Camera;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 
 /**
  *
@@ -10,9 +10,9 @@ import processing.core.PApplet;
  */
 public class CameraP3 implements Camera {
     
-    private final PApplet app;
+    private final ProcessingMapmaker app;
 
-    public CameraP3(PApplet app) {
+    public CameraP3(ProcessingMapmaker app) {
         this.app = app;
     }
 

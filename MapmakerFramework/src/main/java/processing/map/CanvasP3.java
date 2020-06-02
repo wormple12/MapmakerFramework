@@ -3,7 +3,6 @@ package processing.map;
 import java.util.ArrayList;
 import mapmaker.entities.WorldMap;
 import mapmaker.map.Canvas;
-import processing.core.PApplet;
 import mapmaker.entities.EntityInfo;
 import mapmaker.general.UserRole;
 import processing.core.PGraphics;
@@ -19,12 +18,12 @@ import processing.ProcessingMapmaker;
  */
 public class CanvasP3 implements Canvas {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final PGraphics water;
 
     private WorldMap currentMap = null;
 
-    public CanvasP3(PApplet app) {
+    public CanvasP3(ProcessingMapmaker app) {
         this.app = app;
 
         water = app.createGraphics(app.width, app.height);
@@ -33,7 +32,7 @@ public class CanvasP3 implements Canvas {
         water.endDraw();
     }
 
-    public void run() {
+    public void display() {
         app.background(255);
         app.image(water, 0, 0);
 
@@ -59,13 +58,13 @@ public class CanvasP3 implements Canvas {
 
     @Override
     public WorldMap loadEmpty(EntityInfo info) {
-        ((ProcessingMapmaker) app).setAppState(0);
+        app.setAppState(app.STATE_MAP);
         return new WorldMap(info, new ArrayList(), new ArrayList(), new ArrayList(), new ArrayList());
     }
 
     @Override
     public void loadWorldMap(WorldMap map) {
-        ((ProcessingMapmaker) app).setAppState(0);
+        app.setAppState(app.STATE_MAP);
         System.out.println(map.getFilePath());
         System.out.println(map.getInfo().getName());
     }

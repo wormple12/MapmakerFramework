@@ -1,6 +1,6 @@
 package processing.map.ui;
 
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import processing.core.PGraphics;
 
 /**
@@ -9,9 +9,9 @@ import processing.core.PGraphics;
  */
 public class InfoUI_P3 {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
 
-    public InfoUI_P3(PApplet app) {
+    public InfoUI_P3(ProcessingMapmaker app) {
         this.app = app;
     }
     

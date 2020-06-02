@@ -5,8 +5,7 @@ import mapmaker.entities.Region;
 import mapmaker.entities.sprites.Location;
 import mapmaker.entities.sprites.UserMarker;
 import mapmaker.viewer.Viewer;
-import processing.core.PApplet;
-import processing.map.ui.ModeUI_P3;
+import processing.ProcessingMapmaker;
 import processing.map.ui.SpriteUI_P3;
 import processing.entities.sprites.UserMarkerP3;
 import processing.map.CanvasP3;
@@ -17,13 +16,13 @@ import processing.map.CanvasP3;
  */
 public class ViewerP3 implements Viewer {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final SpriteUI_P3 userMarkerUI;
     private final CanvasP3 canvas;
 
     private UserMarkerP3 selectedMarker = null;
 
-    public ViewerP3(CanvasP3 canvas, PApplet app) {
+    public ViewerP3(CanvasP3 canvas, ProcessingMapmaker app) {
         this.app = app;
         this.userMarkerUI = new SpriteUI_P3("sprites/markers/", app);
         this.canvas = canvas;

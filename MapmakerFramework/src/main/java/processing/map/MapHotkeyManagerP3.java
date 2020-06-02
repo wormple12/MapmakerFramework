@@ -11,27 +11,32 @@ import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
+import processing.general.events.PEventListener;
+import processing.general.menus.ViewerMenuP3;
 
 /**
  *
  * @author Simon Norup
  */
-public class MapHotkeyManagerP3 {
+public class MapHotkeyManagerP3 implements PEventListener {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final IEditorP3 editor;
     private final ViewerP3 viewer;
     private final ModeUI_P3 modeUI;
-    private final EditorMenuP3 menu;
+    private final EditorMenuP3 editorMenu;
+    private final ViewerMenuP3 viewerMenu;
 
-    public MapHotkeyManagerP3(PApplet app, IEditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu) {
+    public MapHotkeyManagerP3(ProcessingMapmaker app, IEditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu, ViewerMenuP3 viewerMenu) {
         this.app = app;
         this.editor = editor;
         this.viewer = viewer;
         this.modeUI = modeUI;
-        this.menu = menu;
+        this.editorMenu = menu;
+        this.viewerMenu = viewerMenu;
     }
 
+    @Override
     public void keyPressed(processing.event.KeyEvent evt) {
         if (evt.isControlDown() && !modeUI.isInCTRLMode()) {
             modeUI.setPreviousMode(modeUI.getCurrentMode());
@@ -80,7 +85,7 @@ public class MapHotkeyManagerP3 {
                     // DELETING LOCATIONS
                     case PApplet.BACKSPACE:
                     case PApplet.DELETE:
-                        if (modeUI.isCurrentMode(Mode.MARKER))  {
+                        if (modeUI.isCurrentMode(Mode.MARKER)) {
                             if (UserRole.getCurrentRole() == UserRole.EDITOR && editor.getSelectedLocation() != null) {
                                 editor.editLocationInfo(editor.getSelectedLocation(), null);
                             } else if (UserRole.getCurrentRole() == UserRole.VIEWER && viewer.getSelectedMarker() != null) {
@@ -90,20 +95,24 @@ public class MapHotkeyManagerP3 {
 
                     // SAVING/LOADING
                     case 'S':
-                        if (modeUI.isInCTRLMode())  { // holding CTRL
-                            menu.saveMap();
+                        if (modeUI.isInCTRLMode()) { // holding CTRL
+                            editorMenu.saveMap();
                             new Robot().keyRelease(KeyEvent.VK_CONTROL); // 
                         }
                         break;
                     case 'O':
-                        if (modeUI.isInCTRLMode())  { // holding CTRL
-                            menu.loadMap(false);
+                        if (modeUI.isInCTRLMode()) { // holding CTRL
+                            if (UserRole.getCurrentRole() == UserRole.EDITOR) {
+                                editorMenu.loadMap(false);
+                            } else {
+                                viewerMenu.loadMap(false);
+                            }
                             new Robot().keyRelease(KeyEvent.VK_CONTROL);
                         }
                         break;
 
                     case PApplet.ESC:
-                        ((ProcessingMapmaker) app).setAppState(1);
+                        app.setAppState(app.STATE_MENU_MAIN);
                         break;
 
                     default:
@@ -114,6 +123,7 @@ public class MapHotkeyManagerP3 {
         }
     }
 
+    @Override
     public void keyReleased(processing.event.KeyEvent evt) {
         if (!evt.isControlDown() && modeUI.isInCTRLMode()) {
             modeUI.switchMode(modeUI.getPreviousMode());

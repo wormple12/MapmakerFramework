@@ -4,8 +4,9 @@ import mapmaker.editor.Mode;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.general.UserRole;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
+import processing.general.events.PEventListener;
 import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 
@@ -13,9 +14,9 @@ import processing.viewer.ViewerP3;
  *
  * @author Simon Norup
  */
-public class MapMouseManagerP3 {
+public class MapMouseManagerP3 implements PEventListener {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final IEditorP3 editor;
     private final ViewerP3 viewer;
     private final CanvasP3 canvas;
@@ -23,7 +24,7 @@ public class MapMouseManagerP3 {
 
     private final float brushRadius = 100;
 
-    public MapMouseManagerP3(PApplet app, IEditorP3 editor, ViewerP3 viewer, CanvasP3 canvas, ModeUI_P3 modeUI) {
+    public MapMouseManagerP3(ProcessingMapmaker app, IEditorP3 editor, ViewerP3 viewer, CanvasP3 canvas, ModeUI_P3 modeUI) {
         this.app = app;
         this.editor = editor;
         this.viewer = viewer;
@@ -31,6 +32,7 @@ public class MapMouseManagerP3 {
         this.modeUI = modeUI;
     }
 
+    @Override
     public void mousePressed() {
         if (UserRole.getCurrentRole() == UserRole.EDITOR) {
             if (modeUI.isCurrentMode(Mode.MARKER)) {
@@ -51,6 +53,7 @@ public class MapMouseManagerP3 {
         }
     }
 
+    @Override
     public void mouseReleased() {
         if (UserRole.getCurrentRole() == UserRole.EDITOR) {
             if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
@@ -70,6 +73,7 @@ public class MapMouseManagerP3 {
         }
     }
 
+    @Override
     public void mouseDragged() {
         if (UserRole.getCurrentRole() == UserRole.EDITOR) {
             if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {

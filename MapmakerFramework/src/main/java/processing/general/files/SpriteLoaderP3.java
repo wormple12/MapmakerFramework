@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import mapmaker.entities.sprites.Sprite;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.entities.sprites.SpriteTypeP3;
@@ -17,9 +17,9 @@ import processing.entities.sprites.SpriteTypeP3;
  */
 public class SpriteLoaderP3 {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
 
-    public SpriteLoaderP3(PApplet app) {
+    public SpriteLoaderP3(ProcessingMapmaker app) {
         this.app = app;
     }
 

@@ -1,12 +1,14 @@
 package processing;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import mapmaker.editor.EditorProxy;
-import mapmaker.editor.Mode;
-import mapmaker.general.UserRole;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.editor.EditorP3;
 import processing.editor.IEditorP3;
+import processing.general.events.*;
 import processing.general.files.MapStorageP3;
 import processing.general.menus.*;
 import processing.map.*;
@@ -19,22 +21,16 @@ import processing.viewer.ViewerP3;
  */
 public class ProcessingMapmaker extends PApplet {
 
-    private int appState = 1;
-    // 0 = actual map
-    // 1 = main menu
-    // 2 = editor menu
-    // 3 = viewer menu
+    public final int STATE_MAP = 0, STATE_MENU_MAIN = 1, STATE_MENU_EDITOR = 2, STATE_MENU_VIEWER = 3;
+
+    private PStateManager[] stateManagers;
+    private List<PEventListener> eventListeners = new ArrayList<>();
 
     private MainMenuP3 mainMenu;
     private EditorMenuP3 editorMenu;
     private ViewerMenuP3 viewerMenu;
     private CanvasP3 canvas;
-    private IEditorP3 editor;
-    private ViewerP3 viewer;
-    private ModeUI_P3 modeUI;
-    private MapMouseManagerP3 mapMouse;
-    private MapHotkeyManagerP3 mapHotkeys;
-    private MapRunnerP3 mapRunner;
+    private MapStateManagerP3 mapManager;
 
     @Override
     public void settings() {
@@ -51,100 +47,52 @@ public class ProcessingMapmaker extends PApplet {
         editorMenu = new EditorMenuP3(mapStorage, canvas, this);
         viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
         mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
-        modeUI = new ModeUI_P3(this);
-        editor = (IEditorP3) EditorProxy.getProxyInstance(
-                new EditorP3(canvas, modeUI, this),
-                IEditorP3.class);
-//        editor = new EditorP3(canvas, modeUI, this); // Using this instead will disable general draw() functionality
-        viewer = new ViewerP3(canvas, this);
-        mapMouse = new MapMouseManagerP3(this, editor, viewer, canvas, modeUI);
-        mapHotkeys = new MapHotkeyManagerP3(this, editor, viewer, modeUI, editorMenu);
-        mapRunner = new MapRunnerP3(this, editor, viewer, canvas);
+        mapManager = new MapStateManagerP3(this, canvas, editorMenu, viewerMenu);
 
-        //hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
+        stateManagers = new PStateManager[]{mapManager, mainMenu, editorMenu, viewerMenu};
+        setAppState(STATE_MENU_MAIN);
+
+//        hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
 
     public void setAppState(int state) {
-        appState = state;
-        // setting the default Mode when entering a map:
-        if (state == 0) {
-            if (UserRole.getCurrentRole() == UserRole.EDITOR) {
-                modeUI.switchMode(Mode.LANDMASS);
-            } else {
-                modeUI.switchMode(Mode.MARKER);
-            }
-        }
+        eventListeners = new ArrayList<>();
+        stateManagers[state].startListening();
+    }
+
+    public void attach(PEventListener... listeners) {
+        eventListeners.addAll(Arrays.asList(listeners));
     }
 
     @Override
     public void draw() {
-        background(255);
-
-        switch (appState) {
-            case 0:
-                mapRunner.run();
-                break;
-            case 1:
-                mainMenu.run();
-                break;
-            case 2:
-                editorMenu.run();
-                break;
-            case 3:
-                viewerMenu.run();
-                break;
-            default:
-                throw new AssertionError();
-        }
+        eventListeners.forEach(PEventListener::update);
     }
 
     @Override
     public void mousePressed() {
-        switch (appState) {
-            case 0:
-                mapMouse.mousePressed();
-                break;
-            case 1:
-                mainMenu.mousePressed();
-                break;
-            case 2:
-                editorMenu.mousePressed();
-                break;
-            case 3:
-                viewerMenu.mousePressed();
-                break;
-            default:
-                throw new AssertionError();
-        }
+        eventListeners.forEach(PEventListener::mousePressed);
     }
 
     @Override
     public void mouseDragged() {
-        if (appState == 0) {
-            mapMouse.mouseDragged();
-        }
+        eventListeners.forEach(PEventListener::mouseDragged);
     }
 
     @Override
     public void mouseReleased() {
-        if (appState == 0) {
-            mapMouse.mouseReleased();
-        }
+        eventListeners.forEach(PEventListener::mouseReleased);
     }
 
     @Override
     public void keyPressed(processing.event.KeyEvent evt) {
-        if (appState == 0) {
-            mapHotkeys.keyPressed(evt);
-        }
+        eventListeners.forEach((listener) -> listener.keyPressed(evt));
         key = 0; // prevents Processing default hotkey behavior (e.g. terminating on Escape)
     }
 
     @Override
     public void keyReleased(processing.event.KeyEvent evt) {
-        if (appState == 0) {
-            mapHotkeys.keyReleased(evt);
-        }
+        eventListeners.forEach((listener) -> listener.keyReleased(evt));
     }
 
     public static void main(String[] passedArgs) {

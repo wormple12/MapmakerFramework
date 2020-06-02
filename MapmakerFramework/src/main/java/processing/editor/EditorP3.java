@@ -4,7 +4,7 @@ import java.util.List;
 import mapmaker.editor.Mode;
 import mapmaker.entities.*;
 import mapmaker.entities.sprites.*;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import static processing.core.PApplet.dist;
 import static processing.core.PConstants.ELLIPSE;
 import processing.core.PGraphics;
@@ -21,7 +21,7 @@ import processing.map.ui.*;
  */
 public class EditorP3 implements IEditorP3 {
     
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final ModeUI_P3 modeUI;
     private final InfoUI_P3 infoUI;
     private final SpriteUI_P3 locationUI;
@@ -34,7 +34,7 @@ public class EditorP3 implements IEditorP3 {
     private final float borderThickness = 10;
     private int selectedBrushColor = 1;
     
-    public EditorP3(CanvasP3 canvas, ModeUI_P3 modeUI, PApplet app) {
+    public EditorP3(CanvasP3 canvas, ModeUI_P3 modeUI, ProcessingMapmaker app) {
         this.app = app;
         this.modeUI = modeUI;
         this.infoUI = new InfoUI_P3(app);

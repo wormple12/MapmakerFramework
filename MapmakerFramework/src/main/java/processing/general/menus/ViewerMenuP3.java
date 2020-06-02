@@ -3,46 +3,49 @@ package processing.general.menus;
 import mapmaker.general.Storage;
 import mapmaker.general.menus.StorageMenu;
 import mapmaker.map.Canvas;
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.general.menus.components.PMenuDisplay;
 import processing.ProcessingMapmaker;
+import processing.general.events.PEventListener;
+import processing.general.events.PStateManager;
 
 /**
  *
  * @author Simon Norup
  */
-public class ViewerMenuP3 extends StorageMenu {
+public class ViewerMenuP3 extends StorageMenu implements PStateManager, PEventListener {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final PGraphics layer;
     private final PMenuDisplay menuDisplay;
     private final String[] menuOptions = {"Continue", "Load", "Return"};
 
-    public ViewerMenuP3(Storage storage, Canvas canvas, PApplet app) {
+    public ViewerMenuP3(Storage storage, Canvas canvas, ProcessingMapmaker app) {
         super(storage, canvas);
         this.app = app;
 
         layer = app.createGraphics(app.width, app.height);
-        menuDisplay = new PMenuDisplay("Map Viewer", menuOptions, layer, app);
-        layer.beginDraw();
-        layer.background(102);
+        menuDisplay = new PMenuDisplay("Map Viewer", menuOptions, layer, 102, app);
         menuDisplay.setup();
-        layer.endDraw();
     }
 
     @Override
     public void show() {
-        ((ProcessingMapmaker) app).setAppState(3);
+        app.setAppState(app.STATE_MENU_VIEWER);
     }
 
-    public void run() {
-        layer.beginDraw();
+    @Override
+    public void startListening() {
+        app.attach(this);
+    }
+
+    @Override
+    public void update() {
         menuDisplay.draw();
-        layer.endDraw();
         app.image(layer, 0, 0);
     }
 
+    @Override
     public void mousePressed() {
         switch (menuDisplay.getButtonPressed()) {
             case 0:
@@ -61,7 +64,7 @@ public class ViewerMenuP3 extends StorageMenu {
 
     @Override
     public void returnToPrevious() {
-        ((ProcessingMapmaker) app).setAppState(1);
+        app.setAppState(app.STATE_MENU_MAIN);
     }
 
 }

@@ -1,6 +1,6 @@
 package processing.general.menus.components;
 
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import static processing.core.PApplet.min;
 import static processing.core.PConstants.CENTER;
 import processing.core.PGraphics;
@@ -11,7 +11,7 @@ import processing.core.PGraphics;
  */
 public class PMenuButton {
 
-    private final PApplet app;
+    private final ProcessingMapmaker app;
     private final PGraphics menuLayer;
     private final String label;
     private final float x;    // top left corner x position
@@ -20,7 +20,7 @@ public class PMenuButton {
     private final float h;    // height of button
     private final float textSize;
 
-    public PMenuButton(String label, float x, float y, float width, float height, float textSize, PGraphics menuLayer, PApplet app) {
+    public PMenuButton(String label, float x, float y, float width, float height, float textSize, PGraphics menuLayer, ProcessingMapmaker app) {
         this.app = app;
         this.menuLayer = menuLayer;
         this.label = label;
@@ -45,7 +45,7 @@ public class PMenuButton {
         return app.mouseX > x && app.mouseX < (x + w) && app.mouseY > y && app.mouseY < (y + h);
     }
 
-    public static float getSmallestFontSize(String[] menuOptions, float buttonWidth, float buttonHeight, PApplet app) {
+    public static float getSmallestFontSize(String[] menuOptions, float buttonWidth, float buttonHeight, ProcessingMapmaker app) {
         Float result = null;
         for (String label : menuOptions) {
             float minSizeW = 12 / app.textWidth(label) * buttonWidth; // calculate minimum size to fit width

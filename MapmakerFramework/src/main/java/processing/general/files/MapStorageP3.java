@@ -10,7 +10,7 @@ import mapmaker.entities.sprites.Location;
 import mapmaker.entities.sprites.UserMarker;
 import mapmaker.general.files.FileHandler;
 import mapmaker.general.files.FileStorage;
-import processing.core.PApplet;
+import processing.ProcessingMapmaker;
 import processing.core.PImage;
 import processing.entities.LandmassP3;
 import processing.entities.dto.LandmassP3_DTO;
@@ -30,19 +30,16 @@ import processing.map.RouteLoaderP3;
  */
 public class MapStorageP3 extends FileStorage {
 
-    private final PApplet app;
-    private final FileStorage infoStorage;
+    private final ProcessingMapmaker app;
 
-    public MapStorageP3(PApplet app) {
+    public MapStorageP3(ProcessingMapmaker app) {
         super();
         this.app = app;
-        this.infoStorage = new FileStorage();
     }
 
-    public MapStorageP3(FileHandler fileHandler, PApplet app) {
+    public MapStorageP3(FileHandler fileHandler, ProcessingMapmaker app) {
         super(fileHandler);
         this.app = app;
-        this.infoStorage = new FileStorage(fileHandler);
     }
 
     @Override
