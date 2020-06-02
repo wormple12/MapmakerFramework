@@ -4,6 +4,8 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import mapmaker.editor.Mode;
+import mapmaker.entities.EntityInfo;
+import mapmaker.entities.Region;
 import mapmaker.general.UserRole;
 import processing.core.PApplet;
 import processing.general.menus.EditorMenuP3;
@@ -11,8 +13,13 @@ import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
+import processing.entities.RegionInfoP3;
+import processing.entities.RouteP3;
+import processing.entities.sprites.LocationInfoP3;
+import processing.entities.sprites.LocationP3;
 import processing.general.events.PEventListener;
 import processing.general.menus.ViewerMenuP3;
+import processing.map.ui.InfoUI_P3;
 
 /**
  *
@@ -23,15 +30,21 @@ public class MapHotkeyManagerP3 implements PEventListener {
     private final ProcessingMapmaker app;
     private final IEditorP3 editor;
     private final ViewerP3 viewer;
+    private final CanvasP3 canvas;
     private final ModeUI_P3 modeUI;
+    private final InfoUI_P3 infoUI;
     private final EditorMenuP3 editorMenu;
     private final ViewerMenuP3 viewerMenu;
 
-    public MapHotkeyManagerP3(ProcessingMapmaker app, IEditorP3 editor, ViewerP3 viewer, ModeUI_P3 modeUI, EditorMenuP3 menu, ViewerMenuP3 viewerMenu) {
+    private Boolean isTyping = false;
+
+    public MapHotkeyManagerP3(ProcessingMapmaker app, IEditorP3 editor, ViewerP3 viewer, CanvasP3 canvas, ModeUI_P3 modeUI, InfoUI_P3 infoUI, EditorMenuP3 menu, ViewerMenuP3 viewerMenu) {
         this.app = app;
         this.editor = editor;
         this.viewer = viewer;
+        this.canvas = canvas;
         this.modeUI = modeUI;
+        this.infoUI = infoUI;
         this.editorMenu = menu;
         this.viewerMenu = viewerMenu;
     }
@@ -41,6 +54,22 @@ public class MapHotkeyManagerP3 implements PEventListener {
         if (evt.isControlDown() && !modeUI.isInCTRLMode()) {
             modeUI.setPreviousMode(modeUI.getCurrentMode());
             modeUI.switchMode(Mode.CAMERA);
+
+        } else if (isTyping) {
+            if (app.keyCode == PApplet.ENTER) {
+                isTyping = false;
+                if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
+                    Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
+                    editor.editRegion(selectedRegion, new RegionInfoP3(infoUI.getText()));
+                } else if (modeUI.isCurrentMode(Mode.MARKER)) {
+                    LocationP3 selectedLocation = editor.getSelectedLocation();
+                    editor.editLocationInfo(selectedLocation, new LocationInfoP3(infoUI.getText()));
+                }
+                infoUI.setText(null);
+            } else {
+                infoUI.writeToText(app.keyCode);
+            }
+
         } else {
             if (UserRole.getCurrentRole() == UserRole.EDITOR) {
                 switch (app.keyCode) {
@@ -82,7 +111,24 @@ public class MapHotkeyManagerP3 implements PEventListener {
             try {
                 switch (app.keyCode) {
 
-                    // DELETING LOCATIONS
+                    // EDITING ENTITY INFO
+                    case 'T':
+                        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
+                            Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
+                            if (selectedRegion != null) {
+                                infoUI.setText(selectedRegion.getInfo().getName());
+                                isTyping = true;
+                            }
+                        } else if (modeUI.isCurrentMode(Mode.MARKER)) {
+                            LocationP3 selectedLocation = editor.getSelectedLocation();
+                            if (selectedLocation != null) {
+                                infoUI.setText(selectedLocation.getInfo().getName());
+                                isTyping = true;
+                            }
+                        }
+                        break;
+
+                    // DELETING MARKERS
                     case PApplet.BACKSPACE:
                     case PApplet.DELETE:
                         if (modeUI.isCurrentMode(Mode.MARKER)) {
@@ -92,6 +138,7 @@ public class MapHotkeyManagerP3 implements PEventListener {
                                 viewer.editMarkerInfo(viewer.getSelectedMarker(), null);
                             }
                         }
+                        break;
 
                     // SAVING/LOADING
                     case 'S':

@@ -12,12 +12,14 @@ import processing.core.PGraphics;
 public final class ModeUI_P3 implements ModeUI {
 
     private final ProcessingMapmaker app;
+    private final PGraphics uiLayer;
 
     private Mode currentMode = Mode.CAMERA;
     private Mode previousMode = null;
 
     public ModeUI_P3(ProcessingMapmaker app) {
         this.app = app;
+        uiLayer = app.createGraphics(app.width, app.height);
     }
 
     @Override
@@ -67,8 +69,8 @@ public final class ModeUI_P3 implements ModeUI {
     }
 
     private PGraphics loadModeUIGraphics() {
-        PGraphics uiLayer = app.createGraphics(app.width, app.height);
         uiLayer.beginDraw();
+        uiLayer.clear();
         uiLayer.textSize(37);
         uiLayer.text("Mode: " + currentMode.name(), 1, 50);
         uiLayer.endDraw();

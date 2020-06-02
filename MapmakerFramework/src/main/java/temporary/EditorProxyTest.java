@@ -4,6 +4,7 @@ import java.util.List;
 import mapmaker.editor.DrawFunction;
 import mapmaker.editor.Editor;
 import mapmaker.editor.EditorProxy;
+import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.sprites.Location;
@@ -59,7 +60,7 @@ public class EditorProxyTest {
         }
 
         @Override
-        public void editRegion(Region original, Region updated) {
+        public void editRegion(Region original, EntityInfo updated) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -95,7 +96,7 @@ public class EditorProxyTest {
         }
 
         @Override
-        public void editLocationInfo(Location original, Location updated) {
+        public void editLocationInfo(Location original, EntityInfo updated) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

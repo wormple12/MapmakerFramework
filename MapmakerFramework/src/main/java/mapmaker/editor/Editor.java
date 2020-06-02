@@ -1,6 +1,7 @@
 package mapmaker.editor;
 
 import java.util.List;
+import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.entities.sprites.Location;
@@ -85,9 +86,9 @@ public interface Editor {
      * update the current Map object.
      *
      * @param original
-     * @param updated
+     * @param updatedInfo
      */
-    public void editRegion(Region original, Region updated);
+    public void editRegion(Region original, EntityInfo updatedInfo);
 
     /**
      * Draws a route, road, river, or similar line on the map based on pointer
@@ -159,10 +160,10 @@ public interface Editor {
      * update the current Map object.
      *
      * @param original the location to edit
-     * @param updated the edited location info to replace the original with. If
+     * @param updatedInfo the edited location info to replace the original with. If
      * this is null, it attempts to delete the original location
      */
-    public void editLocationInfo(Location original, Location updated);
+    public void editLocationInfo(Location original, EntityInfo updatedInfo);
 
     // ============= LEGACY ============
     /**

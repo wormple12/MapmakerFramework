@@ -79,7 +79,7 @@ public class ViewerP3 implements Viewer {
     public void editMarkerInfo(UserMarker original, UserMarker updated) {
         final List<UserMarker> markers = canvas.getCurrentMap().getMarkers();
         if (markers.contains(original)) {
-            // DELETE LOCATION
+            // DELETE MARKER
             if (updated == null) {
                 markers.remove(original);
                 selectedMarker = null;

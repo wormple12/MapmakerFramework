@@ -23,10 +23,10 @@ abstract public class EditorMenu extends StorageMenu {
      */
     public final void newMap() {
         EntityInfo info = initMapInfo();
+        switchUserRole();
         WorldMap map = canvas.loadEmpty(info);
         canvas.setCurrentMap(map);
         saveMap();
-        switchUserRole();
     }
 
     /**

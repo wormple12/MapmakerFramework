@@ -3,17 +3,12 @@ package processing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import mapmaker.editor.EditorProxy;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
-import processing.editor.EditorP3;
-import processing.editor.IEditorP3;
 import processing.general.events.*;
 import processing.general.files.MapStorageP3;
 import processing.general.menus.*;
 import processing.map.*;
-import processing.map.ui.ModeUI_P3;
-import processing.viewer.ViewerP3;
 
 /**
  *

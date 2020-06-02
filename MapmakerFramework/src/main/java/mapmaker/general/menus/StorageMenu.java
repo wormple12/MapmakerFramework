@@ -33,9 +33,9 @@ abstract public class StorageMenu implements SubMenu {
             mapToLoad = storage.attemptLoad(loadLatest);
         }
         if (mapToLoad != null) {
+            switchUserRole();
             canvas.loadWorldMap(mapToLoad);
             canvas.setCurrentMap(mapToLoad);
-            switchUserRole();
         }
     }
 
