@@ -1,6 +1,6 @@
 package processing.map;
 
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
 import mapmaker.general.UserRole;

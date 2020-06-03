@@ -3,12 +3,15 @@ package processing;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import mapmaker.general.files.FileStorage;
 import processing.core.PApplet;
 import processing.general.events.*;
 import processing.general.files.MapStorageP3;
 import processing.general.menus.*;
 import processing.map.*;
+import processing.general.events.PEventConsumer;
 
 /**
  *
@@ -18,14 +21,21 @@ public class ProcessingMapmaker extends PApplet {
 
     public final int STATE_MAP = 0, STATE_MENU_MAIN = 1, STATE_MENU_EDITOR = 2, STATE_MENU_VIEWER = 3;
 
-    private PStateManager[] stateManagers;
-    private List<PEventListener> eventListeners = new ArrayList<>();
-
-    private MainMenuP3 mainMenu;
-    private EditorMenuP3 editorMenu;
-    private ViewerMenuP3 viewerMenu;
-    private CanvasP3 canvas;
-    private MapStateManagerP3 mapManager;
+    // manages which listeners should listen in which states
+    private PStateManager[] stateManagers; 
+    // listens and acts upon events
+    protected List<PEventListener> eventListeners = new ArrayList<>(); 
+    
+    // collects mouse events and lets us activate them in another thread for optimization
+    private static final BlockingQueue<Runnable> MOUSE_EVENTS = new ArrayBlockingQueue(500); 
+    // the thread that runs all functionality based on mouse events
+    private static Thread mouseThread; 
+    // NOTE: The cause of most issues concerning performance is the image() rendering of PGraphics entities (see CanvasP3).
+    // Unfortunately, we have not been able to optimize this with threading, because:
+    // (A) Processing is designed as a mono-threaded framework, and attempts to force it into a multi-threaded context 
+    // makes for unstable results to say the least;
+    // (B) a world map is rendered one layer at a time, meaning that we have to wait for one image() call before we can 
+    // continue to the next - otherwise the layers load in the wrong order.
 
     @Override
     public void settings() {
@@ -38,14 +48,17 @@ public class ProcessingMapmaker extends PApplet {
         surface.setResizable(true);
 
         FileStorage mapStorage = new MapStorageP3(this);
-        canvas = new CanvasP3(this);
-        editorMenu = new EditorMenuP3(mapStorage, canvas, this);
-        viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
-        mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
-        mapManager = new MapStateManagerP3(this, canvas, editorMenu, viewerMenu);
+        CanvasP3 canvas = new CanvasP3(this);
+        EditorMenuP3 editorMenu = new EditorMenuP3(mapStorage, canvas, this);
+        ViewerMenuP3 viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
+        MainMenuP3 mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
+        MapStateManagerP3 mapManager = new MapStateManagerP3(this, canvas, editorMenu, viewerMenu);
 
         stateManagers = new PStateManager[]{mapManager, mainMenu, editorMenu, viewerMenu};
         setAppState(STATE_MENU_MAIN);
+
+        mouseThread = new Thread(new PEventConsumer(MOUSE_EVENTS));
+        mouseThread.start();
 
 //        hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
@@ -59,6 +72,14 @@ public class ProcessingMapmaker extends PApplet {
         eventListeners.addAll(Arrays.asList(listeners));
     }
 
+    public void putEventInQueue(Runnable event) {
+        try {
+            MOUSE_EVENTS.put(event);
+        } catch (InterruptedException ex) {
+            System.out.println("Interrupted...");
+        }
+    }
+
     @Override
     public void draw() {
         eventListeners.forEach(PEventListener::update);
@@ -66,17 +87,17 @@ public class ProcessingMapmaker extends PApplet {
 
     @Override
     public void mousePressed() {
-        eventListeners.forEach(PEventListener::mousePressed);
+        putEventInQueue(() -> eventListeners.forEach(PEventListener::mousePressed));
     }
 
     @Override
     public void mouseDragged() {
-        eventListeners.forEach(PEventListener::mouseDragged);
+        putEventInQueue(() -> eventListeners.forEach(PEventListener::mouseDragged));
     }
 
     @Override
     public void mouseReleased() {
-        eventListeners.forEach(PEventListener::mouseReleased);
+        putEventInQueue(() -> eventListeners.forEach(PEventListener::mouseReleased));
     }
 
     @Override

@@ -9,6 +9,7 @@ import processing.core.PGraphics;
 import processing.entities.MapInfoP3;
 import processing.general.menus.components.PMenuDisplay;
 import processing.ProcessingMapmaker;
+import processing.event.MouseEvent;
 import processing.general.events.PEventListener;
 import processing.general.events.PStateManager;
 

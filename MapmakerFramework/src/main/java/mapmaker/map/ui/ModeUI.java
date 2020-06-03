@@ -1,6 +1,6 @@
 package mapmaker.map.ui;
 
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 
 /**
  *

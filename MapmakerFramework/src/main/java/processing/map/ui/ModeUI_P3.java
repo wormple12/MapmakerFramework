@@ -1,6 +1,6 @@
 package processing.map.ui;
 
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.map.ui.ModeUI;
 import processing.ProcessingMapmaker;
 import processing.core.PGraphics;

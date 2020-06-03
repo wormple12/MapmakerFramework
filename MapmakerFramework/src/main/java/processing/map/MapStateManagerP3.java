@@ -1,7 +1,7 @@
 package processing.map;
 
 import mapmaker.editor.EditorProxy;
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.general.UserRole;
 import processing.ProcessingMapmaker;
 import processing.editor.EditorP3;

@@ -1,7 +1,7 @@
 package processing.editor;
 
 import java.util.List;
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.entities.*;
 import mapmaker.entities.sprites.*;
 import processing.ProcessingMapmaker;

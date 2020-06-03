@@ -1,4 +1,4 @@
-package temporary;
+package temporary.files;
 
 import mapmaker.entities.WorldMap;
 import mapmaker.general.files.FileStorage;

@@ -3,7 +3,7 @@ package processing.map;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.entities.Region;
 import mapmaker.general.UserRole;
 import processing.core.PApplet;

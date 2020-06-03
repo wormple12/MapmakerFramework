@@ -1,4 +1,4 @@
-package temporary;
+package temporary.files;
 
 import java.nio.file.Paths;
 import java.util.Arrays;

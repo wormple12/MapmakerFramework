@@ -40,6 +40,8 @@ public class MapUpdateManagerP3 implements PEventListener {
                 viewer.dragMarker(viewer.getSelectedMarker(), app.mouseX, app.mouseY);
             }
         }
+
+        app.text(app.frameRate, app.width - 100, app.height - 50);
     }
 
 }

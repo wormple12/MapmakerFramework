@@ -1,4 +1,4 @@
-package mapmaker.editor;
+package mapmaker.general;
 
 /**
  *

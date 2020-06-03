@@ -1,6 +1,6 @@
 package processing.map.ui;
 
-import mapmaker.editor.Mode;
+import mapmaker.general.Mode;
 import mapmaker.entities.EntityInfo;
 import processing.ProcessingMapmaker;
 import processing.core.PApplet;
