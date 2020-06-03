@@ -58,13 +58,13 @@ public class MapHotkeyManagerP3 implements PEventListener {
                 isTyping = false;
                 if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
                     Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
-                    editor.editRegion(selectedRegion, new RegionInfoP3(infoUI.getText()));
+                    editor.editRegion(selectedRegion, new RegionInfoP3(infoUI.getInfoText()));
                 } else if (modeUI.isCurrentMode(Mode.MARKER)) {
                     LocationP3 selectedLocation = editor.getSelectedLocation();
-                    editor.editLocationInfo(selectedLocation, new LocationInfoP3(infoUI.getText()));
+                    editor.editLocationInfo(selectedLocation, new LocationInfoP3(infoUI.getInfoText()));
                 }
-                infoUI.setText(null);
-            } else if (Character.isLetterOrDigit(app.key)) {
+                infoUI.setInfoText(null);
+            } else if (Character.isLetterOrDigit(app.key) || app.keyCode == PApplet.BACKSPACE || app.keyCode == ' ') {
                 infoUI.writeToText(app.keyCode);
             }
 
@@ -97,6 +97,17 @@ public class MapHotkeyManagerP3 implements PEventListener {
                         }
                         break;
 
+                    // EDITING ENTITY INFO
+                    case 'T':
+                        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
+                            Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
+                            if (selectedRegion != null) {
+                                infoUI.setInfoText(selectedRegion.getInfo().getName());
+                                isTyping = true;
+                            }
+                        }
+                        break;
+
                     // SWITCHING COLOR BRUSH
                     case 'Q':
                         editor.switchColorBrush();
@@ -109,18 +120,13 @@ public class MapHotkeyManagerP3 implements PEventListener {
             try {
                 switch (app.keyCode) {
 
-                    // EDITING ENTITY INFO
                     case 'T':
-                        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
-                            Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
-                            if (selectedRegion != null) {
-                                infoUI.setText(selectedRegion.getInfo().getName());
+                        if (modeUI.isCurrentMode(Mode.MARKER)) {
+                            if (UserRole.getCurrentRole() == UserRole.EDITOR && editor.getSelectedLocation() != null) {
+                                infoUI.setInfoText(editor.getSelectedLocation().getInfo().getName());
                                 isTyping = true;
-                            }
-                        } else if (modeUI.isCurrentMode(Mode.MARKER)) {
-                            LocationP3 selectedLocation = editor.getSelectedLocation();
-                            if (selectedLocation != null) {
-                                infoUI.setText(selectedLocation.getInfo().getName());
+                            } else if (UserRole.getCurrentRole() == UserRole.VIEWER && viewer.getSelectedMarker() != null) {
+                                infoUI.setInfoText(viewer.getSelectedMarker().getInfo().getName());
                                 isTyping = true;
                             }
                         }

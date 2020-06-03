@@ -60,8 +60,15 @@ public class EditorP3 implements IEditorP3 {
             locationUI.display();
             viewLocationInfo(selectedLocation);
         }
-        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.ROUTE, Mode.WATER)) {
+        if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.ROUTE)) {
             infoUI.loadLayerUIGraphics(layer);
+        }
+        if (modeUI.isCurrentMode(Mode.WATER)) {
+            if (layer == canvas.getCurrentMap().getRegions().size()) {
+                infoUI.loadLayerUIGraphics(-1);
+            } else {
+                infoUI.loadLayerUIGraphics(layer);
+            }
         }
         if (modeUI.isCurrentMode(Mode.LANDMASS)) {
             loadColorUIGraphics();

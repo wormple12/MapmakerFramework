@@ -1,5 +1,6 @@
 package processing.map.ui;
 
+import mapmaker.editor.Mode;
 import mapmaker.entities.EntityInfo;
 import processing.ProcessingMapmaker;
 import processing.core.PApplet;
@@ -15,7 +16,7 @@ public class InfoUI_P3 {
     private final PGraphics layerGraphics;
     private final PGraphics infoGraphics;
 
-    private String text = null;
+    private String infoText = null;
 
     public InfoUI_P3(ProcessingMapmaker app) {
         this.app = app;
@@ -24,18 +25,19 @@ public class InfoUI_P3 {
     }
 
     public void loadLayerUIGraphics(int layer) {
+        String layerStr = (layer == -1) ? "All" : Integer.toString(layer);
         layerGraphics.beginDraw();
         layerGraphics.clear();
         layerGraphics.textSize(37);
-        layerGraphics.text("Active layer: " + layer, app.displayWidth - 285, 50);
+        layerGraphics.text("Active layer: " + layerStr, app.displayWidth - 285, 50);
         layerGraphics.endDraw();
         app.image(layerGraphics, 0, 0);
     }
 
     public void loadInfoUIGraphics(EntityInfo info) {
         String textToDisplay = "Name: ";
-        if (text != null) {
-            textToDisplay += text;
+        if (infoText != null) {
+            textToDisplay += infoText;
         } else if (info != null) {
             textToDisplay += info.getName();
         }
@@ -49,20 +51,20 @@ public class InfoUI_P3 {
 
     public void writeToText(int keycode) {
         if (keycode == PApplet.BACKSPACE) {
-            if (!"".equals(text)) {
-                text = text.substring(0, text.length() - 1);
+            if (!"".equals(infoText)) {
+                infoText = infoText.substring(0, infoText.length() - 1);
             }
         } else {
-            text += app.key;
+            infoText += app.key;
         }
     }
 
-    public void setText(String t) {
-        text = t;
+    public void setInfoText(String t) {
+        infoText = t;
     }
 
-    public String getText() {
-        return text;
+    public String getInfoText() {
+        return infoText;
     }
 
 }
