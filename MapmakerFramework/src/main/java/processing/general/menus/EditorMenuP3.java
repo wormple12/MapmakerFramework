@@ -13,7 +13,7 @@ import processing.general.events.PStateManager;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class EditorMenuP3 extends EditorMenu implements PStateManager, PEventListener {
 

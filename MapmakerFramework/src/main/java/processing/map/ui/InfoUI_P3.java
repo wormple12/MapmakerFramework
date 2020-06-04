@@ -1,6 +1,5 @@
 package processing.map.ui;
 
-import mapmaker.general.Mode;
 import mapmaker.entities.EntityInfo;
 import processing.ProcessingMapmaker;
 import processing.core.PApplet;
@@ -8,7 +7,7 @@ import processing.core.PGraphics;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class InfoUI_P3 {
 

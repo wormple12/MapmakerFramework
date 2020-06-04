@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

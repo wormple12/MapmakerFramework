@@ -19,7 +19,7 @@ import processing.map.ui.InfoUI_P3;
 /**
  * OBSERVER DESIGN PATTERN
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MapStateManagerP3 implements PStateManager {
 

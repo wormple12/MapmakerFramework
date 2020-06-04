@@ -6,7 +6,7 @@ import processing.entities.LandmassP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class LandmassP3_DTO implements Landmass, Serializable {
 

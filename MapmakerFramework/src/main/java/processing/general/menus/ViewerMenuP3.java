@@ -11,7 +11,7 @@ import processing.general.events.PStateManager;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class ViewerMenuP3 extends StorageMenu implements PStateManager, PEventListener {
 

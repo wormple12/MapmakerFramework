@@ -18,7 +18,7 @@ import processing.entities.sprites.UserMarkerP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public final class SpriteUI_P3 implements SpriteUI {
 
@@ -27,7 +27,6 @@ public final class SpriteUI_P3 implements SpriteUI {
     private final String spriteDirectory;
     private final List<SpriteTypeP3> spriteTypes;
 
-//    private static final int UNDEFINED = -1;
     private static final float SPRITE_TYPE_BOUNDS = 30;
     private Marker newSpriteType = null;
 

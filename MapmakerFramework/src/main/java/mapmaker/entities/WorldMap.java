@@ -9,7 +9,7 @@ import mapmaker.entities.sprites.UserMarker;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class WorldMap implements Serializable {
 

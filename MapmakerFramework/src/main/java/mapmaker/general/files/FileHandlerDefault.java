@@ -12,7 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public final class FileHandlerDefault implements FileHandler {
 

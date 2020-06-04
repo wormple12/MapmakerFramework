@@ -5,7 +5,7 @@ import processing.entities.sprites.LocationP3;
 
 /**
  *
- * @author rasmu
+ * @author TeamOne
  */
 public class LocationP3_DTO extends Location {
 

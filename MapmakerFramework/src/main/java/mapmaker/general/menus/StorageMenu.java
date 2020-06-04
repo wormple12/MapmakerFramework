@@ -7,7 +7,7 @@ import mapmaker.general.Storage;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 abstract public class StorageMenu implements SubMenu {
 

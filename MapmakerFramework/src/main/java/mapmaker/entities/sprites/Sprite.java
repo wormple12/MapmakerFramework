@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class Sprite implements Serializable {
 

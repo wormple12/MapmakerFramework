@@ -12,7 +12,7 @@ import processing.map.CanvasP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class ViewerP3 implements Viewer {
 
@@ -62,7 +62,6 @@ public class ViewerP3 implements Viewer {
     @Override
     public void dropMarker(UserMarker marker, int x, int y) {
         UserMarkerP3 markerP3 = (UserMarkerP3) marker;
-//        locP3.setCoordinates(x, y);
         if (userMarkerUI.getSelectedSpriteType() != null) {
             canvas.getCurrentMap().addMarker(markerP3);
         }

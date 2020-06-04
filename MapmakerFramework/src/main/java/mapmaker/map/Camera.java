@@ -2,7 +2,7 @@ package mapmaker.map;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface Camera {
 

@@ -5,7 +5,7 @@ import processing.entities.sprites.UserMarkerP3;
 
 /**
  *
- * @author rasmu
+ * @author TeamOne
  */
 public class UserMarkerP3_DTO extends UserMarker {
 

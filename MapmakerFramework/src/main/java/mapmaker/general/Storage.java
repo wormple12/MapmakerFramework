@@ -4,7 +4,7 @@ import mapmaker.entities.WorldMap;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface Storage {
 

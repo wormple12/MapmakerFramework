@@ -13,7 +13,7 @@ import processing.viewer.ViewerP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MapMouseManagerP3 implements PEventListener {
 

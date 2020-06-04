@@ -9,7 +9,7 @@ import processing.viewer.ViewerP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MapUpdateManagerP3 implements PEventListener {
 

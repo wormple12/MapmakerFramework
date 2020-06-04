@@ -6,7 +6,7 @@ import mapmaker.entities.sprites.UserMarker;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface Viewer {
 

@@ -8,7 +8,7 @@ import mapmaker.entities.sprites.Location;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface Editor {
 

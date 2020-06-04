@@ -5,7 +5,7 @@ import mapmaker.entities.sprites.Sprite;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface SpriteUI {
 

@@ -15,21 +15,21 @@ import processing.general.events.PEventConsumer;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class ProcessingMapmaker extends PApplet {
 
     public final int STATE_MAP = 0, STATE_MENU_MAIN = 1, STATE_MENU_EDITOR = 2, STATE_MENU_VIEWER = 3;
 
     // manages which listeners should listen in which states
-    private PStateManager[] stateManagers; 
+    private PStateManager[] stateManagers;
     // listens and acts upon events
-    protected List<PEventListener> eventListeners = new ArrayList<>(); 
-    
+    protected List<PEventListener> eventListeners = new ArrayList<>();
+
     // collects mouse events and lets us activate them in another thread for optimization
-    private final BlockingQueue<Runnable> mouseEvents = new ArrayBlockingQueue(500); 
+    private final BlockingQueue<Runnable> mouseEvents = new ArrayBlockingQueue(500);
     // the thread that consumes and runs all functionality based on mouse events
-    private Thread mouseThread; 
+    private Thread mouseThread;
     // NOTE: The cause of most issues concerning performance is the image() rendering of PGraphics entities (see CanvasP3).
     // Unfortunately, we have not been able to optimize this with threading, because:
     // (A) Processing is designed as a mono-threaded framework, and attempts to force it into a multi-threaded context 
@@ -59,8 +59,6 @@ public class ProcessingMapmaker extends PApplet {
 
         mouseThread = new Thread(new PEventConsumer(mouseEvents));
         mouseThread.start();
-
-//        hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
     }
 
     public void setAppState(int state) {

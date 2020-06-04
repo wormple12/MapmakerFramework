@@ -9,7 +9,7 @@ import mapmaker.general.Storage;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class FileStorage implements Storage {
 

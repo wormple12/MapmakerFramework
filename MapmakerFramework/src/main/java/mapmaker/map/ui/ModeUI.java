@@ -4,7 +4,7 @@ import mapmaker.general.Mode;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface ModeUI {
 

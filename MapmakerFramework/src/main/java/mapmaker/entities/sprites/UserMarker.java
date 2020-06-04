@@ -1,12 +1,10 @@
-
 package mapmaker.entities.sprites;
 
-import java.nio.file.Path;
 import mapmaker.entities.EntityInfo;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class UserMarker extends Marker {
 

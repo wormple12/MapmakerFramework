@@ -2,7 +2,7 @@ package mapmaker.general.menus;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 abstract public class MainMenu implements SubMenu {
 

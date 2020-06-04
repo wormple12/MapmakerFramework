@@ -24,7 +24,7 @@ import processing.map.RouteLoaderP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MapStorageP3 extends FileStorage {
 
