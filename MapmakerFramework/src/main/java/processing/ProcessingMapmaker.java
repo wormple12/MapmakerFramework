@@ -27,9 +27,9 @@ public class ProcessingMapmaker extends PApplet {
     protected List<PEventListener> eventListeners = new ArrayList<>(); 
     
     // collects mouse events and lets us activate them in another thread for optimization
-    private static final BlockingQueue<Runnable> MOUSE_EVENTS = new ArrayBlockingQueue(500); 
-    // the thread that runs all functionality based on mouse events
-    private static Thread mouseThread; 
+    private final BlockingQueue<Runnable> mouseEvents = new ArrayBlockingQueue(500); 
+    // the thread that consumes and runs all functionality based on mouse events
+    private Thread mouseThread; 
     // NOTE: The cause of most issues concerning performance is the image() rendering of PGraphics entities (see CanvasP3).
     // Unfortunately, we have not been able to optimize this with threading, because:
     // (A) Processing is designed as a mono-threaded framework, and attempts to force it into a multi-threaded context 
@@ -51,13 +51,13 @@ public class ProcessingMapmaker extends PApplet {
         CanvasP3 canvas = new CanvasP3(this);
         EditorMenuP3 editorMenu = new EditorMenuP3(mapStorage, canvas, this);
         ViewerMenuP3 viewerMenu = new ViewerMenuP3(mapStorage, canvas, this);
-        MainMenuP3 mainMenu = new MainMenuP3(editorMenu, viewerMenu, null, this);
+        MainMenuP3 mainMenu = new MainMenuP3(editorMenu, viewerMenu, this);
         MapStateManagerP3 mapManager = new MapStateManagerP3(this, canvas, editorMenu, viewerMenu);
 
         stateManagers = new PStateManager[]{mapManager, mainMenu, editorMenu, viewerMenu};
         setAppState(STATE_MENU_MAIN);
 
-        mouseThread = new Thread(new PEventConsumer(MOUSE_EVENTS));
+        mouseThread = new Thread(new PEventConsumer(mouseEvents));
         mouseThread.start();
 
 //        hint(DISABLE_ASYNC_SAVEFRAME); // enable this to prevent the black-box saving issue, when exporting PGraphics layers to files
@@ -74,7 +74,7 @@ public class ProcessingMapmaker extends PApplet {
 
     public void putEventInQueue(Runnable event) {
         try {
-            MOUSE_EVENTS.put(event);
+            mouseEvents.put(event);
         } catch (InterruptedException ex) {
             System.out.println("Interrupted...");
         }

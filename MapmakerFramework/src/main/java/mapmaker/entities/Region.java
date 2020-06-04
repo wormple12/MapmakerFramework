@@ -10,12 +10,10 @@ public class Region implements Serializable {
 
     private Landmass area;
     private EntityInfo info;
-    private Biome biome;
 
-    public Region(Landmass area, EntityInfo info, Biome biome) {
+    public Region(Landmass area, EntityInfo info) {
         this.area = area;
         this.info = info;
-        this.biome = biome;
     }
 
     public Landmass getArea() {
@@ -32,14 +30,6 @@ public class Region implements Serializable {
 
     public void setInfo(EntityInfo info) {
         this.info = info;
-    }
-
-    public Biome getBiome() {
-        return biome;
-    }
-
-    public void setBiome(Biome biome) {
-        this.biome = biome;
     }
 
 }

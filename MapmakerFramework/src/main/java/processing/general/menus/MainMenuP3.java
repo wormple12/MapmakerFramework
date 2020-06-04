@@ -3,11 +3,9 @@ package processing.general.menus;
 import mapmaker.general.menus.EditorMenu;
 import mapmaker.general.menus.MainMenu;
 import mapmaker.general.menus.StorageMenu;
-import mapmaker.general.menus.SubMenu;
 import processing.core.PGraphics;
 import processing.general.menus.components.PMenuDisplay;
 import processing.ProcessingMapmaker;
-import processing.event.MouseEvent;
 import processing.general.events.PEventListener;
 import processing.general.events.PStateManager;
 
@@ -22,8 +20,8 @@ public class MainMenuP3 extends MainMenu implements PStateManager, PEventListene
     private final PMenuDisplay menuDisplay;
     private final String[] menuOptions = {"Editor", "Viewer", "Exit"};
 
-    public MainMenuP3(EditorMenu editorMenu, StorageMenu viewerMenu, SubMenu settingsMenu, ProcessingMapmaker app) {
-        super(editorMenu, viewerMenu, settingsMenu);
+    public MainMenuP3(EditorMenu editorMenu, StorageMenu viewerMenu, ProcessingMapmaker app) {
+        super(editorMenu, viewerMenu);
         this.app = app;
         layer = app.createGraphics(app.width, app.height);
         menuDisplay = new PMenuDisplay("Processing Mapmaker", menuOptions, layer, 102, app);

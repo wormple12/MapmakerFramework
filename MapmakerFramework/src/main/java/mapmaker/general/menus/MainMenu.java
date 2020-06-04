@@ -8,12 +8,10 @@ abstract public class MainMenu implements SubMenu {
 
     EditorMenu editorMenu;
     StorageMenu viewerMenu;
-    SubMenu settingsMenu;
 
-    public MainMenu(EditorMenu editorMenu, StorageMenu viewerMenu, SubMenu settingsMenu) {
+    public MainMenu(EditorMenu editorMenu, StorageMenu viewerMenu) {
         this.editorMenu = editorMenu;
         this.viewerMenu = viewerMenu;
-        this.settingsMenu = settingsMenu;
     }
 
     public final void enterEditorMenu() {
@@ -22,10 +20,6 @@ abstract public class MainMenu implements SubMenu {
 
     public final void enterViewerMenu() {
         viewerMenu.show();
-    }
-
-    public final void openSettings() {
-        settingsMenu.show();
     }
 
     public void terminate() {

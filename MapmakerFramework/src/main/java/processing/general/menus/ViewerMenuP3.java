@@ -6,7 +6,6 @@ import mapmaker.map.Canvas;
 import processing.core.PGraphics;
 import processing.general.menus.components.PMenuDisplay;
 import processing.ProcessingMapmaker;
-import processing.event.MouseEvent;
 import processing.general.events.PEventListener;
 import processing.general.events.PStateManager;
 

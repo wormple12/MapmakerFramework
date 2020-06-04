@@ -65,8 +65,6 @@ public class CanvasP3 implements Canvas {
     @Override
     public void loadWorldMap(WorldMap map) {
         app.setAppState(app.STATE_MAP);
-        System.out.println(map.getFilePath());
-        System.out.println(map.getInfo().getName());
     }
 
     @Override

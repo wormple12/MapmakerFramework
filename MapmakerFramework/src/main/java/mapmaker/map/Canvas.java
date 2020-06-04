@@ -1,7 +1,6 @@
 package mapmaker.map;
 
 import mapmaker.entities.WorldMap;
-import mapmaker.entities.LocalMap;
 import mapmaker.entities.EntityInfo;
 
 /**
@@ -39,13 +38,4 @@ public interface Canvas {
      * @param map the map that is currently loaded
      */
     public void setCurrentMap(WorldMap map);
-
-    /**
-     * Allowed to be unsupported. Displays a given local location map.
-     *
-     * @param map
-     */
-    default public void loadLocalMap(LocalMap map) {
-        throw new UnsupportedOperationException("This framework does not support local maps for locations");
-    }
 }

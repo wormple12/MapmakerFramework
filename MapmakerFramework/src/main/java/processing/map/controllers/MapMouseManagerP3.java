@@ -1,4 +1,4 @@
-package processing.map;
+package processing.map.controllers;
 
 import mapmaker.general.Mode;
 import mapmaker.entities.Region;
@@ -7,6 +7,7 @@ import mapmaker.general.UserRole;
 import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
 import processing.general.events.PEventListener;
+import processing.map.CanvasP3;
 import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 

@@ -14,7 +14,7 @@ public final class ModeUI_P3 implements ModeUI {
     private final ProcessingMapmaker app;
     private final PGraphics uiLayer;
 
-    private Mode currentMode = Mode.CAMERA;
+    private Mode currentMode = Mode.CONTROL;
     private Mode previousMode = null;
 
     public ModeUI_P3(ProcessingMapmaker app) {
@@ -60,7 +60,7 @@ public final class ModeUI_P3 implements ModeUI {
     }
 
     public boolean isInCTRLMode() {
-        return currentMode == Mode.CAMERA;
+        return currentMode == Mode.CONTROL;
     }
 
     @Override

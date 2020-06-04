@@ -99,21 +99,24 @@ public class EditorP3 implements IEditorP3 {
             if (optionalRegion == null) {
                 createNewRegionLayer();
             }
-            final LandmassP3 area = (LandmassP3) canvas.getCurrentMap().getRegions().get(layer).getArea();
-            final PGraphics land = area.getGraphics();
-            final PGraphics border = area.getBorderGraphics();
+            final Region region = canvas.getCurrentMap().getRegion(layer);
+            if (region != null) {
+                final LandmassP3 area = (LandmassP3) region.getArea();
+                final PGraphics land = area.getGraphics();
+                final PGraphics border = area.getBorderGraphics();
 
-            land.beginDraw();
-            land.stroke(colors[selectedBrushColor]);
-            land.strokeWeight(fRadius - borderThickness);
-            land.line(app.pmouseX, app.pmouseY, x, y);
-            land.endDraw();
+                land.beginDraw();
+                land.stroke(colors[selectedBrushColor]);
+                land.strokeWeight(fRadius - borderThickness);
+                land.line(app.pmouseX, app.pmouseY, x, y);
+                land.endDraw();
 
-            border.beginDraw();
-            border.stroke(0);
-            border.strokeWeight(fRadius);
-            border.line(app.pmouseX, app.pmouseY, x, y);
-            border.endDraw();
+                border.beginDraw();
+                border.stroke(0);
+                border.strokeWeight(fRadius);
+                border.line(app.pmouseX, app.pmouseY, x, y);
+                border.endDraw();
+            }
         }
     }
 
@@ -161,8 +164,7 @@ public class EditorP3 implements IEditorP3 {
     public void createNewRegionLayer() {
         canvas.getCurrentMap().addRegion(new Region(
                 new LandmassP3(app.createGraphics(app.width, app.height), app.createGraphics(app.width, app.height)),
-                new RegionInfoP3("New Region"),
-                Biome.PLAINS)
+                new EntityInfo("New Region"))
         );
         System.out.println("New REGION added");
     }

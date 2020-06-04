@@ -1,8 +1,9 @@
-package processing.map;
+package processing.map.controllers;
 
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import mapmaker.entities.EntityInfo;
 import mapmaker.general.Mode;
 import mapmaker.entities.Region;
 import mapmaker.general.UserRole;
@@ -12,11 +13,10 @@ import processing.map.ui.ModeUI_P3;
 import processing.viewer.ViewerP3;
 import processing.ProcessingMapmaker;
 import processing.editor.IEditorP3;
-import processing.entities.RegionInfoP3;
-import processing.entities.sprites.LocationInfoP3;
 import processing.entities.sprites.LocationP3;
 import processing.general.events.PEventListener;
 import processing.general.menus.ViewerMenuP3;
+import processing.map.CanvasP3;
 import processing.map.ui.InfoUI_P3;
 
 /**
@@ -51,20 +51,20 @@ public class MapHotkeyManagerP3 implements PEventListener {
     public void keyPressed(processing.event.KeyEvent evt) {
         if (evt.isControlDown() && !modeUI.isInCTRLMode()) {
             modeUI.setPreviousMode(modeUI.getCurrentMode());
-            modeUI.switchMode(Mode.CAMERA);
+            modeUI.switchMode(Mode.CONTROL);
 
         } else if (isTyping) {
             if (app.keyCode == PApplet.ENTER) {
                 isTyping = false;
                 if (modeUI.isCurrentMode(Mode.LANDMASS, Mode.WATER)) {
                     Region selectedRegion = canvas.getCurrentMap().getRegion(editor.getLayer());
-                    editor.editRegion(selectedRegion, new RegionInfoP3(infoUI.getInfoText()));
+                    editor.editRegion(selectedRegion, new EntityInfo(infoUI.getInfoText()));
                 } else if (modeUI.isCurrentMode(Mode.MARKER)) {
                     LocationP3 selectedLocation = editor.getSelectedLocation();
-                    editor.editLocationInfo(selectedLocation, new LocationInfoP3(infoUI.getInfoText()));
+                    editor.editLocationInfo(selectedLocation, new EntityInfo(infoUI.getInfoText()));
                 }
                 infoUI.setInfoText(null);
-            } else if (Character.isLetterOrDigit(app.key) || app.keyCode == PApplet.BACKSPACE || app.keyCode == ' ') {
+            } else if (app.keyCode != PApplet.CONTROL && app.keyCode != PApplet.SHIFT && app.keyCode != PApplet.ALT) {
                 infoUI.writeToText(app.keyCode);
             }
 

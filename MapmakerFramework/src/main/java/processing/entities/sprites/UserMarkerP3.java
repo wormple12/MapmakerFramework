@@ -1,6 +1,7 @@
 package processing.entities.sprites;
 
 import java.util.Objects;
+import mapmaker.entities.EntityInfo;
 import mapmaker.entities.sprites.Marker;
 import mapmaker.entities.sprites.UserMarker;
 import static processing.core.PApplet.dist;
@@ -15,7 +16,7 @@ public class UserMarkerP3 extends UserMarker {
 
     private PImage image;
 
-    public UserMarkerP3(UserMarkerInfoP3 info, String spritePath, float x, float y, float width, float height, PImage image) {
+    public UserMarkerP3(EntityInfo info, String spritePath, float x, float y, float width, float height, PImage image) {
         super(info, spritePath, x, y, width, height);
         this.image = image;
     }

@@ -1,6 +1,7 @@
 package processing.entities.sprites;
 
 import java.util.Objects;
+import mapmaker.entities.EntityInfo;
 import mapmaker.entities.sprites.Location;
 import mapmaker.entities.sprites.Marker;
 import static processing.core.PApplet.dist;
@@ -15,7 +16,7 @@ public class LocationP3 extends Location {
 
     private PImage image;
 
-    public LocationP3(LocationInfoP3 info, String spritePath, float x, float y, float width, float height, PImage image) {
+    public LocationP3(EntityInfo info, String spritePath, float x, float y, float width, float height, PImage image) {
         super(info, spritePath, x, y, width, height);
         this.image = image;
     }

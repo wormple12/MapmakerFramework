@@ -2,6 +2,7 @@ package processing.map.ui;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import mapmaker.entities.EntityInfo;
 import mapmaker.entities.sprites.Marker;
 import mapmaker.entities.sprites.Sprite;
 import processing.core.PGraphics;
@@ -12,9 +13,7 @@ import mapmaker.general.UserRole;
 import processing.ProcessingMapmaker;
 import static processing.core.PApplet.dist;
 import processing.core.PImage;
-import processing.entities.sprites.LocationInfoP3;
 import processing.entities.sprites.LocationP3;
-import processing.entities.sprites.UserMarkerInfoP3;
 import processing.entities.sprites.UserMarkerP3;
 
 /**
@@ -81,12 +80,12 @@ public final class SpriteUI_P3 implements SpriteUI {
             PImage typeImage = ((SpriteTypeP3) type).getImage();
             if (UserRole.getCurrentRole() == UserRole.EDITOR) {
                 newSpriteType = new LocationP3(
-                        new LocationInfoP3("New Location"), type.getSpritePath(),
+                        new EntityInfo("New Location"), type.getSpritePath(),
                         app.mouseX, app.mouseY, type.getWidth(), type.getHeight(), typeImage
                 );
             } else {
                 newSpriteType = new UserMarkerP3(
-                        new UserMarkerInfoP3("Custom Marker"), type.getSpritePath(),
+                        new EntityInfo("Custom Marker"), type.getSpritePath(),
                         app.mouseX, app.mouseY, type.getWidth(), type.getHeight(), typeImage
                 );
             }

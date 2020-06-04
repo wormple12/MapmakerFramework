@@ -16,10 +16,8 @@ import processing.entities.LandmassP3;
 import processing.entities.dto.LandmassP3_DTO;
 import processing.entities.RouteP3;
 import processing.entities.dto.RouteP3_DTO;
-import processing.entities.sprites.LocationInfoP3;
 import processing.entities.sprites.LocationP3;
 import processing.entities.dto.LocationP3_DTO;
-import processing.entities.sprites.UserMarkerInfoP3;
 import processing.entities.sprites.UserMarkerP3;
 import processing.entities.dto.UserMarkerP3_DTO;
 import processing.map.RouteLoaderP3;
@@ -45,7 +43,7 @@ public class MapStorageP3 extends FileStorage {
     @Override
     public boolean attemptSave(WorldMap world) {
         // converting to DTO
-        List<Region> regions = world.getRegions().stream().map(r -> new Region(new LandmassP3_DTO((LandmassP3) r.getArea()), r.getInfo(), r.getBiome())).collect(Collectors.toList());
+        List<Region> regions = world.getRegions().stream().map(r -> new Region(new LandmassP3_DTO((LandmassP3) r.getArea()), r.getInfo())).collect(Collectors.toList());
         List<Route> routes = world.getRoutes().stream().map(r -> new RouteP3_DTO((RouteP3) r)).collect(Collectors.toList());
         List<Location> locations = world.getLocations().stream().map(loc -> new LocationP3_DTO((LocationP3) loc)).collect(Collectors.toList());
         List<UserMarker> markers = world.getMarkers().stream().map(m -> new UserMarkerP3_DTO((UserMarkerP3) m)).collect(Collectors.toList());
@@ -114,7 +112,7 @@ public class MapStorageP3 extends FileStorage {
             world.setLocations(
                     world.getLocations().stream().map(loc -> {
                         LocationP3_DTO dto = (LocationP3_DTO) loc;
-                        LocationP3 location = new LocationP3((LocationInfoP3) dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
+                        LocationP3 location = new LocationP3(dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
 
                         PImage sprite = app.loadImage(location.getSpritePath());
                         location.setImage(sprite);
@@ -126,7 +124,7 @@ public class MapStorageP3 extends FileStorage {
             world.setMarkers(
                     world.getMarkers().stream().map(m -> {
                         UserMarkerP3_DTO dto = (UserMarkerP3_DTO) m;
-                        UserMarkerP3 marker = new UserMarkerP3((UserMarkerInfoP3) dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
+                        UserMarkerP3 marker = new UserMarkerP3(dto.getInfo(), dto.getSpritePath(), dto.getX(), dto.getY(), dto.getWidth(), dto.getHeight(), null);
 
                         PImage sprite = app.loadImage(marker.getSpritePath());
                         marker.setImage(sprite);

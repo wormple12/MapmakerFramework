@@ -1,5 +1,8 @@
 package processing.map;
 
+import processing.map.controllers.MapMouseManagerP3;
+import processing.map.controllers.MapUpdateManagerP3;
+import processing.map.controllers.MapHotkeyManagerP3;
 import mapmaker.editor.EditorProxy;
 import mapmaker.general.Mode;
 import mapmaker.general.UserRole;
