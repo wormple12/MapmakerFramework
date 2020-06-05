@@ -20,12 +20,11 @@ Extra optional features:
   - Editor can change visibility for landmarks and information, or can give different viewers specific levels of access.
 -----------------
 
-Initial thoughs about course relevant subjects to explore in the project:
+Course relevant subjects to explore in the project:
 - Wishful programming
 - Design patterns
-- Event-based programming
-- Generics
+- Event-based programming (Observer design pattern + Producer/consumer design pattern)
+- Reflection + annotations
 - Streams
-- Annotations
 
 Implementations of the framework could for instance be created with Processing 3 or as a simple continuation of Tobias Grundtvig's 2DApp framework.
