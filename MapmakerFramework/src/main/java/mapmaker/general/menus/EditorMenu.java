@@ -8,7 +8,8 @@ import mapmaker.entities.EntityInfo;
 
 /**
  *
- * @author Simon Norup Example of wishful programming. See superclass as well.
+ * @author TeamOne 
+ * Example of wishful programming. See superclass as well.
  */
 abstract public class EditorMenu extends StorageMenu {
 

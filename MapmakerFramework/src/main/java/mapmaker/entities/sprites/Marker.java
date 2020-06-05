@@ -1,11 +1,10 @@
 package mapmaker.entities.sprites;
 
-import java.util.Objects;
 import mapmaker.entities.EntityInfo;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class Marker extends Sprite {
 

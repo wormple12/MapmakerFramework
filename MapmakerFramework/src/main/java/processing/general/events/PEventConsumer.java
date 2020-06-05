@@ -4,7 +4,7 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class PEventConsumer implements Runnable {
 

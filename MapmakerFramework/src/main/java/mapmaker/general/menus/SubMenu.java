@@ -2,7 +2,7 @@ package mapmaker.general.menus;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface SubMenu {
 

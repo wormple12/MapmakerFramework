@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public final class ModeUI_P3 implements ModeUI {
 

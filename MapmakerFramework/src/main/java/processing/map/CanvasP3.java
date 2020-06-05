@@ -14,7 +14,7 @@ import processing.ProcessingMapmaker;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class CanvasP3 implements Canvas {
 
@@ -76,46 +76,4 @@ public class CanvasP3 implements Canvas {
     public void setCurrentMap(WorldMap map) {
         currentMap = map;
     }
-    
-//    private final PGraphics combo;
-//    private static final BlockingQueue<Runnable> UPDATE_EVENTS = new ArrayBlockingQueue(1000);
-//    private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(1);
-    
-//      IN CONSTRUCTOR:
-//    combo = app.createGraphics(app.width, app.height);
-//    THREAD_POOL.execute(new PEventConsumer(UPDATE_EVENTS));
-    
-//    public void display() {
-//        if (UPDATE_EVENTS.isEmpty()) {
-//            ProcessingMapmakerThreaded app2 = (ProcessingMapmakerThreaded) app;
-//
-//            app2.putEventInQueue(UPDATE_EVENTS, () -> combo.beginDraw());
-//            app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(water, 0, 0));
-//
-//            currentMap.getRegions().stream().map(r -> (LandmassP3) r.getArea()).forEachOrdered(area -> {
-//                app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(area.getBorderGraphics(), 0, 0));
-//                app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(area.getGraphics(), 0, 0));
-//            });
-//
-//            currentMap.getRoutes().stream().map(r -> (RouteP3) r).forEachOrdered(r
-//                    -> app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(r.getGraphics(), 0, 0))
-//            );
-//
-//            currentMap.getLocations().stream().map((loc) -> (LocationP3) loc)
-//                    .forEachOrdered((loc) -> {
-//                        app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(loc.getImage(), loc.getX(), loc.getY(), loc.getWidth(), loc.getHeight()));
-//                    });
-//
-//            if (UserRole.getCurrentRole() == UserRole.VIEWER) {
-//                currentMap.getMarkers().stream().map((marker) -> (UserMarkerP3) marker)
-//                        .forEachOrdered((marker) -> {
-//                            app2.putEventInQueue(UPDATE_EVENTS, () -> combo.image(marker.getImage(), marker.getX(), marker.getY(), marker.getWidth(), marker.getHeight()));
-//                        });
-//            }
-//
-//            app2.putEventInQueue(UPDATE_EVENTS, () -> combo.endDraw());
-//            app2.putEventInQueue(UPDATE_EVENTS, () -> app.image(combo, 0, 0));
-//        }
-//    }
-
 }

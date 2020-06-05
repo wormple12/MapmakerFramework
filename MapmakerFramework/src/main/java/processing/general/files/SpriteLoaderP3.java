@@ -13,7 +13,7 @@ import processing.entities.sprites.SpriteTypeP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class SpriteLoaderP3 {
 

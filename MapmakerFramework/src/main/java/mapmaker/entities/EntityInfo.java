@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class EntityInfo implements Serializable {
     

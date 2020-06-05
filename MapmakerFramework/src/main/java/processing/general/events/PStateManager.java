@@ -2,7 +2,7 @@ package processing.general.events;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface PStateManager {
     

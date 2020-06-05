@@ -2,7 +2,7 @@ package mapmaker.general;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public enum UserRole {
 

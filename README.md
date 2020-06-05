@@ -24,9 +24,8 @@ Initial thoughs about course relevant subjects to explore in the project:
 - Wishful programming
 - Design patterns
 - Event-based programming
-- (Potentially) Kotlin
-- (Potentially) Generics
-- (Potentially) Streams
-- (Potentially) Annotations
+- Generics
+- Streams
+- Annotations
 
 Implementations of the framework could for instance be created with Processing 3 or as a simple continuation of Tobias Grundtvig's 2DApp framework.

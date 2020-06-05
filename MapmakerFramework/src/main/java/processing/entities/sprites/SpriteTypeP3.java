@@ -6,7 +6,7 @@ import processing.core.PVector;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class SpriteTypeP3 extends Sprite {
 

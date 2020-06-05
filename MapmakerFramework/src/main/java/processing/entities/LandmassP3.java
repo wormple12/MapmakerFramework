@@ -7,7 +7,7 @@ import processing.general.files.MapStorageP3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class LandmassP3 implements Landmass, Serializable {
 

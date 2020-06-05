@@ -15,7 +15,7 @@ import processing.map.ui.*;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class EditorP3 implements IEditorP3 {
 
@@ -227,9 +227,7 @@ public class EditorP3 implements IEditorP3 {
     public void attemptSelectLocation(int x, int y) {
         LocationP3 result = (LocationP3) locationUI.attemptSelectSpriteType();
         if (result == null) {
-            //for (Location location : canvas.getCurrentMap().getLocations()) {
             for (int i = 0; i < canvas.getCurrentMap().getLocations().size(); i++) {
-//                active = i;
                 LocationP3 locP3 = (LocationP3) canvas.getCurrentMap().getLocations().get(i);
                 if (locP3.mouseIsOver(x, y)) {
                     result = locP3;
@@ -252,7 +250,6 @@ public class EditorP3 implements IEditorP3 {
     @Override
     public void dropLocation(Location location, int x, int y) {
         LocationP3 locP3 = (LocationP3) location;
-//        locP3.setCoordinates(x, y);
         if (locationUI.getSelectedSpriteType() != null) {
             canvas.getCurrentMap().addLocation(locP3);
         }

@@ -4,7 +4,7 @@ import mapmaker.entities.EntityInfo;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class Player extends UserMarker {
 

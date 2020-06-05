@@ -15,7 +15,7 @@ import java.util.Map;
  * Reflection API (with annotations); (2) Dynamic Proxy (with Java's
  * InvocationHandler).
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class EditorProxy implements InvocationHandler {
 
@@ -64,7 +64,8 @@ public class EditorProxy implements InvocationHandler {
      * automatically when appropiate.
      *
      * @param editor the object to convert to proxy
-     * @param interfaceClass the editor interface that the object implements; default: Editor.class
+     * @param interfaceClass the editor interface that the object implements;
+     * default: Editor.class
      * @return the given editor object as a proxy version of that same object
      */
     public static Editor getProxyInstance(Editor editor, Class<? extends Editor> interfaceClass) {
@@ -73,7 +74,7 @@ public class EditorProxy implements InvocationHandler {
                 new Class[]{interfaceClass},
                 new EditorProxy(editor, interfaceClass));
     }
-    
+
     public static Editor getProxyInstance(Editor editor) {
         return getProxyInstance(editor, Editor.class);
     }

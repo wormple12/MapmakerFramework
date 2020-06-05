@@ -11,7 +11,7 @@ import processing.general.events.PStateManager;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MainMenuP3 extends MainMenu implements PStateManager, PEventListener {
 

@@ -21,7 +21,7 @@ import processing.map.ui.InfoUI_P3;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public class MapHotkeyManagerP3 implements PEventListener {
 

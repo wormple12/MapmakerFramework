@@ -5,7 +5,7 @@ import processing.event.KeyEvent;
 
 /**
  *
- * @author Simon Norup
+ * @author TeamOne
  */
 public interface PEventListener {
     

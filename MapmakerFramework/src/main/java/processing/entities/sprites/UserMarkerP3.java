@@ -10,7 +10,7 @@ import processing.core.PImage;
 
 /**
  *
- * @author rasmu
+ * @author TeamOne
  */
 public class UserMarkerP3 extends UserMarker {
 
