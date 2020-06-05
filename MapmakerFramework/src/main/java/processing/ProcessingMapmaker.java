@@ -29,13 +29,16 @@ public class ProcessingMapmaker extends PApplet {
     // collects mouse events and lets us activate them in another thread for optimization
     private final BlockingQueue<Runnable> mouseEvents = new ArrayBlockingQueue(500); 
     // the thread that consumes and runs all functionality based on mouse events
-    private Thread mouseThread; 
-    // NOTE: The cause of most issues concerning performance is the image() rendering of PGraphics entities (see CanvasP3).
+    private Thread mouseThread;
+    // NOTE 1: The cause of most issues concerning performance is the image() rendering of PGraphics entities (see CanvasP3).
     // Unfortunately, we have not been able to optimize this with threading, because:
     // (A) Processing is designed as a mono-threaded framework, and attempts to force it into a multi-threaded context 
     // makes for unstable results to say the least;
     // (B) a world map is rendered one layer at a time, meaning that we have to wait for one image() call before we can 
     // continue to the next - otherwise the layers load in the wrong order.
+    // // NOTE 2: Spreading the mouseEvent workload (via Executors.newFixedThreadPool()) has been tested, but also didn't 
+    // work, presumably because of the Reason A as describe above, and because values probably need to be synchronized 
+    // to allow simultenous editing/reading
 
     @Override
     public void settings() {
