@@ -3,7 +3,7 @@ package temporary;
 import java.util.List;
 import mapmaker.editor.DrawFunction;
 import mapmaker.editor.Editor;
-import mapmaker.editor.EditorProxy;
+import mapmaker.editor.EditorProxyHandler;
 import mapmaker.entities.EntityInfo;
 import mapmaker.entities.Region;
 import mapmaker.entities.Route;
@@ -18,7 +18,7 @@ public class EditorProxyTest {
     private static TestEditor automaticDrawer;
 
     public static void main(String[] args) {
-        automaticDrawer = (TestEditor) EditorProxy.getProxyInstance(new TestEditorImpl(), TestEditor.class);
+        automaticDrawer = (TestEditor) EditorProxyHandler.getProxyInstance(new TestEditorImpl(), TestEditor.class);
 //        automaticDrawer.drawLandmass(0, 5, 10, null);
         automaticDrawer.drawWater(4, 14, 2.3);
         automaticDrawer.updateRoute();

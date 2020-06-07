@@ -17,12 +17,12 @@ import java.util.Map;
  *
  * @author TeamOne
  */
-public class EditorProxy implements InvocationHandler {
+public class EditorProxyHandler implements InvocationHandler {
 
     private final Map<String, Method> methods = new HashMap<>();
     private final Editor editor;
 
-    private EditorProxy(Editor editor, Class<? extends Editor> editorInterface) {
+    private EditorProxyHandler(Editor editor, Class<? extends Editor> editorInterface) {
         this.editor = editor;
 
         if (!editorInterface.isInterface()) {
@@ -72,7 +72,7 @@ public class EditorProxy implements InvocationHandler {
         return (Editor) Proxy.newProxyInstance(
                 interfaceClass.getClassLoader(),
                 new Class[]{interfaceClass},
-                new EditorProxy(editor, interfaceClass));
+                new EditorProxyHandler(editor, interfaceClass));
     }
 
     public static Editor getProxyInstance(Editor editor) {

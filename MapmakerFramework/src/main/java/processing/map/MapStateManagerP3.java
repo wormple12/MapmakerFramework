@@ -3,7 +3,7 @@ package processing.map;
 import processing.map.controllers.MapMouseManagerP3;
 import processing.map.controllers.MapUpdateManagerP3;
 import processing.map.controllers.MapHotkeyManagerP3;
-import mapmaker.editor.EditorProxy;
+import mapmaker.editor.EditorProxyHandler;
 import mapmaker.general.Mode;
 import mapmaker.general.UserRole;
 import processing.ProcessingMapmaker;
@@ -36,7 +36,7 @@ public class MapStateManagerP3 implements PStateManager {
         this.app = app;
         this.modeUI = new ModeUI_P3(app);
         this.infoUI = new InfoUI_P3(app);
-        this.editor = (IEditorP3) EditorProxy.getProxyInstance(
+        this.editor = (IEditorP3) EditorProxyHandler.getProxyInstance(
                 new EditorP3(canvas, modeUI, infoUI, app),
                 IEditorP3.class);
 //        editor = new EditorP3(canvas, modeUI, this); // Using this instead will disable general draw() functionality
