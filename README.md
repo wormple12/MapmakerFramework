@@ -2,6 +2,8 @@
 
 Framework/Interfaces for different methods of drawing and interacting with a land map, specially designed with video game world maps (fantasy setting or otherwise) in mind.
 
+Currently halfway-implemented using the Processing 3.0+ technology as an example.
+
 Vision:
 -----------------
 You can open this tool in two different capacities; as an editor or as a viewer.
